@@ -1,0 +1,35 @@
+-- Run this migration for existing databases
+CREATE TABLE IF NOT EXISTS projects (
+  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(200) NOT NULL,
+  start_date DATE NOT NULL,
+  duration_months INT UNSIGNED NOT NULL,
+  description TEXT NULL,
+  status ENUM('planning','in_progress','paused','done') NOT NULL DEFAULT 'planning',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS project_members (
+  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  project_id BIGINT UNSIGNED NOT NULL,
+  user_id INT UNSIGNED NOT NULL,
+  project_role VARCHAR(120) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT fk_project_member_project FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
+  CONSTRAINT fk_project_member_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  UNIQUE KEY uq_project_user (project_id, user_id)
+);
+
+CREATE TABLE IF NOT EXISTS project_modules (
+  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  project_id BIGINT UNSIGNED NOT NULL,
+  name VARCHAR(200) NOT NULL,
+  planned_months DECIMAL(5,2) NOT NULL DEFAULT 1.00,
+  status ENUM('pending','in_progress','done') NOT NULL DEFAULT 'pending',
+  progress_percent TINYINT UNSIGNED NOT NULL DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT fk_project_module_project FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
+);
