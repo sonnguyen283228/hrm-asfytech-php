@@ -38,8 +38,8 @@
       gap:12px;
       margin-bottom:14px;
       padding:10px 12px;
-      background:rgba(255,255,255,.75);
-      border:1px solid #d9ece1;
+      background:linear-gradient(135deg, rgba(66,133,244,.10), rgba(66,133,244,.03));
+      border:1px solid #d7e5ff;
       border-radius:12px;
       backdrop-filter: blur(4px);
     }
@@ -112,11 +112,11 @@
 </head>
 <body>
   <div class="topbar">
-    <div class="brand">
+    <a class="brand" href="/attendance" style="text-decoration:none;color:inherit">
       <?php $logo = site_get('site_logo_url', ''); if ($logo): ?><img src="<?= htmlspecialchars($logo) ?>" alt="logo"><?php endif; ?>
       <span><?= htmlspecialchars(site_get('site_name', 'HRM APP')) ?></span>
-    </div>
-    <small class="muted">Tone: #4285f4</small>
+    </a>
+    <small class="muted">ASFY HRM</small>
   </div>
   <?= site_get('header_html', '') ?>
 
