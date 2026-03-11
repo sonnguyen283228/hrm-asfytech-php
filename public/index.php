@@ -24,7 +24,7 @@ if ($uri === '/login' && $method === 'POST') {
     $stmt->execute([$email]);
     $user = $stmt->fetch();
 
-    if (!$user || !password_verify($password, $user['password'])) {
+    if (!$user || (int)($user['is_active'] ?? 1) !== 1 || !password_verify($password, $user['password'])) {
         $_SESSION['error'] = 'Sai tài khoản hoặc mật khẩu';
         redirect('/login');
     }
@@ -114,12 +114,16 @@ if ($uri === '/auth/google/callback' && $method === 'GET') {
 
     if (!$user) {
         $randomPass = password_hash(bin2hex(random_bytes(16)), PASSWORD_BCRYPT);
-        $stmt = db()->prepare('INSERT INTO users(full_name,email,password,role,department_id,position,avatar_url) VALUES(?,?,?,?,NULL,?,?)');
+        $stmt = db()->prepare('INSERT INTO users(full_name,email,password,role,is_active,department_id,position,avatar_url,last_seen_at) VALUES(?,?,?,?,1,NULL,?,?,NOW())');
         $stmt->execute([$name, $email, $randomPass, 'staff', 'Nhân viên', $avatar]);
         $id = (int)db()->lastInsertId();
     } else {
         $id = (int)$user['id'];
-        $stmt = db()->prepare('UPDATE users SET full_name = ?, avatar_url = ? WHERE id = ?');
+        if ((int)($user['is_active'] ?? 1) !== 1) {
+            $_SESSION['error'] = 'Tài khoản đã bị khóa, vui lòng liên hệ Admin.';
+            redirect('/login');
+        }
+        $stmt = db()->prepare('UPDATE users SET full_name = ?, avatar_url = ?, last_seen_at = NOW() WHERE id = ?');
         $stmt->execute([$name, $avatar, $id]);
     }
 
@@ -243,14 +247,39 @@ if ($uri === '/employees/create' && $method === 'POST') {
     $departmentId = (int)($_POST['department_id'] ?? 0);
     $position = trim((string)($_POST['position'] ?? 'Nhân viên'));
 
+    $phone = trim((string)($_POST['phone'] ?? ''));
+    $addressWard = trim((string)($_POST['address_ward'] ?? ''));
+    $addressCity = trim((string)($_POST['address_city'] ?? ''));
+    $startDate = trim((string)($_POST['start_date'] ?? ''));
+    $birthDate = trim((string)($_POST['birth_date'] ?? ''));
+    $baseSalary = (int)($_POST['base_salary'] ?? 0);
+
     if ($fullName === '' || $email === '') {
         $_SESSION['error'] = 'Vui lòng nhập đầy đủ họ tên và email.';
         redirect('/employees/create');
     }
 
+    if (!is_gmail($email)) {
+        $_SESSION['error'] = 'Email phải là @gmail.com';
+        redirect('/employees/create');
+    }
+    if (!is_vn_phone($phone)) {
+        $_SESSION['error'] = 'Số điện thoại chưa đúng chuẩn VN.';
+        redirect('/employees/create');
+    }
+    $age = age_from_birthdate($birthDate);
+    if ($age === null || $age < 18) {
+        $_SESSION['error'] = 'Nhân sự phải từ 18 tuổi trở lên.';
+        redirect('/employees/create');
+    }
+    if ($baseSalary < 0) {
+        $_SESSION['error'] = 'Lương cơ bản không hợp lệ.';
+        redirect('/employees/create');
+    }
+
     $randomPass = password_hash(bin2hex(random_bytes(16)), PASSWORD_BCRYPT);
-    $stmt = db()->prepare('INSERT INTO users(full_name,email,password,role,department_id,position,avatar_url) VALUES(?,?,?,?,?,?,NULL)');
-    $stmt->execute([$fullName, $email, $randomPass, $role, $departmentId ?: null, $position]);
+    $stmt = db()->prepare('INSERT INTO users(full_name,email,phone,address_ward,address_city,start_date,birth_date,base_salary,password,role,is_active,department_id,position,avatar_url,last_seen_at) VALUES(?,?,?,?,?,?,?,?,?,?,1,?,?,?,?,NOW())');
+    $stmt->execute([$fullName, $email, $phone, $addressWard, $addressCity, $startDate ?: null, $birthDate ?: null, $baseSalary, $randomPass, $role, $departmentId ?: null, $position, null]);
 
     $_SESSION['success'] = 'Đã thêm nhân sự. Avatar sẽ tự đồng bộ khi nhân sự đăng nhập Google lần đầu.';
     redirect('/employees');
@@ -365,16 +394,15 @@ if ($uri === '/projects/create' && $method === 'POST') {
 
     $name = trim((string)($_POST['name'] ?? ''));
     $startDate = trim((string)($_POST['start_date'] ?? ''));
-    $durationMonths = (int)($_POST['duration_months'] ?? 0);
     $description = trim((string)($_POST['description'] ?? ''));
 
-    if ($name === '' || $startDate === '' || $durationMonths <= 0) {
+    if ($name === '' || $startDate === '') {
         $_SESSION['error'] = 'Vui lòng nhập đầy đủ thông tin dự án.';
         redirect('/projects/create');
     }
 
     $stmt = db()->prepare('INSERT INTO projects(name,start_date,duration_months,description,status) VALUES(?,?,?,?,?)');
-    $stmt->execute([$name, $startDate, $durationMonths, $description, 'planning']);
+    $stmt->execute([$name, $startDate, null, $description, 'planning']);
 
     $_SESSION['success'] = 'Đã tạo dự án mới.';
     redirect('/projects');
@@ -431,6 +459,9 @@ if ($uri === '/projects/modules/create' && $method === 'POST') {
     $stmt = db()->prepare('INSERT INTO project_modules(project_id,name,planned_months,status,progress_percent) VALUES(?,?,?,?,?)');
     $stmt->execute([$projectId, $name, $plannedMonths, 'pending', 0]);
 
+    $u = db()->prepare('UPDATE projects p SET duration_months = CEIL((SELECT COALESCE(SUM(duration_days),0) FROM project_details WHERE project_id = p.id)/30) WHERE p.id = ?');
+    $u->execute([$projectId]);
+
     $_SESSION['success'] = 'Đã thêm module cho dự án.';
     redirect('/projects/view?id=' . $projectId);
 }
@@ -472,6 +503,32 @@ if ($uri === '/projects/members/add' && $method === 'POST') {
 
     $_SESSION['success'] = 'Đã thêm/cập nhật vai trò nhân sự trong dự án.';
     redirect('/projects/view?id=' . $projectId);
+}
+
+
+// ===== Site settings (admin) =====
+if ($uri === '/settings/site' && $method === 'GET') {
+    $user = require_admin();
+    $settings = site_settings();
+    view('settings/site', ['user' => $user, 'settings' => $settings]);
+    exit;
+}
+
+if ($uri === '/settings/site' && $method === 'POST') {
+    $user = require_admin();
+    $pairs = [
+        'site_name' => trim((string)($_POST['site_name'] ?? 'HRM APP')),
+        'site_logo_url' => trim((string)($_POST['site_logo_url'] ?? '')),
+        'site_favicon_url' => trim((string)($_POST['site_favicon_url'] ?? '')),
+        'header_html' => (string)($_POST['header_html'] ?? ''),
+        'footer_html' => (string)($_POST['footer_html'] ?? ''),
+        'footer_text' => trim((string)($_POST['footer_text'] ?? '© HRM APP')),
+    ];
+    $stmt = db()->prepare('INSERT INTO site_settings(`key`,`value`) VALUES(?,?) ON DUPLICATE KEY UPDATE `value`=VALUES(`value`)');
+    foreach ($pairs as $k => $v) $stmt->execute([$k, $v]);
+
+    $_SESSION['success'] = 'Đã cập nhật giao diện site.';
+    redirect('/settings/site');
 }
 
 http_response_code(404);

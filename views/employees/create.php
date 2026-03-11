@@ -10,8 +10,26 @@
     <label>Họ tên</label>
     <input type="text" name="full_name" required>
 
-    <label>Email công việc</label>
-    <input type="email" name="email" required placeholder="name@company.com">
+    <label>Email công việc (chỉ @gmail.com)</label>
+    <input type="email" name="email" required placeholder="name@gmail.com">
+
+    <label>Điện thoại (VN)</label>
+    <input type="text" name="phone" required placeholder="09xxxxxxxx">
+
+    <label>Địa chỉ - Phường/Xã</label>
+    <input type="text" name="address_ward" placeholder="VD: Phường 7">
+
+    <label>Địa chỉ - Tỉnh/Thành phố</label>
+    <input type="text" name="address_city" placeholder="VD: TP.HCM">
+
+    <label>Ngày bắt đầu làm việc</label>
+    <input type="date" name="start_date">
+
+    <label>Ngày sinh</label>
+    <input type="date" name="birth_date">
+
+    <label>Lương cơ bản (VND)</label>
+    <input type="number" min="0" step="1" name="base_salary" placeholder="10000000">
 
     <label>Phòng ban</label> <a class="muted" href="/departments/create">(+ Thêm phòng ban mới)</a>
     <select name="department_id" style="padding:10px;width:100%;margin-top:6px;margin-bottom:12px;border:1px solid #d1d5db;border-radius:8px">

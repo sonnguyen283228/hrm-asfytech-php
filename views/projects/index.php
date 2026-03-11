@@ -30,7 +30,7 @@
       <tr>
         <td style="padding:8px;border-bottom:1px solid #f1f1f1"><?= htmlspecialchars($p['name']) ?></td>
         <td style="padding:8px;border-bottom:1px solid #f1f1f1"><?= htmlspecialchars($p['start_date']) ?></td>
-        <td style="padding:8px;border-bottom:1px solid #f1f1f1"><?= (int)$p['duration_months'] ?> tháng</td>
+        <td style="padding:8px;border-bottom:1px solid #f1f1f1"><?= (int)($p['duration_months'] ?? 0) ?> tháng (tính từ chi tiết)</td>
         <td style="padding:8px;border-bottom:1px solid #f1f1f1"><?= (int)$p['total_modules'] ?></td>
         <td style="padding:8px;border-bottom:1px solid #f1f1f1"><?= round((float)$p['progress_avg']) ?>%</td>
         <td style="padding:8px;border-bottom:1px solid #f1f1f1"><a class="btn" href="/projects/view?id=<?= (int)$p['id'] ?>">Chi tiết</a></td>

@@ -42,7 +42,12 @@ function auth_user(): ?array
     if (empty($_SESSION['user_id'])) return null;
     $stmt = db()->prepare('SELECT * FROM users WHERE id = ? LIMIT 1');
     $stmt->execute([$_SESSION['user_id']]);
-    return $stmt->fetch() ?: null;
+    $u = $stmt->fetch() ?: null;
+    if ($u) {
+        $up = db()->prepare('UPDATE users SET last_seen_at = NOW() WHERE id = ?');
+        $up->execute([$u['id']]);
+    }
+    return $u;
 }
 
 function require_auth(): array
@@ -84,13 +89,19 @@ function attendance_summary_by_month(string $month): array
 
 function projects_overview(): array
 {
-    $sql = "SELECT p.*, COALESCE(m.total_modules,0) AS total_modules, COALESCE(m.progress_avg,0) AS progress_avg
+    $sql = "SELECT p.*,
+                   COALESCE(x.total_details,0) AS total_modules,
+                   COALESCE(x.progress_weighted,0) AS progress_avg
             FROM projects p
             LEFT JOIN (
-                SELECT project_id, COUNT(*) AS total_modules, AVG(progress_percent) AS progress_avg
-                FROM project_modules
-                GROUP BY project_id
-            ) m ON m.project_id = p.id
+                SELECT pd.project_id,
+                       COUNT(*) AS total_details,
+                       CASE WHEN SUM(pd.duration_days) = 0 THEN 0
+                            ELSE SUM(pd.progress_percent * pd.duration_days) / SUM(pd.duration_days)
+                       END AS progress_weighted
+                FROM project_details pd
+                GROUP BY pd.project_id
+            ) x ON x.project_id = p.id
             ORDER BY p.id DESC";
 
     return db()->query($sql)->fetchAll();
@@ -169,3 +180,76 @@ Host: {$host}
 {$last['file']}:{$last['line']}";
     alert_telegram($msg);
 });
+
+
+function is_gmail(string $email): bool
+{
+    return (bool)preg_match('/^[A-Za-z0-9._%+-]+@gmail\.com$/', $email);
+}
+
+function is_vn_phone(string $phone): bool
+{
+    return (bool)preg_match('/^(0[3|5|7|8|9])[0-9]{8}$/', $phone);
+}
+
+function age_from_birthdate(?string $birthDate): ?int
+{
+    if (!$birthDate) return null;
+    try {
+        $d = new DateTime($birthDate);
+        $now = new DateTime();
+        return (int)$now->diff($d)->y;
+    } catch (Throwable $e) {
+        return null;
+    }
+}
+
+function working_tenure_text(?string $startDate): string
+{
+    if (!$startDate) return '--';
+    try {
+        $s = new DateTime($startDate);
+        $n = new DateTime();
+        $diff = $n->diff($s);
+        if ($diff->y === 0 and $diff->m === 0) return 'Dưới 1 tháng';
+        if ($diff->y === 0 and $diff->m < 3) return 'Trên 1 tháng';
+        if ($diff->y === 0 and $diff->m >= 3) return 'Trên 3 tháng';
+        if ($diff->y >= 1 and $diff->m === 0) return $diff->y . ' năm';
+        return $diff->y . ' năm ' . $diff->m . ' tháng';
+    } catch (Throwable $e) {
+        return '--';
+    }
+}
+
+function is_user_online(?string $lastSeenAt, int $minutes = 5): bool
+{
+    if (!$lastSeenAt) return false;
+    try {
+        $last = new DateTime($lastSeenAt);
+        $now = new DateTime();
+        return ($now->getTimestamp() - $last->getTimestamp()) <= ($minutes * 60);
+    } catch (Throwable $e) {
+        return false;
+    }
+}
+
+
+function site_settings(): array
+{
+    static $cache = null;
+    if ($cache !== null) return $cache;
+    try {
+        $rows = db()->query('SELECT `key`,`value` FROM site_settings')->fetchAll();
+        $cache = [];
+        foreach ($rows as $r) $cache[$r['key']] = (string)($r['value'] ?? '');
+    } catch (Throwable $e) {
+        $cache = [];
+    }
+    return $cache;
+}
+
+function site_get(string $key, string $default = ''): string
+{
+    $s = site_settings();
+    return isset($s[$key]) && $s[$key] !== '' ? $s[$key] : $default;
+}

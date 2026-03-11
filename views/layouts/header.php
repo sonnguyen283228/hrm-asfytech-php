@@ -1,9 +1,12 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="vi">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>HRM PHP</title>
+  <title><?= htmlspecialchars(site_get('site_name', 'HRM PHP')) ?></title>
+  <?php $favicon = site_get('site_favicon_url', ''); if ($favicon): ?>
+    <link rel="icon" href="<?= htmlspecialchars($favicon) ?>">
+  <?php endif; ?>
   <style>
     body{font-family:Arial,sans-serif;background:#f5f7fb;max-width:980px;margin:24px auto;padding:0 12px;color:#1f2937}
     .card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.04)}
@@ -17,3 +20,8 @@
   </style>
 </head>
 <body>
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+    <?php $logo = site_get('site_logo_url', ''); if ($logo): ?><img src="<?= htmlspecialchars($logo) ?>" alt="logo" style="height:40px"><?php endif; ?>
+    <strong><?= htmlspecialchars(site_get('site_name', 'HRM APP')) ?></strong>
+  </div>
+  <?= site_get('header_html', '') ?>

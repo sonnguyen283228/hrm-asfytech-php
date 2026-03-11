@@ -6,7 +6,7 @@
   <p>Check-out: <strong><?= htmlspecialchars($row['check_out'] ?? 'ChÆ°a') ?></strong></p>
 
   <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
-    <?php if (($user['role'] ?? 'staff') === 'admin'): ?><a class="btn" href="/employees">Nhân sự</a><a class="btn" href="/departments">Phòng ban</a><a class="btn" href="/projects">Dự án</a><a class="btn" href="/attendance/reports">Báo cáo công</a><?php endif; ?>
+    <?php if (($user['role'] ?? 'staff') === 'admin'): ?><a class="btn" href="/employees">Nhân sự</a><a class="btn" href="/departments">Phòng ban</a><a class="btn" href="/projects">Dự án</a><a class="btn" href="/attendance/reports">Báo cáo công</a><a class="btn" href="/settings/site">Tùy biến site</a><?php endif; ?>
     <form method="post" action="/attendance/check-in">
       <button class="btn btn-primary" type="submit">Check-in</button>
     </form>

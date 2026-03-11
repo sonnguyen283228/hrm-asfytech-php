@@ -13,9 +13,6 @@
     <label>Ngày bắt đầu</label>
     <input type="date" name="start_date" required>
 
-    <label>Thời gian triển khai dự kiến (tháng)</label>
-    <input type="number" min="1" name="duration_months" required>
-
     <label>Mô tả dự án</label>
     <input type="text" name="description" placeholder="Mô tả ngắn về dự án">
 
