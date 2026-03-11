@@ -100,7 +100,7 @@
 
     .badge{padding:3px 8px;border-radius:999px;font-size:12px;font-weight:700}
     .badge-online{background:#dcfce7;color:#166534}
-    .badge-offline{background:#f3f4f6;color:#6b7280}
+    .badge-offline{background:#f3f4f6;color:#6b7280}`r`n`r`n    .menu{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}`r`n    .menu a{padding:8px 12px;border-radius:999px;text-decoration:none;font-weight:600;color:#1f2937;background:#fff;border:1px solid #d8e3ff}`r`n    .menu a.active{background:var(--brand);border-color:var(--brand);color:#fff}`r`n    .menu a:hover{border-color:var(--brand)}
 
     @media (max-width: 768px){
       body{padding:10px}
@@ -118,5 +118,15 @@
     </a>
     <small class="muted">ASFY HRM</small>
   </div>
+  <?php $u = auth_user(); $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/'; ?>
+  <?php if ($u): ?>
+    <nav class="menu">
+      <a class="<?= ($path === '/attendance' || $path === '/') ? 'active' : '' ?>" href="/attendance">Home</a>
+      <a class="<?= (strpos($path, '/employees') === 0) ? 'active' : '' ?>" href="/employees">Nhân sự</a>
+      <a class="<?= (strpos($path, '/projects') === 0) ? 'active' : '' ?>" href="/projects">Dự án</a>
+    </nav>
+  <?php endif; ?>
   <?= site_get('header_html', '') ?>
+
+
 
