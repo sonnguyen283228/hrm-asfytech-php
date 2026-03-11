@@ -9,8 +9,8 @@
   <?php endif; ?>
   <style>
     :root{
-      --brand:#0f9d58;
-      --brand-dark:#0a7a44;
+      --brand:#4285f4;
+      --brand-dark:#2f6fdb;
       --bg:#f3f7f5;
       --text:#1f2937;
       --muted:#6b7280;
@@ -23,7 +23,7 @@
     html,body{margin:0;padding:0}
     body{
       font-family:"Inter","Segoe UI",Arial,sans-serif;
-      background:radial-gradient(circle at top right,#e9f8ef 0%,var(--bg) 40%,#f7faf8 100%);
+      background:radial-gradient(circle at top right,#eaf2ff 0%,var(--bg) 40%,#f7faff 100%);
       color:var(--text);
       max-width:1120px;
       margin:0 auto;
@@ -88,7 +88,7 @@
     input:focus,select:focus,textarea:focus{
       outline:none;
       border-color:var(--brand);
-      box-shadow:0 0 0 3px rgba(15,157,88,.15);
+      box-shadow:0 0 0 3px rgba(66,133,244,.25);
     }
 
     .muted{color:var(--muted)}
@@ -116,6 +116,7 @@
       <?php $logo = site_get('site_logo_url', ''); if ($logo): ?><img src="<?= htmlspecialchars($logo) ?>" alt="logo"><?php endif; ?>
       <span><?= htmlspecialchars(site_get('site_name', 'HRM APP')) ?></span>
     </div>
-    <small class="muted">Tone: #0f9d58</small>
+    <small class="muted">Tone: #4285f4</small>
   </div>
   <?= site_get('header_html', '') ?>
+
