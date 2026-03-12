@@ -1,9 +1,8 @@
 <?php require __DIR__ . '/../layouts/header.php'; ?>
-<div class="dashboard-shell">
-  <?php $activePage='home'; require __DIR__ . '/../layouts/sidebar.php'; ?>
+<?php $activePage='home'; require __DIR__ . '/../layouts/sidebar.php'; ?>
 
-  <section class="mainpanel p-4">
-    <div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-2">
+<div class="px-sm-4 px-md-5 mt-4">
+  <div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-2">
       <div>
         <h2 class="mb-1 text-900">Tổng quan Hệ thống</h2>
         <div class="text-700 fw-semi-bold">Cập nhật lúc <?= date('H:i d/m/Y') ?></div>
@@ -105,7 +104,5 @@
         </div>
     </div>
 
-  </section>
 </div>
-
 <?php require __DIR__ . '/../layouts/footer.php'; ?>

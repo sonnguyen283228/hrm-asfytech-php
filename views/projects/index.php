@@ -1,10 +1,8 @@
 <?php require __DIR__ . '/../layouts/header.php'; ?>
+<?php $activePage='projects'; require __DIR__ . '/../layouts/sidebar.php'; ?>
 
-<div class="dashboard-shell">
-  <?php $activePage='projects'; require __DIR__ . '/../layouts/sidebar.php'; ?>
-  
-  <section class="mainpanel p-4">
-    <div class="mb-4">
+<div class="px-sm-4 px-md-5 mt-4">
+  <div class="mb-4">
       <div class="row align-items-center justify-content-between g-3">
         <div class="col-auto flex-grow-1">
           <h2 class="mb-0 text-900">Quản lý dự án</h2>
@@ -136,7 +134,6 @@
 
       </div>
     </div>
-  </section>
 </div>
 
 <?php require __DIR__ . '/../layouts/footer.php'; ?>

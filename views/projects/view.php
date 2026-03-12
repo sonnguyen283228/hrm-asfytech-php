@@ -1,10 +1,8 @@
 <?php require __DIR__ . '/../layouts/header.php'; ?>
+<?php $activePage='projects'; require __DIR__ . '/../layouts/sidebar.php'; ?>
 
-<div class="dashboard-shell">
-  <?php $activePage='projects'; require __DIR__ . '/../layouts/sidebar.php'; ?>
-  
-  <section class="mainpanel p-4">
-    <!-- Breadcrumb & Header -->
+<div class="px-sm-4 px-md-5 mt-4">
+  <!-- Breadcrumb & Header -->
     <nav class="mb-2" aria-label="breadcrumb">
       <ol class="breadcrumb mb-0">
         <li class="breadcrumb-item"><a href="/projects">Dự án</a></li>
@@ -207,7 +205,6 @@
       </div>
     </div> <!-- .card modules -->
 
-  </section>
 </div>
 
 <script>

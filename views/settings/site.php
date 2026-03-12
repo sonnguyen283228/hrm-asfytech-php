@@ -1,10 +1,8 @@
 <?php require __DIR__ . '/../layouts/header.php'; ?>
+<?php $activePage='settings'; require __DIR__ . '/../layouts/sidebar.php'; ?>
 
-<div class="dashboard-shell">
-  <?php $activePage='settings'; require __DIR__ . '/../layouts/sidebar.php'; ?>
-  
-  <section class="mainpanel p-4">
-    <div class="mb-5">
+<div class="px-sm-4 px-md-5 mt-4">
+  <div class="mb-5">
       <h2 class="mb-0 text-900">Tùy biến giao diện App</h2>
       <p class="text-700 mb-0">Thiết lập cấu hình giao diện chung và thông tin hiển thị của hệ thống.</p>
     </div>
@@ -87,7 +85,6 @@
         </form>
       </div>
     </div>
-  </section>
 </div>
 
 <script>
