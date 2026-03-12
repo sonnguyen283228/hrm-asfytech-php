@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="vi">
 <head>
   <meta charset="utf-8">
@@ -9,7 +9,8 @@
     <link rel="icon" href="<?= htmlspecialchars($favicon) ?>">
   <?php endif; ?>
   <link href="/theme-phoenix/assets/css/theme.min.css" rel="stylesheet" />
-  <link href="/theme-phoenix/assets/css/user.min.css" rel="stylesheet" />`n  <link href="/theme-phoenix/assets/css/asfy-custom.css" rel="stylesheet" />
+  <link href="/theme-phoenix/assets/css/user.min.css" rel="stylesheet" />
+  <link href="/theme-phoenix/assets/css/asfy-custom.css" rel="stylesheet" />
   <style>
     :root{--phoenix-primary:#4285f4}
     .navbar-brand img{height:32px}
