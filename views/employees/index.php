@@ -13,7 +13,7 @@
         <div class="col-auto">
           <div class="d-flex align-items-center gap-2">
             <button class="btn btn-outline-secondary btn-sm"><span data-feather="download" class="me-2"></span>Export File</button>
-            <?php if (in_array((string)(auth_user()['role'] ?? ''), ['admin', 'manager'])): ?>
+            <?php if (in_array(strtolower((string)(auth_user()['role'] ?? '')), ['admin', 'manager'])): ?>
             <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#employeeModal"><span data-feather="plus" class="me-2"></span>Thêm nhân sự mới</button>
             <?php endif; ?>
           </div>

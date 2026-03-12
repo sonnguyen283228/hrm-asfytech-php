@@ -69,7 +69,7 @@ function require_auth(): array
 function require_admin(): array
 {
     $u = require_auth();
-    if (($u['role'] ?? 'staff') !== 'admin') {
+    if (strtolower($u['role'] ?? 'staff') !== 'admin') {
         http_response_code(403);
         exit('403 Forbidden');
     }

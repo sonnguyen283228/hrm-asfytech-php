@@ -10,9 +10,10 @@
     <link rel="icon" href="<?= htmlspecialchars($favicon) ?>">
   <?php endif; ?>
 
+  <script src="/phoenix/assets/js/config.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-  <link href="/phoenix/assets/css/theme.min.css" rel="stylesheet" />
-  <link href="/phoenix/assets/css/user.min.css" rel="stylesheet" />
+  <link href="/phoenix/assets/css/theme.min.css" rel="stylesheet" id="style-default">
+  <link href="/phoenix/assets/css/user.min.css" rel="stylesheet" id="user-style-default">
   <link href="/phoenix/assets/css/asfy-custom.css" rel="stylesheet" />
   
   <style>
@@ -22,7 +23,7 @@
   
   <?= site_get('header_html', '') ?>
 </head>
-<body>
+<body class="navbar-top">
   <main class="main" id="top">
     <!-- Top Navbar -->
     <nav class="navbar navbar-top fixed-top navbar-expand-lg border-bottom px-0" id="navbarTop">
@@ -45,7 +46,11 @@
           <li class="nav-item dropdown">
             <a class="nav-link lh-1 pe-0" id="navbarDropdownUser" href="#!" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false">
               <div class="avatar avatar-l">
-                <div class="avatar-name rounded-circle border border-2 border-white bg-200 text-700"><span><?= mb_substr($u['full_name'] ?? 'User', 0, 1) ?></span></div>
+                <?php if (!empty($u['avatar_url'])): ?>
+                  <img class="rounded-circle" src="<?= htmlspecialchars($u['avatar_url']) ?>" alt="" referrerpolicy="no-referrer" />
+                <?php else: ?>
+                  <div class="avatar-name rounded-circle border border-2 border-white bg-200 text-700"><span><?= mb_substr($u['full_name'] ?? 'U', 0, 1) ?></span></div>
+                <?php endif; ?>
               </div>
             </a>
             <div class="dropdown-menu dropdown-menu-end navbar-dropdown-caret py-0 dropdown-profile shadow border border-300" aria-labelledby="navbarDropdownUser">
@@ -53,7 +58,11 @@
                 <div class="card-body p-0">
                   <div class="text-center pt-4 pb-3">
                     <div class="avatar avatar-xl">
-                      <div class="avatar-name rounded-circle border border-2 border-white bg-200 text-700"><span><?= mb_substr($u['full_name'] ?? 'User', 0, 1) ?></span></div>
+                      <?php if (!empty($u['avatar_url'])): ?>
+                        <img class="rounded-circle object-fit-cover w-100 h-100" src="<?= htmlspecialchars($u['avatar_url']) ?>" alt="" referrerpolicy="no-referrer" />
+                      <?php else: ?>
+                        <div class="avatar-name rounded-circle border border-2 border-white bg-200 text-700"><span><?= mb_substr($u['full_name'] ?? 'U', 0, 1) ?></span></div>
+                      <?php endif; ?>
                     </div>
                     <h6 class="mt-2 text-1000"><?= htmlspecialchars($u['full_name'] ?? '') ?></h6>
                     <p class="text-600 fs--2 mb-0"><?= htmlspecialchars($u['role'] ?? '') ?></p>

@@ -89,7 +89,7 @@
                         </div>
                         
                         <!-- Links (phân quyền) -->
-                        <?php if ($u && in_array((string)$u['role'], ['admin', 'manager'])): ?>
+                        <?php if ($u && in_array(strtolower((string)$u['role']), ['admin', 'manager'])): ?>
                         <a class="btn btn-subtle-secondary text-start fw-semi-bold bg-white shadow-sm" href="/employees"><span data-feather="users" class="me-3 text-primary"></span>Quản lý nhân sự</a>
                         <?php endif; ?>
                         

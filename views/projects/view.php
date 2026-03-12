@@ -56,7 +56,7 @@
           <div class="card-body">
             <div class="d-flex align-items-center justify-content-between border-bottom pb-2 mb-3">
                <h5 class="card-title text-900 mb-0">Thành viên đội dự án</h5>
-               <?php if (in_array((string)(auth_user()['role'] ?? ''), ['admin', 'manager'])): ?>
+               <?php if (in_array(strtolower((string)(auth_user()['role'] ?? '')), ['admin', 'manager'])): ?>
                <button class="btn btn-sm btn-subtle-primary" type="button" data-bs-toggle="collapse" data-bs-target="#addMemberForm"><span data-feather="user-plus" class="me-2"></span>Thêm thành viên</button>
                <?php endif; ?>
             </div>
@@ -129,7 +129,7 @@
       <div class="card-body">
         <div class="d-flex align-items-center justify-content-between border-bottom pb-2 mb-3">
             <h5 class="card-title text-900 mb-0">Các hạng mục (Modules) triển khai</h5>
-            <?php if (in_array((string)(auth_user()['role'] ?? ''), ['admin', 'manager'])): ?>
+            <?php if (in_array(strtolower((string)(auth_user()['role'] ?? '')), ['admin', 'manager'])): ?>
             <button class="btn btn-sm btn-subtle-primary" type="button" data-bs-toggle="collapse" data-bs-target="#addModuleForm"><span data-feather="layers" class="me-2"></span>Thêm Module</button>
             <?php endif; ?>
         </div>

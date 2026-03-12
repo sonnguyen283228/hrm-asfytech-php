@@ -10,7 +10,7 @@
         </div>
         <div class="col-auto">
           <div class="d-flex align-items-center gap-2">
-            <?php if (in_array((string)(auth_user()['role'] ?? ''), ['admin', 'manager'])): ?>
+            <?php if (in_array(strtolower((string)(auth_user()['role'] ?? '')), ['admin', 'manager'])): ?>
             <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#deptModal"><span data-feather="plus" class="me-2"></span>Thêm phòng ban</button>
             <?php endif; ?>
           </div>
@@ -73,7 +73,7 @@
                     <span class="badge badge-phoenix fs--2 badge-phoenix-primary"><span class="badge-label"><?= (int)$d['total_users'] ?></span></span>
                 </td>
                 <td class="align-middle white-space-nowrap text-end py-3">
-                  <?php if (in_array((string)(auth_user()['role'] ?? ''), ['admin', 'manager'])): ?>
+                  <?php if (in_array(strtolower((string)(auth_user()['role'] ?? '')), ['admin', 'manager'])): ?>
                   <div class="font-sans-serif btn-reveal-trigger position-static">
                     <button class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal fs--2" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs--2"></span></button>
                     <div class="dropdown-menu dropdown-menu-end py-2">

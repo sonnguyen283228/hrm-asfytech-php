@@ -10,7 +10,7 @@
         </div>
         <div class="col-auto">
           <div class="d-flex align-items-center gap-2">
-            <?php if (in_array((string)(auth_user()['role'] ?? ''), ['admin', 'manager'])): ?>
+            <?php if (in_array(strtolower((string)(auth_user()['role'] ?? '')), ['admin', 'manager'])): ?>
             <a class="btn btn-primary" href="/projects/create"><span data-feather="plus" class="me-2"></span>Tạo dự án mới</a>
             <?php endif; ?>
           </div>
