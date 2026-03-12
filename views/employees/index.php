@@ -61,55 +61,83 @@
 </div>
 
 <div id="employeeModal" class="modal-mask" style="display:none">
-  <div class="modal-panel">
+  <div class="modal-panel" style="max-width:920px">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
       <h3 style="margin:0">Thêm nhân sự mới</h3>
       <button class="btn" type="button" onclick="closeEmployeeModal()">Đóng</button>
     </div>
+
     <form method="post" action="/employees/create">
-      <label>Họ tên</label>
-      <input type="text" name="full_name" required>
+      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px">
+        <div>
+          <label>Họ tên</label>
+          <input type="text" name="full_name" required>
+        </div>
 
-      <label>Email công việc (chỉ @gmail.com)</label>
-      <input type="email" name="email" required placeholder="name@gmail.com">
+        <div>
+          <label>Email công việc (chỉ @gmail.com)</label>
+          <input type="email" name="email" required placeholder="name@gmail.com">
+        </div>
 
-      <label>Điện thoại (VN)</label>
-      <input type="text" name="phone" required placeholder="09xxxxxxxx">
+        <div>
+          <label>Điện thoại (VN)</label>
+          <input type="text" name="phone" required placeholder="09xxxxxxxx">
+        </div>
 
-      <label>Địa chỉ - Phường/Xã</label>
-      <input type="text" name="address_ward" placeholder="VD: Phường 7">
+        <div>
+          <label>Địa chỉ - Phường/Xã</label>
+          <input type="text" name="address_ward" placeholder="VD: Phường 7">
+        </div>
 
-      <label>Địa chỉ - Tỉnh/Thành phố</label>
-      <input type="text" name="address_city" placeholder="VD: TP.HCM">
+        <div>
+          <label>Địa chỉ - Tỉnh/Thành phố</label>
+          <input type="text" name="address_city" placeholder="VD: TP.HCM">
+        </div>
 
-      <label>Ngày bắt đầu làm việc</label>
-      <input type="date" name="start_date">
+        <div>
+          <label>Ngày bắt đầu làm việc</label>
+          <input type="date" name="start_date">
+        </div>
 
-      <label>Ngày sinh</label>
-      <input type="date" name="birth_date">
+        <div>
+          <label>Ngày sinh</label>
+          <input type="date" name="birth_date">
+        </div>
 
-      <label>Lương cơ bản (VND)</label>
-      <input type="number" min="0" step="1" name="base_salary" placeholder="10000000">
+        <div>
+          <label>Lương cơ bản (VND)</label>
+          <input type="number" min="0" step="1" name="base_salary" placeholder="10000000">
+        </div>
 
-      <label>Phòng ban</label>
-      <select name="department_id">
-        <option value="">-- Chọn phòng ban --</option>
-        <?php foreach (($departments ?? []) as $d): ?>
-          <option value="<?= (int)$d['id'] ?>"><?= htmlspecialchars($d['name']) ?></option>
-        <?php endforeach; ?>
-      </select>
+        <div style="grid-column:1/-1">
+          <label>Phòng ban</label>
+          <select name="department_id">
+            <option value="">-- Chọn phòng ban --</option>
+            <?php foreach (($departments ?? []) as $d): ?>
+              <option value="<?= (int)$d['id'] ?>"><?= htmlspecialchars($d['name']) ?></option>
+            <?php endforeach; ?>
+          </select>
+        </div>
 
-      <label>Vị trí</label>
-      <input type="text" name="position" placeholder="VD: Frontend Developer" required>
+        <div>
+          <label>Vị trí</label>
+          <input type="text" name="position" placeholder="VD: Frontend Developer" required>
+        </div>
 
-      <label>Vai trò hệ thống</label>
-      <select name="role">
-        <option value="staff">staff</option>
-        <option value="manager">manager</option>
-        <option value="admin">admin</option>
-      </select>
+        <div>
+          <label>Vai trò hệ thống</label>
+          <select name="role">
+            <option value="staff">staff</option>
+            <option value="manager">manager</option>
+            <option value="admin">admin</option>
+          </select>
+        </div>
 
-      <button class="btn btn-asfy" type="submit">Lưu nhân sự</button>
+        <div style="grid-column:1/-1;display:flex;gap:8px;justify-content:flex-start">
+          <button class="btn btn-asfy" type="submit">Lưu nhân sự</button>
+          <button class="btn" type="button" onclick="closeEmployeeModal()">Hủy</button>
+        </div>
+      </div>
     </form>
   </div>
 </div>
