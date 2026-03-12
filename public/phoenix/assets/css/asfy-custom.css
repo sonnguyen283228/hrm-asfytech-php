@@ -1,0 +1,7 @@
+﻿:root{--asfy:#4285f4;--asfy-dark:#2f6fdb}
+body{background:#f6f8fc}
+.nav-pill{padding:.45rem .8rem;border-radius:999px}
+.nav-pill.active{background:var(--asfy)!important;color:#fff!important}
+.btn-asfy{background:var(--asfy);border-color:var(--asfy);color:#fff}
+.btn-asfy:hover{background:var(--asfy-dark);border-color:var(--asfy-dark);color:#fff}
+.card-modern{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:16px;box-shadow:0 6px 18px rgba(15,23,42,.05)}

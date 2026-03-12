@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="vi">
 <head>
   <meta charset="utf-8">
@@ -8,9 +8,9 @@
   <?php $favicon = site_get('site_favicon_url', ''); if ($favicon): ?>
     <link rel="icon" href="<?= htmlspecialchars($favicon) ?>">
   <?php endif; ?>
-  <link href="/theme-phoenix/assets/css/theme.min.css" rel="stylesheet" />
-  <link href="/theme-phoenix/assets/css/user.min.css" rel="stylesheet" />
-  <link href="/theme-phoenix/assets/css/asfy-custom.css" rel="stylesheet" />
+  <link href="/phoenix/assets/css/theme.min.css" rel="stylesheet" />
+  <link href="/phoenix/assets/css/user.min.css" rel="stylesheet" />
+  <link href="/phoenix/assets/css/asfy-custom.css" rel="stylesheet" />
   <style>
     :root{--phoenix-primary:#4285f4}
     .navbar-brand img{height:32px}
@@ -33,8 +33,8 @@
           <?php if ($u): ?>
           <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-3 gap-2">
             <li class="nav-item"><a class="nav-link nav-pill <?= ($path==='/'||strpos($path,'/attendance')===0)?'active':'' ?>" href="/attendance">Home</a></li>
-            <li class="nav-item"><a class="nav-link nav-pill <?= (strpos($path,'/employees')===0||strpos($path,'/departments')===0)?'active':'' ?>" href="/employees">Nhân sự</a></li>
-            <li class="nav-item"><a class="nav-link nav-pill <?= (strpos($path,'/projects')===0)?'active':'' ?>" href="/projects">Dự án</a></li>
+            <li class="nav-item"><a class="nav-link nav-pill <?= (strpos($path,'/employees')===0||strpos($path,'/departments')===0)?'active':'' ?>" href="/employees">NhĂ¢n sá»±</a></li>
+            <li class="nav-item"><a class="nav-link nav-pill <?= (strpos($path,'/projects')===0)?'active':'' ?>" href="/projects">Dá»± Ă¡n</a></li>
           </ul>
           <?php endif; ?>
           <small class="text-700">ASFY HRM</small>
@@ -42,4 +42,5 @@
       </nav>
 
       <?= site_get('header_html', '') ?>
+
 

@@ -5,7 +5,8 @@
       </div>
     </div>
   </main>
-  <script src="/theme-phoenix/vendors/popper/popper.min.js"></script>
-  <script src="/theme-phoenix/vendors/bootstrap/bootstrap.min.js"></script>
+  <script src="/phoenix/vendors/popper/popper.min.js"></script>
+  <script src="/phoenix/vendors/bootstrap/bootstrap.min.js"></script>
 </body>
 </html>
+
