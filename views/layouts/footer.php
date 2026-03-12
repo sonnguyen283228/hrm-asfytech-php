@@ -1,5 +1,6 @@
 ﻿      <?= site_get('footer_html', '') ?>
-      <div class="text-center text-700 fs-10 mt-3"><?= htmlspecialchars(site_get('footer_text', '© HRM APP')) ?></div>
+      <?php $ft = str_replace('YECH','TECH',site_get('footer_text', '© ASFY TECH')); ?>
+      <div class="text-center text-700 fs-10 mt-3"><?= htmlspecialchars($ft ?: '© ASFY TECH') ?></div>
     </div>
   </main>
   <script src="/theme-phoenix/vendors/popper/popper.min.js"></script>
