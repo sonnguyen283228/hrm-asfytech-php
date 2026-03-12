@@ -1,7 +1,7 @@
-<?php require __DIR__ . '/../layouts/header.php'; ?>
-<div class="card" style="max-width:920px">
-  <h2>Tùy biến giao diện App (Admin)</h2>
-  <?php if (!empty($_SESSION['success'])): ?><p style="color:#0a7d34"><?= htmlspecialchars($_SESSION['success']) ?></p><?php unset($_SESSION['success']); endif; ?>
+﻿<?php require __DIR__ . '/../layouts/header.php'; ?>
+<div class="card-modern" style="max-width:980px">
+  <h2 style="margin-top:0">Tùy biến giao diện App (Admin)</h2>
+  <?php if (!empty($_SESSION['success'])): ?><p style="color:#0a7d34;font-weight:600"><?= htmlspecialchars($_SESSION['success']) ?></p><?php unset($_SESSION['success']); endif; ?>
 
   <form method="post" action="/settings/site" enctype="multipart/form-data">
     <label>Tên site</label>
@@ -12,7 +12,7 @@
         <label>Logo URL (tuỳ chọn)</label>
         <input type="text" name="site_logo_url" value="<?= htmlspecialchars($settings['site_logo_url'] ?? '') ?>" placeholder="https://...logo.png">
         <label>Kéo thả / chọn file Logo</label>
-        <div id="logoDrop" style="border:2px dashed #b9cdfa;border-radius:12px;padding:16px;text-align:center;background:#f6f9ff;cursor:pointer">
+        <div id="logoDrop" class="drop-zone">
           Kéo thả logo vào đây hoặc bấm để chọn file
           <input id="logoInput" type="file" name="site_logo_file" accept=".png,.jpg,.jpeg,.webp,.svg,.gif" style="display:none">
         </div>
@@ -22,7 +22,7 @@
         <label>Favicon URL (tuỳ chọn)</label>
         <input type="text" name="site_favicon_url" value="<?= htmlspecialchars($settings['site_favicon_url'] ?? '') ?>" placeholder="https://...favicon.ico">
         <label>Kéo thả / chọn file Favicon</label>
-        <div id="favDrop" style="border:2px dashed #b9cdfa;border-radius:12px;padding:16px;text-align:center;background:#f6f9ff;cursor:pointer">
+        <div id="favDrop" class="drop-zone">
           Kéo thả favicon vào đây hoặc bấm để chọn file
           <input id="favInput" type="file" name="site_favicon_file" accept=".ico,.png,.svg" style="display:none">
         </div>
@@ -38,7 +38,7 @@
     <label>Footer HTML</label>
     <textarea name="footer_html" style="width:100%;min-height:100px;margin-bottom:12px"><?= htmlspecialchars($settings['footer_html'] ?? '') ?></textarea>
 
-    <button class="btn btn-primary" type="submit">Lưu tùy biến</button>
+    <button class="btn btn-asfy" type="submit">Lưu tùy biến</button>
     <a class="btn" href="/attendance">Quay lại</a>
   </form>
 </div>
