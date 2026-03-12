@@ -140,7 +140,37 @@ if ($uri === '/attendance' && $method === 'GET') {
     $stmt = db()->prepare('SELECT * FROM attendance_logs WHERE user_id = ? AND work_date = ? LIMIT 1');
     $stmt->execute([$user['id'], $today]);
     $row = $stmt->fetch();
-    view('attendance/index', ['user' => $user, 'row' => $row, 'today' => $today]);
+
+    $stats = [
+        'employees' => 0,
+        'projects_total' => 0,
+        'projects_planning' => 0,
+        'projects_in_progress' => 0,
+        'projects_paused' => 0,
+        'projects_done' => 0,
+        'present_today' => 0,
+        'my_today_hours' => 0,
+    ];
+
+    $stats['employees'] = (int)(db()->query("SELECT COUNT(*) c FROM users WHERE is_active = 1")->fetch()['c'] ?? 0);
+
+    $projectRows = db()->query("SELECT status, COUNT(*) c FROM projects GROUP BY status")->fetchAll();
+    foreach ($projectRows as $r) {
+        $k = 'projects_' . $r['status'];
+        if (array_key_exists($k, $stats)) $stats[$k] = (int)$r['c'];
+        $stats['projects_total'] += (int)$r['c'];
+    }
+
+    $pStmt = db()->prepare("SELECT COUNT(*) c FROM attendance_logs WHERE work_date = ? AND check_in IS NOT NULL");
+    $pStmt->execute([$today]);
+    $stats['present_today'] = (int)($pStmt->fetch()['c'] ?? 0);
+
+    $hStmt = db()->prepare("SELECT TIMESTAMPDIFF(MINUTE, check_in, COALESCE(check_out, NOW())) m FROM attendance_logs WHERE user_id = ? AND work_date = ? AND check_in IS NOT NULL LIMIT 1");
+    $hStmt->execute([$user['id'], $today]);
+    $mins = (int)($hStmt->fetch()['m'] ?? 0);
+    $stats['my_today_hours'] = round($mins / 60, 2);
+
+    view('attendance/index', ['user' => $user, 'row' => $row, 'today' => $today, 'stats' => $stats]);
     exit;
 }
 
