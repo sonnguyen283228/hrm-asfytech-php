@@ -1,0 +1,104 @@
+ MÔ TẢ CHỨC NĂNG APP WEBSITE HRM 
+ I.  Module 1: Quản lý nhân sự, phòng ban 
+ 1.  Các chức năng 
+ 1)  Thêm mới, sửa, khóa nhân sự 
+ ●  Tên nhân sự (validate); 
+ ●  email  (bắt  buộc  là  Gmail)  (validate)  Lưu  ý  có  check  trùng 
+ email với Database; 
+ ●  Điện thoại (validate); 
+ ●  Địa chỉ (select theo xã(Phường) và Tỉnh (Thành phố)); 
+ ●  Ngày  bắt  đầu  làm  việc  tại  công  ty  (cho  phép  chọn,  không 
+ nhập); 
+ ●  Ngày sinh (validate) (cho phép chọn, không nhập); 
+ ●  Lương cơ bản (đơn vị tính là VND hay  đ  ). 
+ 2)  Thêm mới, sửa, khóa phòng ban 
+ ●  Tên phòng ban (validate); 
+ ●  Mô tả (chức năng của phòng ban) (không cần validate). 
+ 3)  Thêm mới, sửa, khóa chức vụ 
+ ●  Tên chức vụ (validate); 
+ ●  Mô tả (không cần validate). 
+ 4)  Chức năng chấm công hàng ngày cho nhân sự 
+ 2.  Các page trong Module 
+ 1)  Danh sách nhân sự 
+ ●  Tên,  tuổi,  avatar  (lấy  theo  tài  khoản  Gmail),  trạng  thái 
+ online/oﬄine,  thời  gian  làm  việc  tại  công  ty,  lương  cơ  bản, 
+ Phòng ban, chức vụ; 
+ ●  Có chức năng lọc: 
+ +  Theo tên nhân sự; 
+ +  Theo thời gian bắt đầu làm việc tại công ty; 
+ +  Theo phòng ban. 
+
+ ●  Có  chức  năng  xuất  danh  sách  (theo  điều  kiện  lọc)  sang  định 
+ dạng excel và pdf để tải về. 
+ 2)  Danh sách phòng ban 
+ ●  Tên phòng ban, Số lượng nhân sự, Mô tả 
+ II.  Module 2: Quản lý dự án 
+ 1.  Các chức năng 
+ 1)  Thêm mới, sửa, khóa dự án 
+ ●  Tên dự án (validate); 
+ ●  Ngày bắt đầu (chọn ngày, tháng, năm) (validate); 
+ ●  Trạng  thái  (Kế  hoạch/Đang  triển  khai/Tạm  dừng/Hoàn 
+ thành) (mặc định lấy trạng thái "Đang triển khai"); 
+ ●  Nhân  sự  tham  gia  dự  án  (chọn  trong  danh  sách  nhân  sự),  Vai 
+ trò của nhân sự trong dự án đó; 
+ ●  Mô tả dự án (không cần validate). 
+ 2)  Thêm chi tiết triển khai cho từng dự án 
+ ●  Nội  dung,  Nhân  sự  thực  hiện,  ngày  thực  hiện  (chọn  ngày), 
+ thời  gian  thực  hiện  (số  ngày),  hiển  thị  ra  ngày  hoàn  thành  dự 
+ kiến =“ngày thực hiện” + thời gian thực hiện. 
+ 3)  Tính toán tỷ lệ hoàn thành của dự án 
+ ●  Mặc  định  khi  chưa  thêm  “chi  tiết  triển  khai  cho  từng  dự  án” 
+ thì tỷ lệ hoàn thành là 0%. 
+ ●  Dựa  vào  “chi  tiết  triển  khai”  được  Admin  thêm  vào  sẽ  tính 
+ toán  được  tổng  thời  gian  hoàn  thành  của  dự  án  và  tính  toán 
+ được  các  “chi  tiết  triển  khai”  sẽ  chiếm  tỷ  lệ  trong  dự  án  dựa 
+ vào số ngày của từng chi tiết trong tổng dự án. 
+ ●  Admin  có  quyền  chỉnh  sửa  “thời  gian  thực  hiện  (số  ngày)” 
+ cho  từng  “chi  tiết  triển  khai”.  Nhân  sự  được  giao  chỉ  xem  và 
+ không sửa được nội dung này. 
+ III.  TRANG TỔNG QUAN 
+ ●  Thể hiện tổng số nhân sự trong công ty; 
+ ●  Thể  hiện  tổng  số  dự  án  ((Kế  hoạch/Đang  triển  khai/Tạm  dừng/Hoàn 
+ thành); 
+ ●  Thể hiện tỷ lệ hoàn thành của từng dự án “đang triển khai” 
+
+ ●  Báo  cáo  chấm  công  cho  nhân  sự  trong  tháng  hiện  tại  (Có  thể  tải  về  theo 
+ định dạng Excel và Pdf) 
+ IV.  PHÂN QUYỀN 
+ 1.  Các quyền trên App website 
+ 1)  Admin 
+ 2)  HR 
+ 3)  Nhân viên 
+ 2.  Phân quyền cho các vị trí 
+ 1)  Admin 
+ -  Admin là tài khoản email:  nguyensonmbt@gmail.com 
+ -  Admin có các quyền sau: 
+ ●  Thêm nhân sự mới, sửa thông tin của nhân sự, khóa 
+ nhân sự. 
+ ●  Thêm dự án mới, sửa thông tin của dự án, khóa dự án; 
+ ●  Thêm chi tiết triển khai cho từng dự án. 
+ ●  Thêm phòng ban mới, sửa thông tin của phòng ban, 
+ khóa phòng ban. 
+ ●  Xem được tất cả các báo cáo. 
+ -  Admin có thể tùy biến header và footer cho App website 
+ Tạo Logo site, favicon, Chỉnh sửa thông tin ở footer. 
+ 2)  HR 
+ -  HR có các quyền sau: 
+ ●  Thêm nhân sự mới; 
+ ●  Sửa thông tin của nhân sự, khóa nhân sự, chờ Admin 
+ duyệt các thông tin này mới được public. 
+ ●  Thêm phòng ban mới; 
+ ●  Sửa thông tin của phòng ban, khóa phòng ban. chờ 
+ Admin duyệt các thông tin này mới được public. 
+ ●  Xem được danh sách tổng nhân sự. 
+ ●  Xem được danh sách dự án. 
+ 3)  Nhân viên 
+ -  Nhân viên có các quyền sau: 
+ ●  Xem được các thông tin của nhân viên đó, danh sách 
+ các dự án nhân viên đó đã và đang tham gia. 
+ ●  Xem được tổng số công của nhân viên đó qua các 
+ tháng (hiện tại và quá khứ) 
+ ●  Gửi phản hồi, đề xuất tới Admin. 
+
+
+

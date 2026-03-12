@@ -1,5 +1,5 @@
-﻿<?php
-// Standalone login layout (clean, centered) to match provided reference style
+<?php
+// Standalone login layout (Phoenix Style)
 $siteName = function_exists('site_get') ? site_get('site_name', 'HRM APP') : 'HRM APP';
 $logo = function_exists('site_get') ? site_get('site_logo_url', '') : '';
 $favicon = function_exists('site_get') ? site_get('site_favicon_url', '') : '';
@@ -8,87 +8,104 @@ $favicon = function_exists('site_get') ? site_get('site_favicon_url', '') : '';
 <html lang="vi">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><?= htmlspecialchars($siteName) ?> - Đăng nhập</title>
   <?php if ($favicon): ?><link rel="icon" href="<?= htmlspecialchars($favicon) ?>"><?php endif; ?>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="/phoenix/assets/css/theme.min.css" rel="stylesheet" id="style-default">
+  <link href="/phoenix/assets/css/user.min.css" rel="stylesheet" id="user-style-default">
+  
   <style>
-    :root{--primary:#4f46e5;--primary-dark:#4338ca;--bg:#f1f3f5;--card:#ffffff;--text:#111827;--muted:#6b7280}
-    *{box-sizing:border-box}
-    body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
-    .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
-    .panel{width:100%;max-width:480px}
-    .logo{display:flex;justify-content:center;margin-bottom:16px}
-    .logo .holder{width:76px;height:76px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 20px rgba(0,0,0,.12)}
-    .logo img{max-width:44px;max-height:44px}
-    .card{background:var(--card);border:1px solid #e5e7eb;border-radius:12px;box-shadow:0 10px 25px rgba(0,0,0,.08);overflow:hidden}
-    .content{padding:24px 28px}
-    h2{margin:0 0 14px;font-size:22px}
-    label{display:block;font-weight:600;margin:12px 0 6px}
-    input[type=email],input[type=password]{width:100%;height:46px;border:1px solid #d1d5db;border-radius:8px;padding:0 12px;font-size:15px}
-    input:focus{outline:none;border-color:#818cf8;box-shadow:0 0 0 3px rgba(79,70,229,.15)}
-    .row{display:flex;align-items:center;gap:8px;margin:12px 0}
-    .captcha{height:78px;border:1px solid #d1d5db;border-radius:6px;background:#fff;display:flex;align-items:center;padding:12px;margin-top:8px}
-    .captcha .box{width:28px;height:28px;border:2px solid #6b7280;margin-right:10px}
-    .btn{width:100%;height:44px;border:0;border-radius:8px;font-weight:700;cursor:pointer}
-    .btn-primary{background:linear-gradient(90deg,var(--primary),#5b43ea);color:#fff}
-    .btn-primary:hover{background:linear-gradient(90deg,var(--primary-dark),#4f46e5)}
-    .divider{display:flex;align-items:center;gap:10px;color:var(--muted);margin:14px 0}
-    .divider:before,.divider:after{content:'';flex:1;height:1px;background:#e5e7eb}
-    .btn-google{display:flex;align-items:center;justify-content:center;gap:8px;height:42px;border:1px solid #d1d5db;border-radius:8px;background:#fff;color:#1f2937;text-decoration:none;font-weight:600}
-    .foot{padding:12px 16px;background:#f8fafc;border-top:1px solid #e5e7eb;text-align:center;color:#6b7280;font-size:13px}
-    .error{background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;padding:10px;border-radius:8px;margin-bottom:10px}
+    body { font-family: 'Nunito Sans', sans-serif; background-color: #f5f7fa; }
+    .bg-auth {
+      background-image: url('/phoenix/assets/img/bg/bg-11.png');
+      background-size: cover;
+      background-position: center;
+    }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="panel">
-      <div class="logo">
-        <div class="holder">
-          <?php if ($logo): ?>
-            <img src="<?= htmlspecialchars($logo) ?>" alt="logo">
-          <?php else: ?>
-            <div style="font-weight:800;color:#4f46e5">A</div>
-          <?php endif; ?>
+  <main class="main" id="top">
+    <div class="row vh-100 g-0">
+      <div class="col-lg-6 position-relative d-none d-lg-block">
+        <div class="bg-auth position-absolute top-0 left-0 w-100 h-100"></div>
+        <div class="position-absolute w-100 h-100" style="background: rgba(15, 23, 42, 0.7);"></div>
+        <div class="position-relative h-100 d-flex flex-column justify-content-center px-6">
+          <div class="mb-4">
+            <?php if ($logo): ?>
+              <img src="<?= htmlspecialchars($logo) ?>" alt="logo" width="64" class="bg-white p-2 rounded-3 shadow-sm mb-4">
+            <?php else: ?>
+              <div class="d-inline-flex align-items-center justify-content-center bg-primary text-white rounded-3 shadow-sm mb-4" style="width: 64px; height: 64px; font-size: 28px; font-weight: 800;">A</div>
+            <?php endif; ?>
+            <h1 class="text-white fw-bolder mb-3 display-4">ASFY HRM System</h1>
+            <p class="text-300 fs-1 leading-normal mb-0" style="max-width: 500px">
+              Hệ thống Quản trị Nhân sự và Quản lý Dự án toàn diện, giúp tối ưu hóa luồng công việc và năng suất của đội ngũ.
+            </p>
+          </div>
         </div>
       </div>
-
-      <div class="card">
-        <div class="content">
-          <h2>Đăng nhập HRM</h2>
+      
+      <div class="col-lg-6 d-flex justify-content-center align-items-center">
+        <div class="w-100 px-4 px-sm-6 px-md-8 px-lg-6 px-xl-8 px-xxl-10" style="max-width: 500px">
+          <div class="text-center mb-5 d-lg-none">
+            <?php if ($logo): ?>
+              <img src="<?= htmlspecialchars($logo) ?>" alt="logo" width="48" class="mb-3 rounded">
+            <?php else: ?>
+              <div class="d-inline-flex align-items-center justify-content-center bg-primary text-white rounded-circle shadow-sm mb-3" style="width: 48px; height: 48px; font-size: 22px; font-weight: 800;">A</div>
+            <?php endif; ?>
+            <h3 class="text-1000">Hệ thống HRM</h3>
+          </div>
+          
+          <div class="mb-5 text-center text-lg-start">
+            <h3 class="text-1000">Đăng nhập</h3>
+            <p class="text-700">Truy cập vào không gian làm việc của bạn</p>
+          </div>
 
           <?php if (!empty($_SESSION['error'])): ?>
-            <div class="error"><?= htmlspecialchars($_SESSION['error']) ?></div>
+            <div class="alert alert-soft-danger d-flex align-items-center mb-4" role="alert">
+              <span class="fas fa-exclamation-triangle me-3 fs-3"></span>
+              <p class="mb-0 flex-1"><?= htmlspecialchars($_SESSION['error']) ?></p>
+            </div>
             <?php unset($_SESSION['error']); ?>
           <?php endif; ?>
 
           <form method="post" action="/login">
-            <label>Tên đăng nhập</label>
-            <input type="email" name="email" required placeholder="Nhập tên đăng nhập">
-
-            <label>Mật khẩu</label>
-            <input type="password" name="password" required placeholder="Nhập mật khẩu">
-
-            <div class="row">
-              <input id="remember" type="checkbox" checked>
-              <label for="remember" style="margin:0;font-weight:500">Ghi nhớ đăng nhập</label>
+            <div class="mb-3 text-start">
+              <label class="form-label" for="email">Tài khoản Email</label>
+              <div class="form-icon-container">
+                <input class="form-control form-icon-input" id="email" name="email" type="email" placeholder="name@gmail.com" required />
+                <span class="fas fa-envelope text-900 fs--1 form-icon"></span>
+              </div>
             </div>
-
-            <div class="captcha">
-              <div class="box"></div>
-              <div style="font-size:14px">Tôi không phải là người máy</div>
+            
+            <div class="mb-3 text-start">
+              <label class="form-label" for="password">Mật khẩu</label>
+              <div class="form-icon-container">
+                <input class="form-control form-icon-input" id="password" name="password" type="password" placeholder="Mật khẩu của bạn" required />
+                <span class="fas fa-key text-900 fs--1 form-icon"></span>
+              </div>
             </div>
-
-            <div style="margin-top:12px">
-              <button class="btn btn-primary" type="submit">Đăng nhập</button>
+            
+            <div class="row flex-between-center mb-4">
+              <div class="col-auto">
+                <div class="form-check mb-0">
+                  <input class="form-check-input" id="basic-checkbox" type="checkbox" checked="checked" />
+                  <label class="form-check-label mb-0" for="basic-checkbox">Ghi nhớ đăng nhập</label>
+                </div>
+              </div>
+              <div class="col-auto"><a class="fs--1 fw-semi-bold" href="#!">Quên mật khẩu?</a></div>
             </div>
+            
+            <button class="btn btn-primary w-100 mb-3" type="submit">Đăng nhập</button>
+            <div class="text-center"><a class="fs--1 fw-bold" href="/auth/google">Tiếp tục đăng nhập bằng Google</a></div>
           </form>
-
-          <div class="divider">Hoặc kết nối với:</div>
-          <a class="btn-google" href="/auth/google">Tiếp tục với Google</a>
         </div>
-        <div class="foot">© 2025 Hệ thống quản trị. Phiên bản 1.0.0</div>
       </div>
     </div>
-  </div>
+  </main>
+
+  <script src="/phoenix/vendors/bootstrap/bootstrap.min.js"></script>
 </body>
 </html>
