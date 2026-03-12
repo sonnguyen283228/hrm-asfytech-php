@@ -1,6 +1,13 @@
-<?php require __DIR__ . '/../layouts/header.php'; ?>
-<div class="card">
-  <h2>Báo cáo chấm công theo tháng</h2>
+<?php $activePage='reports'; require __DIR__ . '/../layouts/header.php'; ?>
+
+<div class="px-sm-4 px-md-5 mt-4">
+    <div class="mb-4">
+        <h2 class="mb-1 text-900">Báo cáo chấm công theo tháng</h2>
+        <p class="text-700 mb-0">Theo dõi thông tin chấm công chi tiết của tất cả nhân sự</p>
+    </div>
+    
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body p-4">
 
   <form method="get" action="/attendance/reports" style="display:flex;gap:8px;align-items:end;flex-wrap:wrap">
     <div>
@@ -14,7 +21,8 @@
     </div>
   </form>
 
-  <table style="width:100%;border-collapse:collapse;margin-top:12px">
+  <div class="table-responsive mt-4">
+  <table class="table table-sm fs--1 mb-0">
     <thead>
       <tr>
         <th style="text-align:left;border-bottom:1px solid #ddd;padding:8px">Họ tên</th>
@@ -34,5 +42,7 @@
       <?php endforeach; ?>
     </tbody>
   </table>
+  </div>
+</div>
 </div>
 <?php require __DIR__ . '/../layouts/footer.php'; ?>

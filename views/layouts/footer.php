@@ -16,6 +16,7 @@
   <!-- Scripts -->
   <script src="/phoenix/vendors/popper/popper.min.js"></script>
   <script src="/phoenix/vendors/bootstrap/bootstrap.min.js"></script>
+  <script src="/phoenix/assets/js/phoenix.js"></script>
   <script src="/phoenix/vendors/feather-icons/feather.min.js"></script>
   <script>
     feather.replace();

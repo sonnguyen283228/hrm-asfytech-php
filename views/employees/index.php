@@ -1,9 +1,6 @@
-<?php require __DIR__ . '/../layouts/header.php'; ?>
+<?php $activePage='employees'; require __DIR__ . '/../layouts/header.php'; ?>
 
-<div class="dashboard-shell">
-  <?php $activePage='employees'; require __DIR__ . '/../layouts/sidebar.php'; ?>
-
-  <section class="mainpanel p-4">
+<div class="px-sm-4 px-md-5 mt-4">
     <div class="mb-4">
       <div class="row align-items-center justify-content-between g-3">
         <div class="col-auto flex-grow-1">
@@ -148,7 +145,6 @@
           </div>
         </div>
 
-      </div>
     </div>
 </div>
 

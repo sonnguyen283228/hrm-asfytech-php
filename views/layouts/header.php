@@ -26,8 +26,8 @@
 <body class="navbar-top">
   <main class="main" id="top">
     <!-- Top Navbar -->
-    <nav class="navbar navbar-top fixed-top navbar-expand-lg border-bottom px-0" id="navbarTop">
-      <div class="container-fluid px-3 px-xl-4">
+    <nav class="navbar navbar-top navbar-expand-lg bg-white mb-4 border-bottom px-0" id="navbarTop">
+      <div class="container-fluid px-3 px-xl-4 px-xxl-6">
         
         <div class="d-flex align-items-center">
           <a class="navbar-brand me-1 me-sm-3 d-flex align-items-center gap-2" href="/attendance">
@@ -40,6 +40,10 @@
           </a>
         </div>
         
+        <div class="d-flex align-items-center">
+          <label class="form-check-label mb-0" for="themeControlToggle">...</label>
+        </div>
+
         <?php $u = auth_user(); ?>
         <?php if ($u): ?>
         <ul class="navbar-nav navbar-nav-icons ms-auto flex-row align-items-center mb-0">
@@ -82,5 +86,8 @@
       </div>
     </nav>
     
+    <!-- Sidebar -->
+    <?php require __DIR__ . '/sidebar.php'; ?>
+
     <!-- Main Content Wrapper -->
-    <div class="content pt-0 mt-5">
+    <div class="content">

@@ -1,5 +1,4 @@
-<?php require __DIR__ . '/../layouts/header.php'; ?>
-<?php $activePage='home'; require __DIR__ . '/../layouts/sidebar.php'; ?>
+<?php $activePage='home'; require __DIR__ . '/../layouts/header.php'; ?>
 
 <div class="px-sm-4 px-md-5 mt-4">
   <div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-2">

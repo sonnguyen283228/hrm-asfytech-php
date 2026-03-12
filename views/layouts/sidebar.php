@@ -1,4 +1,4 @@
-<nav class="navbar navbar-vertical navbar-expand-lg">
+<nav class="navbar navbar-vertical navbar-expand-lg" style="display:inline-block;">
   <script>
     var navbarStyle = window.config.config.phoenixNavbarStyle;
     if (navbarStyle && navbarStyle !== 'transparent') {

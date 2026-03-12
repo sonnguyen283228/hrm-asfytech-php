@@ -1,5 +1,4 @@
-<?php require __DIR__ . '/../layouts/header.php'; ?>
-<?php $activePage='projects'; require __DIR__ . '/../layouts/sidebar.php'; ?>
+<?php $activePage='projects'; require __DIR__ . '/../layouts/header.php'; ?>
 
 <div class="px-sm-4 px-md-5 mt-4">
   <!-- Breadcrumb & Header -->
