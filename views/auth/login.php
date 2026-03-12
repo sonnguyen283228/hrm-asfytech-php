@@ -1,36 +1,94 @@
-﻿<?php require __DIR__ . '/../layouts/header.php'; ?>
-<div class="auth-wrap">
-  <div class="auth-card">
-    <h2 class="auth-title">Đăng nhập HRM</h2>
-    <p class="auth-sub">Quản lý nhân sự và dự án tập trung</p>
+﻿<?php
+// Standalone login layout (clean, centered) to match provided reference style
+$siteName = function_exists('site_get') ? site_get('site_name', 'HRM APP') : 'HRM APP';
+$logo = function_exists('site_get') ? site_get('site_logo_url', '') : '';
+$favicon = function_exists('site_get') ? site_get('site_favicon_url', '') : '';
+?>
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title><?= htmlspecialchars($siteName) ?> - Đăng nhập</title>
+  <?php if ($favicon): ?><link rel="icon" href="<?= htmlspecialchars($favicon) ?>"><?php endif; ?>
+  <style>
+    :root{--primary:#4f46e5;--primary-dark:#4338ca;--bg:#f1f3f5;--card:#ffffff;--text:#111827;--muted:#6b7280}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
+    .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+    .panel{width:100%;max-width:480px}
+    .logo{display:flex;justify-content:center;margin-bottom:16px}
+    .logo .holder{width:76px;height:76px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 20px rgba(0,0,0,.12)}
+    .logo img{max-width:44px;max-height:44px}
+    .card{background:var(--card);border:1px solid #e5e7eb;border-radius:12px;box-shadow:0 10px 25px rgba(0,0,0,.08);overflow:hidden}
+    .content{padding:24px 28px}
+    h2{margin:0 0 14px;font-size:22px}
+    label{display:block;font-weight:600;margin:12px 0 6px}
+    input[type=email],input[type=password]{width:100%;height:46px;border:1px solid #d1d5db;border-radius:8px;padding:0 12px;font-size:15px}
+    input:focus{outline:none;border-color:#818cf8;box-shadow:0 0 0 3px rgba(79,70,229,.15)}
+    .row{display:flex;align-items:center;gap:8px;margin:12px 0}
+    .captcha{height:78px;border:1px solid #d1d5db;border-radius:6px;background:#fff;display:flex;align-items:center;padding:12px;margin-top:8px}
+    .captcha .box{width:28px;height:28px;border:2px solid #6b7280;margin-right:10px}
+    .btn{width:100%;height:44px;border:0;border-radius:8px;font-weight:700;cursor:pointer}
+    .btn-primary{background:linear-gradient(90deg,var(--primary),#5b43ea);color:#fff}
+    .btn-primary:hover{background:linear-gradient(90deg,var(--primary-dark),#4f46e5)}
+    .divider{display:flex;align-items:center;gap:10px;color:var(--muted);margin:14px 0}
+    .divider:before,.divider:after{content:'';flex:1;height:1px;background:#e5e7eb}
+    .btn-google{display:flex;align-items:center;justify-content:center;gap:8px;height:42px;border:1px solid #d1d5db;border-radius:8px;background:#fff;color:#1f2937;text-decoration:none;font-weight:600}
+    .foot{padding:12px 16px;background:#f8fafc;border-top:1px solid #e5e7eb;text-align:center;color:#6b7280;font-size:13px}
+    .error{background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;padding:10px;border-radius:8px;margin-bottom:10px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="panel">
+      <div class="logo">
+        <div class="holder">
+          <?php if ($logo): ?>
+            <img src="<?= htmlspecialchars($logo) ?>" alt="logo">
+          <?php else: ?>
+            <div style="font-weight:800;color:#4f46e5">A</div>
+          <?php endif; ?>
+        </div>
+      </div>
 
-    <?php if (!empty($_SESSION['error'])): ?>
-      <p style="color:#d73a49;font-weight:600"><?= htmlspecialchars($_SESSION['error']) ?></p>
-      <?php unset($_SESSION['error']); ?>
-    <?php endif; ?>
+      <div class="card">
+        <div class="content">
+          <h2>Đăng nhập HRM</h2>
 
-    <form method="post" action="/login">
-      <label>Email</label>
-      <input type="email" name="email" required placeholder="you@gmail.com">
+          <?php if (!empty($_SESSION['error'])): ?>
+            <div class="error"><?= htmlspecialchars($_SESSION['error']) ?></div>
+            <?php unset($_SESSION['error']); ?>
+          <?php endif; ?>
 
-      <label>Mật khẩu</label>
-      <input type="password" name="password" required placeholder="******">
+          <form method="post" action="/login">
+            <label>Tên đăng nhập</label>
+            <input type="email" name="email" required placeholder="Nhập tên đăng nhập">
 
-      <button class="btn btn-asfy auth-btn" type="submit">Đăng nhập</button>
-    </form>
+            <label>Mật khẩu</label>
+            <input type="password" name="password" required placeholder="Nhập mật khẩu">
 
-    <div style="margin:12px 0;text-align:center" class="muted">hoặc</div>
-    <a class="auth-google" href="/auth/google">
-      <span style="display:inline-flex;align-items:center;justify-content:center;gap:8px">
-        <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
-          <path fill="#EA4335" d="M12 10.2v3.9h5.5c-.2 1.3-1.5 3.9-5.5 3.9-3.3 0-6-2.7-6-6s2.7-6 6-6c1.9 0 3.2.8 3.9 1.5l2.7-2.6C16.9 3.3 14.7 2.4 12 2.4 6.8 2.4 2.6 6.6 2.6 11.8S6.8 21.2 12 21.2c6.9 0 9.2-4.8 9.2-7.3 0-.5 0-.9-.1-1.2H12z"/>
-          <path fill="#34A853" d="M3.7 7.2l3.2 2.3C7.8 7.7 9.7 6.4 12 6.4c1.9 0 3.2.8 3.9 1.5l2.7-2.6C16.9 3.3 14.7 2.4 12 2.4 8.4 2.4 5.2 4.5 3.7 7.2z"/>
-          <path fill="#4A90E2" d="M12 21.2c2.6 0 4.8-.8 6.4-2.3l-3-2.5c-.8.6-1.9 1-3.4 1-3.9 0-5.2-2.6-5.5-3.9l-3.3 2.5c1.5 2.8 4.5 5.2 8.8 5.2z"/>
-          <path fill="#FBBC05" d="M3.2 11.8c0-1 .2-1.9.5-2.8L.4 6.5C-.2 7.8-.6 9.2-.6 10.8s.4 3 1 4.3l3.3-2.5c-.3-.8-.5-1.7-.5-2.8z"/>
-        </svg>
-        Đăng nhập bằng Google
-      </span>
-    </a>
+            <div class="row">
+              <input id="remember" type="checkbox" checked>
+              <label for="remember" style="margin:0;font-weight:500">Ghi nhớ đăng nhập</label>
+            </div>
+
+            <div class="captcha">
+              <div class="box"></div>
+              <div style="font-size:14px">Tôi không phải là người máy</div>
+            </div>
+
+            <div style="margin-top:12px">
+              <button class="btn btn-primary" type="submit">Đăng nhập</button>
+            </div>
+          </form>
+
+          <div class="divider">Hoặc kết nối với:</div>
+          <a class="btn-google" href="/auth/google">Tiếp tục với Google</a>
+        </div>
+        <div class="foot">© 2025 Hệ thống quản trị. Phiên bản 1.0.0</div>
+      </div>
+    </div>
   </div>
-</div>
-<?php require __DIR__ . '/../layouts/footer.php'; ?>
+</body>
+</html>
