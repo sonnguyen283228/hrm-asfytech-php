@@ -4,3 +4,11 @@
 *.log
 
 phoenix-v1.15.0/
+
+ANTIGRAVITY_CONTEXT.md
+
+prompts/
+
+*.context.md
+
+CONTEXT.md
