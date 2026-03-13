@@ -89,7 +89,7 @@
             <?php else: ?>
               <div class="d-flex align-items-center justify-content-center bg-primary text-white rounded-2" style="width: 61px; height: 61px; font-weight: 800; font-size: 24px;">A</div>
             <?php endif; ?>
-            <span class="d-none d-sm-block fw-bold text-1000 tracking-tight" style="font-size: 59px; line-height: 1;"><?= htmlspecialchars(site_get('site_name', 'HRM APP')) ?></span>
+            <span class="d-none d-sm-block fw-bold text-1000 tracking-tight" style="font-size: 49px; line-height: 1;"><?= htmlspecialchars(site_get('site_name', 'HRM APP')) ?></span>
           </a>
         </div>
 
