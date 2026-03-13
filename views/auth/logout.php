@@ -26,8 +26,8 @@ $favUrl = get_brand_favicon_url();
       background-position: center;
     }
     .avatar-logout {
-      width: 100px;
-      height: 100px;
+      width: 61px;
+      height: 61px;
       margin: 0 auto;
     }
   </style>
@@ -40,7 +40,7 @@ $favUrl = get_brand_favicon_url();
           <div class="bg-primary position-absolute top-0 start-0 w-100" style="height: 120px; z-index: 1; opacity: 0.1;"></div>
           
           <div class="position-relative" style="z-index: 2; margin-top: 20px;">
-            <div class="avatar avatar-xl avatar-logout mb-4 shadow-sm border border-4 border-white bg-white">
+            <div class="avatar avatar-xl avatar-logout mb-4">
                 <?php if (!empty($user['avatar_url'])): ?>
                    <?php $avtUrl = strpos($user['avatar_url'], 'http') === 0 ? $user['avatar_url'] : $baseUrl . '/' . ltrim($user['avatar_url'], '/'); ?>
                    <img class="rounded-circle object-fit-cover w-100 h-100" src="<?= htmlspecialchars($avtUrl) ?>" alt="Avatar" referrerpolicy="no-referrer" />
