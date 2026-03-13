@@ -9,7 +9,15 @@
         </div>
         <div class="col-auto">
           <div class="d-flex align-items-center gap-2">
-            <a href="/employees/export?<?= http_build_query($_GET) ?>" class="btn btn-outline-secondary btn-sm"><span data-feather="download" class="me-2"></span>Export File</a>
+            <div class="dropdown">
+              <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <span data-feather="download" class="me-2"></span>Export File
+              </button>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="/employees/export?format=excel&<?= http_build_query($_GET) ?>">Excel (.xls)</a></li>
+                <li><a class="dropdown-item" href="/employees/export?format=pdf&<?= http_build_query($_GET) ?>">PDF (.pdf)</a></li>
+              </ul>
+            </div>
             <?php if (in_array(strtolower((string)(auth_user()['role'] ?? '')), ['admin', 'manager'])): ?>
             <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#employeeModal"><span data-feather="plus" class="me-2"></span>Thêm nhân sự mới</button>
             <?php endif; ?>
@@ -42,6 +50,9 @@
              </select>
              <input name="month" value="<?= htmlspecialchars($_GET['month'] ?? '') ?>" type="month" class="form-control form-control-sm w-auto" placeholder="Tháng bắt đầu" aria-label="Lọc thời gian">
              <button type="submit" class="btn btn-sm btn-primary">Lọc / Tìm kiếm</button>
+             <?php if (!empty($_GET['q']) || !empty($_GET['department_id']) || !empty($_GET['month'])): ?>
+               <a href="/employees" class="btn btn-sm btn-outline-secondary">Xóa lọc</a>
+             <?php endif; ?>
           </div>
         </form>
 

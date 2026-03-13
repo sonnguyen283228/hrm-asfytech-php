@@ -221,8 +221,8 @@ function working_tenure_text(?string $startDate): string
         $s = new DateTime($startDate);
         $n = new DateTime();
         
-        // Nếu ngày cấu hình ở tương lai (chưa bắt đầu làm việc)
-        if ($s > $n) return 'Chưa bắt đầu';
+        // Nếu ngày bắt đầu ở tương lai
+        if ($s > $n) return 'Chưa làm việc';
         
         $diff = $s->diff($n);
         
@@ -230,13 +230,14 @@ function working_tenure_text(?string $startDate): string
         $m = $diff->m;
         $d = $diff->d;
 
-        if ($y === 0 && $m === 0) return ($d > 0) ? $d . ' ngày' : 'Hôm nay';
-        
-        $text = '';
-        if ($y > 0) $text .= $y . ' năm ';
-        if ($m > 0) $text .= $m . ' tháng';
-        
-        return trim($text);
+        $total_months = ($y * 12) + $m;
+        if ($total_months < 12) {
+            if ($total_months == 0) return ($d > 0) ? $d . ' ngày' : 'Hôm nay';
+            return $total_months . ' tháng';
+        } else {
+            $years = round($total_months / 12, 1);
+            return str_replace('.0', '', (string)$years) . ' năm';
+        }
     } catch (Throwable $e) {
         return '--';
     }

@@ -297,6 +297,7 @@ if ($uri === '/attendance/export/pdf' && $method === 'GET') {
 if ($uri === '/employees/export' && $method === 'GET') {
     $user = require_admin();
     
+    $format = trim((string)($_GET['format'] ?? 'excel'));
     $q = trim((string)($_GET['q'] ?? ''));
     $departmentId = trim((string)($_GET['department_id'] ?? ''));
     $month = trim((string)($_GET['month'] ?? ''));
@@ -318,8 +319,6 @@ if ($uri === '/employees/export' && $method === 'GET') {
     }
     
     if ($month !== '') {
-        // Chỉ xuất những nhân sự có ngày bắt đầu trước hoặc bằng tháng này. Hoặc nếu muốn lọc người vào đúng tháng.
-        // Dựa theo UI "Tháng bắt đầu", lọc nhân sự bắt đầu làm vào tháng đó.
         $sql .= " AND DATE_FORMAT(u.start_date, '%Y-%m') = ?";
         $params[] = $month;
     }
@@ -328,6 +327,25 @@ if ($uri === '/employees/export' && $method === 'GET') {
     $stmt = db()->prepare($sql);
     $stmt->execute($params);
     $employees = $stmt->fetchAll();
+
+    if ($format === 'pdf') {
+        header('Content-Type: text/html; charset=UTF-8');
+        echo '<!doctype html><html><head><meta charset="utf-8"><title>Danh sách nhân sự</title>';
+        echo '<style>body{font-family:Arial,sans-serif;padding:24px} table{width:100%;border-collapse:collapse;font-size:14px} th,td{border:1px solid #ccc;padding:8px;text-align:left} h2{margin:0 0 16px} .note{margin-top:12px;color:#555}</style>';
+        echo '</head><body>';
+        echo '<h2>Danh sách nhân sự</h2>';
+        echo '<table><thead><tr><th>STT</th><th>Họ tên</th><th>Email</th><th>SĐT</th><th>Phòng ban</th><th>Chức vụ</th><th>Vai trò</th><th>Ngày bắt đầu</th></tr></thead><tbody>';
+        $stt = 1;
+        foreach ($employees as $r) {
+            $pName = htmlspecialchars($r['position'] ?? '--');
+            echo '<tr><td>' . $stt++ . '</td><td>' . htmlspecialchars($r['full_name']) . '</td><td>' . htmlspecialchars($r['email']) . '</td><td>' . htmlspecialchars($r['phone'] ?? '') . '</td><td>' . htmlspecialchars($r['department_name'] ?? '--') . '</td><td>' . $pName . '</td><td>' . htmlspecialchars($r['role']) . '</td><td>' . htmlspecialchars($r['start_date'] ?? '--') . '</td></tr>';
+        }
+        echo '</tbody></table>';
+        echo '<p class="note">Mẹo: Nhấn Ctrl+P và chọn Save as PDF để tải về tệp PDF.</p>';
+        echo '<script>window.print();</script>';
+        echo '</body></html>';
+        exit;
+    }
 
     header('Content-Type: application/vnd.ms-excel; charset=UTF-8');
     header('Content-Disposition: attachment; filename="employees_' . date('Y_m_d_H_i') . '.xls"');
