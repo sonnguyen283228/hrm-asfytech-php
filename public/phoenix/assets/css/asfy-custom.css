@@ -129,3 +129,114 @@ body {
   font-weight: 700;
   font-size: 0.85rem;
 }
+
+/* ===== Card Hover Effect ===== */
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card-hover:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(15, 23, 42, 0.08) !important;
+}
+
+/* ===== Fade In Animation ===== */
+@keyframes asfyFadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-in {
+  animation: asfyFadeIn 0.45s ease-out both;
+}
+.fade-in-delay-1 { animation-delay: 0.07s; }
+.fade-in-delay-2 { animation-delay: 0.14s; }
+.fade-in-delay-3 { animation-delay: 0.21s; }
+.fade-in-delay-4 { animation-delay: 0.28s; }
+
+/* ===== Accent Borders for KPI Cards ===== */
+.border-accent-primary { border-left: 4px solid var(--asfy) !important; }
+.border-accent-info    { border-left: 4px solid #0dcaf0 !important; }
+.border-accent-success { border-left: 4px solid #198754 !important; }
+.border-accent-warning { border-left: 4px solid #ffc107 !important; }
+.border-accent-danger  { border-left: 4px solid #dc3545 !important; }
+
+/* ===== Empty State Component ===== */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+.empty-state-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  background: #f1f5f9;
+}
+
+/* ===== Quick Link Cards ===== */
+.quick-link-card {
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+.quick-link-card:hover {
+  background-color: #eef2ff !important;
+  border-color: var(--asfy) !important;
+  transform: translateX(4px);
+}
+
+/* ===== KPI Card Gradient Backgrounds ===== */
+.kpi-primary   { background: linear-gradient(135deg, #ffffff 0%, #eff6ff 100%); }
+.kpi-info      { background: linear-gradient(135deg, #ffffff 0%, #ecfeff 100%); }
+.kpi-success   { background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%); }
+.kpi-warning   { background: linear-gradient(135deg, #ffffff 0%, #fefce8 100%); }
+
+/* ===== Page Header ===== */
+.page-header {
+  margin-bottom: 1.5rem;
+}
+.page-header h2 {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.page-header p {
+  color: #64748b;
+}
+
+/* ===== Filter Bar ===== */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* ===== Stat Number Hover ===== */
+.stat-number {
+  transition: transform 0.2s ease;
+  display: inline-block;
+}
+.card-hover:hover .stat-number {
+  transform: scale(1.08);
+}
+
+/* ===== Breadcrumb Custom ===== */
+.breadcrumb-modern {
+  background: transparent;
+  padding: 0;
+  margin-bottom: 0.5rem;
+  font-size: 0.8rem;
+}
+.breadcrumb-modern .breadcrumb-item a {
+  color: var(--asfy);
+  text-decoration: none;
+  font-weight: 600;
+}
+.breadcrumb-modern .breadcrumb-item.active {
+  color: #64748b;
+}

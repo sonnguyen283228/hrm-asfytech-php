@@ -1,9 +1,9 @@
 <?php $activePage='home'; require __DIR__ . '/../layouts/header.php'; ?>
 
 <div class="pb-5 pb-lg-7 px-sm-4 px-md-5 mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2 fade-in">
       <div>
-        <h2 class="mb-2 text-1100 fw-bold">Tổng quan Hệ thống</h2>
+        <h2 class="mb-2 text-1100 fw-800">Tổng quan Hệ thống</h2>
         <p class="text-700 mb-0">Cập nhật lúc <?= date('H:i d/m/Y') ?></p>
       </div>
       <div class="d-flex align-items-center gap-2">
@@ -17,13 +17,13 @@
     <!-- KPI Cards -->
     <div class="row g-3 mb-5">
       <!-- Card 1 -->
-      <div class="col-12 col-sm-6 col-xl-3">
-        <div class="card h-100 shadow-sm border border-200 rounded-4 overflow-hidden bg-white">
+      <div class="col-12 col-sm-6 col-xl-3 fade-in fade-in-delay-1">
+        <div class="card h-100 shadow-sm border border-200 rounded-4 overflow-hidden kpi-primary border-accent-primary card-hover">
           <div class="card-body p-4">
             <div class="d-flex justify-content-between align-items-center">
               <div>
                 <p class="text-600 fw-semi-bold mb-1 fs--1 text-uppercase">Tổng nhân sự</p>
-                <h2 class="text-1100 mb-0 fw-bold"><?= (int)($stats['employees'] ?? 0) ?></h2>
+                <h2 class="text-1100 mb-0 fw-bold stat-number"><?= (int)($stats['employees'] ?? 0) ?></h2>
               </div>
               <div class="bg-primary-100 text-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 54px; height: 54px;">
                 <span data-feather="users" style="width: 24px; height: 24px;"></span>
@@ -33,13 +33,13 @@
         </div>
       </div>
       <!-- Card 2 -->
-      <div class="col-12 col-sm-6 col-xl-3">
-        <div class="card h-100 shadow-sm border border-200 rounded-4 overflow-hidden bg-white">
+      <div class="col-12 col-sm-6 col-xl-3 fade-in fade-in-delay-2">
+        <div class="card h-100 shadow-sm border border-200 rounded-4 overflow-hidden kpi-info border-accent-info card-hover">
           <div class="card-body p-4">
             <div class="d-flex justify-content-between align-items-center">
               <div>
                 <p class="text-600 fw-semi-bold mb-1 fs--1 text-uppercase">Tổng dự án</p>
-                <h2 class="text-1100 mb-0 fw-bold"><?= (int)($stats['projects_total'] ?? 0) ?></h2>
+                <h2 class="text-1100 mb-0 fw-bold stat-number"><?= (int)($stats['projects_total'] ?? 0) ?></h2>
               </div>
               <div class="bg-info-100 text-info rounded-circle d-flex align-items-center justify-content-center" style="width: 54px; height: 54px;">
                 <span data-feather="briefcase" style="width: 24px; height: 24px;"></span>
@@ -49,13 +49,13 @@
         </div>
       </div>
       <!-- Card 3 -->
-      <div class="col-12 col-sm-6 col-xl-3">
-        <div class="card h-100 shadow-sm border border-200 rounded-4 overflow-hidden bg-white">
+      <div class="col-12 col-sm-6 col-xl-3 fade-in fade-in-delay-3">
+        <div class="card h-100 shadow-sm border border-200 rounded-4 overflow-hidden kpi-success border-accent-success card-hover">
           <div class="card-body p-4">
             <div class="d-flex justify-content-between align-items-center">
               <div>
                 <p class="text-600 fw-semi-bold mb-1 fs--1 text-uppercase">Đang triển khai</p>
-                <h2 class="text-success mb-0 fw-bold"><?= (int)($stats['projects_in_progress'] ?? 0) ?></h2>
+                <h2 class="text-success mb-0 fw-bold stat-number"><?= (int)($stats['projects_in_progress'] ?? 0) ?></h2>
               </div>
               <div class="bg-success-100 text-success rounded-circle d-flex align-items-center justify-content-center" style="width: 54px; height: 54px;">
                 <span data-feather="play-circle" style="width: 24px; height: 24px;"></span>
@@ -65,13 +65,13 @@
         </div>
       </div>
       <!-- Card 4 -->
-      <div class="col-12 col-sm-6 col-xl-3">
-        <div class="card h-100 shadow-sm border border-200 rounded-4 overflow-hidden bg-white">
+      <div class="col-12 col-sm-6 col-xl-3 fade-in fade-in-delay-4">
+        <div class="card h-100 shadow-sm border border-200 rounded-4 overflow-hidden kpi-warning border-accent-warning card-hover">
           <div class="card-body p-4">
             <div class="d-flex justify-content-between align-items-center">
               <div>
                 <p class="text-600 fw-semi-bold mb-1 fs--1 text-uppercase">Hoàn thành</p>
-                <h2 class="text-warning mb-0 fw-bold"><?= (int)($stats['projects_done'] ?? 0) ?></h2>
+                <h2 class="text-warning mb-0 fw-bold stat-number"><?= (int)($stats['projects_done'] ?? 0) ?></h2>
               </div>
               <div class="bg-warning-100 text-warning rounded-circle d-flex align-items-center justify-content-center" style="width: 54px; height: 54px;">
                 <span data-feather="check-circle" style="width: 24px; height: 24px;"></span>
@@ -142,7 +142,7 @@
                         <?php $u = auth_user(); ?>
                         
                         <?php if ($u && in_array(strtolower((string)$u['role']), ['admin', 'manager'])): ?>
-                        <a class="text-decoration-none d-flex align-items-center p-3 border border-200 rounded-3 bg-light hover-bg-200 transition-base" href="/employees">
+                        <a class="text-decoration-none d-flex align-items-center p-3 border border-200 rounded-3 bg-light quick-link-card" href="/employees">
                             <div class="bg-primary-100 text-primary rounded-2 d-flex align-items-center justify-content-center me-3 shadow-sm" style="width: 40px; height: 40px;">
                                 <span data-feather="users" style="width: 20px; height: 20px;"></span>
                             </div>
@@ -153,7 +153,7 @@
                         </a>
                         <?php endif; ?>
                         
-                        <a class="text-decoration-none d-flex align-items-center p-3 border border-200 rounded-3 bg-light hover-bg-200 transition-base" href="/projects">
+                        <a class="text-decoration-none d-flex align-items-center p-3 border border-200 rounded-3 bg-light quick-link-card" href="/projects">
                             <div class="bg-info-100 text-info rounded-2 d-flex align-items-center justify-content-center me-3 shadow-sm" style="width: 40px; height: 40px;">
                                 <span data-feather="briefcase" style="width: 20px; height: 20px;"></span>
                             </div>
@@ -164,7 +164,7 @@
                         </a>
                         
                         <?php if ($u && (string)$u['role'] === 'admin'): ?>
-                        <a class="text-decoration-none d-flex align-items-center p-3 border border-200 rounded-3 bg-light hover-bg-200 transition-base" href="/attendance/reports">
+                        <a class="text-decoration-none d-flex align-items-center p-3 border border-200 rounded-3 bg-light quick-link-card" href="/attendance/reports">
                             <div class="bg-warning-100 text-warning rounded-2 d-flex align-items-center justify-content-center me-3 shadow-sm" style="width: 40px; height: 40px;">
                                 <span data-feather="file-text" style="width: 20px; height: 20px;"></span>
                             </div>
