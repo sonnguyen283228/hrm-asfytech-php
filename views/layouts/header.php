@@ -8,9 +8,8 @@
   
   <?php 
     $baseUrl = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'])), '/');
-    $favicon = site_get('site_favicon_url', ''); 
-    if ($favicon): 
-      $favUrl = strpos($favicon, 'http') === 0 ? $favicon : $baseUrl . '/' . ltrim($favicon, '/');
+    $favUrl = get_brand_favicon_url(); 
+    if ($favUrl): 
   ?>
     <link rel="icon" href="<?= htmlspecialchars($favUrl) ?>">
   <?php endif; ?>
@@ -83,9 +82,8 @@
           </button>
           <a class="navbar-brand me-1 me-sm-3 d-flex align-items-center gap-2" href="/attendance">
             <?php 
-              $logo = site_get('site_logo_url', ''); 
-              if ($logo): 
-                $logoUrl = strpos($logo, 'http') === 0 ? $logo : $baseUrl . '/' . ltrim($logo, '/');
+              $logoUrl = get_brand_logo_url(); 
+              if ($logoUrl): 
             ?>
               <img src="<?= htmlspecialchars($logoUrl) ?>" alt="logo" style="max-height: 40px; width: auto; object-fit: contain;">
             <?php else: ?>

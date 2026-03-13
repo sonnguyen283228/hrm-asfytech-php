@@ -1,8 +1,8 @@
 <?php
 // Standalone login layout (Phoenix Style)
 $siteName = function_exists('site_get') ? site_get('site_name', 'HRM APP') : 'HRM APP';
-$logo = function_exists('site_get') ? site_get('site_logo_url', '') : '';
-$favicon = function_exists('site_get') ? site_get('site_favicon_url', '') : '';
+$logoUrl = get_brand_logo_url();
+$favUrl = get_brand_favicon_url();
 ?>
 <!doctype html>
 <html lang="vi">
@@ -11,11 +11,7 @@ $favicon = function_exists('site_get') ? site_get('site_favicon_url', '') : '';
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><?= htmlspecialchars($siteName) ?> - Đăng nhập</title>
-  <?php 
-    $baseUrl = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'])), '/');
-    if ($favicon): 
-      $favUrl = strpos($favicon, 'http') === 0 ? $favicon : $baseUrl . '/' . ltrim($favicon, '/');
-  ?>
+  <?php if ($favUrl): ?>
   <link rel="icon" href="<?= htmlspecialchars($favUrl) ?>">
   <?php endif; ?>
   
@@ -39,9 +35,8 @@ $favicon = function_exists('site_get') ? site_get('site_favicon_url', '') : '';
         <div class="w-100 px-4 px-sm-6 px-md-8 px-lg-6 px-xl-8 px-xxl-10 bg-white py-6 shadow-lg rounded-4 border border-200">
           
           <div class="text-center mb-5">
-            <?php if ($logo): ?>
-              <?php $logoUrlL = strpos($logo, 'http') === 0 ? $logo : $baseUrl . '/' . ltrim($logo, '/'); ?>
-              <img src="<?= htmlspecialchars($logoUrlL) ?>" alt="logo" width="64" class="mb-3 rounded-3 shadow-sm p-1 border">
+            <?php if ($logoUrl): ?>
+              <img src="<?= htmlspecialchars($logoUrl) ?>" alt="logo" width="64" class="mb-3 rounded-3 shadow-sm p-1 border">
             <?php else: ?>
               <div class="d-inline-flex align-items-center justify-content-center bg-primary text-white rounded-3 shadow-sm mb-3" style="width: 54px; height: 54px; font-size: 24px; font-weight: 800;">A</div>
             <?php endif; ?>

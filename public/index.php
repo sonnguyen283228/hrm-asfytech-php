@@ -900,43 +900,9 @@ if ($uri === '/settings/site' && $method === 'POST') {
         'footer_text'      => trim((string)($_POST['footer_text'] ?? '\u00a9 HRM APP')),
     ];
 
-    // Handle logo/favicon file upload
-    $uploadDir = __DIR__ . '/uploads/brand/';
-    if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
-    $allowedMime = ['image/png', 'image/jpeg', 'image/webp', 'image/svg+xml', 'image/gif'];
+    // Logo và Favicon giờ đây lấy file tĩnh từ public/brand/ thay vì DB
+    // Đoạn mã xử lý upload file qua form đã được gỡ bỏ phục vụ hiệu suất.
 
-    if (!empty($_FILES['site_logo_file']['tmp_name'])) {
-        $file = $_FILES['site_logo_file'];
-        $ext  = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-        $allowedExts = ['png', 'jpg', 'jpeg', 'webp', 'svg', 'gif'];
-        
-        if (in_array($ext, $allowedExts) && $file['size'] <= 2 * 1024 * 1024) {
-            $dest = $uploadDir . 'logo_' . time() . '.' . $ext;
-            if (move_uploaded_file($file['tmp_name'], $dest)) {
-                $pairs['site_logo_url'] = 'uploads/brand/' . basename($dest);
-                file_put_contents(__DIR__ . '/upload_log.txt', "Success upload logo: $dest\n", FILE_APPEND);
-            } else {
-                file_put_contents(__DIR__ . '/upload_log.txt', "Failed move_uploaded_file logo. Tmp: {$file['tmp_name']}, Dest: $dest\n", FILE_APPEND);
-            }
-        } else {
-            file_put_contents(__DIR__ . '/upload_log.txt', "Validation failed logo: Ext=$ext, Size={$file['size']}\n", FILE_APPEND);
-        }
-    } else if (isset($_FILES['site_logo_file'])) {
-        file_put_contents(__DIR__ . '/upload_log.txt', "Upload error logo: {$_FILES['site_logo_file']['error']}\n", FILE_APPEND);
-    }
-
-    if (!empty($_FILES['site_favicon_file']['tmp_name'])) {
-        $file = $_FILES['site_favicon_file'];
-        $ext  = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-        $allowedExtsFav = ['ico', 'png', 'svg', 'jpg', 'jpeg', 'webp', 'gif'];
-        
-        if (in_array($ext, $allowedExtsFav) && $file['size'] <= 1 * 1024 * 1024) {
-            $dest = $uploadDir . 'favicon_' . time() . '.' . $ext;
-            if (move_uploaded_file($file['tmp_name'], $dest)) {
-                $pairs['site_favicon_url'] = 'uploads/brand/' . basename($dest);
-            }
-        }
-    }
 
     $stmt = db()->prepare('INSERT INTO site_settings(`key`,`value`) VALUES(?,?) ON DUPLICATE KEY UPDATE `value`=VALUES(`value`)');
     foreach ($pairs as $k => $v) $stmt->execute([$k, $v]);

@@ -275,3 +275,33 @@ function site_get(string $key, string $default = ''): string
     $s = site_settings();
     return isset($s[$key]) && $s[$key] !== '' ? $s[$key] : $default;
 }
+
+function get_brand_logo_url(): string
+{
+    $baseUrl = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'])), '/');
+    $brandDir = __DIR__ . '/../public/brand/';
+    $extensions = ['png', 'svg', 'jpg', 'jpeg', 'webp', 'gif'];
+    foreach ($extensions as $ext) {
+        if (file_exists($brandDir . 'logo.' . $ext)) {
+            return $baseUrl . '/brand/logo.' . $ext . '?v=' . filemtime($brandDir . 'logo.' . $ext);
+        }
+    }
+    $dbUrl = site_get('site_logo_url', '');
+    if ($dbUrl) return strpos($dbUrl, 'http') === 0 ? $dbUrl : $baseUrl . '/' . ltrim($dbUrl, '/');
+    return '';
+}
+
+function get_brand_favicon_url(): string
+{
+    $baseUrl = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'])), '/');
+    $brandDir = __DIR__ . '/../public/brand/';
+    $extensions = ['ico', 'png', 'svg', 'jpg', 'jpeg', 'webp', 'gif'];
+    foreach ($extensions as $ext) {
+        if (file_exists($brandDir . 'favicon.' . $ext)) {
+            return $baseUrl . '/brand/favicon.' . $ext . '?v=' . filemtime($brandDir . 'favicon.' . $ext);
+        }
+    }
+    $dbUrl = site_get('site_favicon_url', '');
+    if ($dbUrl) return strpos($dbUrl, 'http') === 0 ? $dbUrl : $baseUrl . '/' . ltrim($dbUrl, '/');
+    return '';
+}

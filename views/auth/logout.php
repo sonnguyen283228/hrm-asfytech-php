@@ -1,7 +1,7 @@
 <?php
 // Standalone logout layout (Phoenix Style)
 $siteName = function_exists('site_get') ? site_get('site_name', 'HRM APP') : 'HRM APP';
-$favicon = function_exists('site_get') ? site_get('site_favicon_url', '') : '';
+$favUrl = get_brand_favicon_url();
 ?>
 <!doctype html>
 <html lang="vi">
@@ -10,11 +10,7 @@ $favicon = function_exists('site_get') ? site_get('site_favicon_url', '') : '';
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Đăng xuất - <?= htmlspecialchars($siteName) ?></title>
-  <?php 
-    $baseUrl = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'])), '/');
-    if ($favicon): 
-      $favUrl = strpos($favicon, 'http') === 0 ? $favicon : $baseUrl . '/' . ltrim($favicon, '/');
-  ?>
+  <?php if ($favUrl): ?>
   <link rel="icon" href="<?= htmlspecialchars($favUrl) ?>">
   <?php endif; ?>
   
