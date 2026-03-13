@@ -56,8 +56,8 @@
         </form>
 
         <div class="table-responsive scrollbar">
-          <table class="table table-sm fs--1 mb-0 overflow-hidden text-nowrap">
-            <thead class="bg-200 text-900 border-bottom">
+          <table class="table table-sm table-hrm fs--1 mb-0 overflow-hidden text-nowrap">
+            <thead>
               <tr>
                 <th class="white-space-nowrap pb-2 pt-3 text-center" style="width:50px">STT</th>
                 <th class="white-space-nowrap pb-2 pt-3" style="width:50px"></th>

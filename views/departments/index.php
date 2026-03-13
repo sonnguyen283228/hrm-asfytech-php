@@ -34,8 +34,8 @@
         </div>
 
         <div class="table-responsive scrollbar">
-          <table class="table table-sm fs--1 mb-0 overflow-hidden text-nowrap">
-            <thead class="bg-200 text-900 border-bottom">
+          <table class="table table-sm table-hrm fs--1 mb-0 overflow-hidden text-nowrap">
+            <thead>
               <tr>
                 <th class="sort pe-1 align-middle white-space-nowrap pb-2 pt-3" data-sort="id">ID</th>
                 <th class="sort pe-1 align-middle white-space-nowrap pb-2 pt-3" data-sort="name">Tên phòng ban</th>
