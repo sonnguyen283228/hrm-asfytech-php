@@ -74,7 +74,7 @@
   <main class="main" id="top">
     <!-- Top Navbar -->
     <nav class="navbar navbar-top navbar-expand-lg bg-white mb-4 border-bottom px-0 sticky-top shadow-sm" id="navbarTop" style="z-index: 1020;">
-      <div class="container-fluid px-3 px-xl-4 px-xxl-6">
+      <div class="container-fluid px-3">
         
         <div class="d-flex align-items-center">
           <button class="btn btn-link navbar-toggler me-1 px-2 d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTopCollapse" aria-controls="navbarTopCollapse" aria-expanded="false" aria-label="Toggle navigation">
