@@ -48,9 +48,8 @@
                   <option value="<?= $d['id'] ?>" <?= (isset($_GET['department_id']) && $_GET['department_id'] == $d['id']) ? 'selected' : '' ?>><?= htmlspecialchars($d['name']) ?></option>
                 <?php endforeach; ?>
              </select>
-             <input name="month" value="<?= htmlspecialchars($_GET['month'] ?? '') ?>" type="month" class="form-control form-control-sm w-auto" placeholder="Tháng bắt đầu" aria-label="Lọc thời gian">
              <button type="submit" class="btn btn-sm btn-primary">Lọc / Tìm kiếm</button>
-             <?php if (!empty($_GET['q']) || !empty($_GET['department_id']) || !empty($_GET['month'])): ?>
+             <?php if (!empty($_GET['q']) || !empty($_GET['department_id'])): ?>
                <a href="/employees" class="btn btn-sm btn-outline-secondary">Xóa lọc</a>
              <?php endif; ?>
           </div>
@@ -63,13 +62,12 @@
                 <th class="white-space-nowrap pb-2 pt-3 text-center" style="width:50px">STT</th>
                 <th class="white-space-nowrap pb-2 pt-3" style="width:50px"></th>
                 <th class="sort pe-1 align-middle white-space-nowrap pb-2 pt-3" data-sort="fullName">Họ tên & Email</th>
-                <th class="sort pe-1 align-middle white-space-nowrap pb-2 pt-3" data-sort="department">Phòng ban</th>
-                <th class="sort pe-1 align-middle white-space-nowrap pb-2 pt-3" data-sort="position">Vị trí</th>
+                <th class="sort pe-1 align-middle white-space-nowrap pb-2 pt-3" data-sort="department">Phòng ban & Vị trí</th>
                 <th class="sort pe-1 align-middle white-space-nowrap pb-2 pt-3" data-sort="role">Vai trò</th>
                 <th class="sort pe-1 align-middle white-space-nowrap pb-2 pt-3" data-sort="status">Trạng thái</th>
                 <th class="sort pe-1 align-middle white-space-nowrap pb-2 pt-3" data-sort="start_date">Thời gian làm việc</th>
                 <th class="sort pe-1 align-middle white-space-nowrap pb-2 pt-3" data-sort="baseSalary">Lương CB</th>
-                <th class="text-end align-middle pb-2 pt-3"></th>
+                <th class="text-end align-middle pb-2 pt-3">Thao tác</th>
               </tr>
             </thead>
             <tbody class="list" id="table-employees-body">
@@ -89,8 +87,10 @@
                     <h6 class="mb-0 text-900 fw-semi-bold"><?= htmlspecialchars($e['full_name']) ?></h6>
                     <a class="text-500 fs--2 fw-semi-bold email" href="mailto:<?= htmlspecialchars($e['email']) ?>"><?= htmlspecialchars($e['email']) ?></a>
                 </td>
-                <td class="department align-middle white-space-nowrap py-2"><?= htmlspecialchars($e['department_name'] ?? '--') ?></td>
-                <td class="position align-middle white-space-nowrap py-2"><?= htmlspecialchars($e['position'] ?? '--') ?></td>
+                <td class="department align-middle white-space-nowrap py-2">
+                    <h6 class="mb-1 text-900"><?= htmlspecialchars($e['department_name'] ?? '--') ?></h6>
+                    <span class="badge badge-phoenix badge-phoenix-secondary fs--2"><?= htmlspecialchars($e['position'] ?? '--') ?></span>
+                </td>
                 <td class="role align-middle white-space-nowrap py-2">
                     <?php 
                       $r = strtolower($e['role']);
@@ -116,32 +116,30 @@
                     <?= isset($e['base_salary']) && $e['base_salary'] !== null ? number_format((int)$e['base_salary']) . ' đ' : '--' ?>
                 </td>
                 <td class="align-middle white-space-nowrap text-end py-2">
-                  <div class="font-sans-serif btn-reveal-trigger position-static">
-                    <button class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal fs--2" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs--2"></span></button>
-                    <div class="dropdown-menu dropdown-menu-end py-2">
-                      <a class="dropdown-item" href="#!">Xem chi tiết</a>
-                      <?php if (in_array(strtolower((string)(auth_user()['role'] ?? '')), ['admin', 'manager'])): ?>
-                      <a class="dropdown-item pe-auto cursor-pointer" onclick='editEmployee(<?= json_encode([
-                          "id" => $e["id"], 
-                          "full_name" => $e["full_name"], 
-                          "email" => $e["email"], 
-                          "phone" => $e["phone"] ?? "",
-                          "birth_date" => $e["birth_date"] ?? "",
-                          "address_city" => $e["address_city"] ?? "",
-                          "address_ward" => $e["address_ward"] ?? "",
-                          "department_id" => $e["department_id"] ?? "",
-                          "position_id" => $e["position_id"] ?? "",
-                          "start_date" => $e["start_date"] ?? "",
-                          "base_salary" => $e["base_salary"] ?? "",
-                          "role" => $e["role"] ?? "staff"
-                      ]) ?>)' data-bs-toggle="modal" data-bs-target="#editEmployeeModal">Chỉnh sửa</a>
-                      <div class="dropdown-divider"></div>
-                      <form method="post" action="/employees/toggle-status" class="mb-0" onsubmit="return confirm('Bạn có chắc chắn muốn thay đổi trạng thái của nhân sự này không?');">
-                        <input type="hidden" name="id" value="<?= $e['id'] ?>">
-                        <button type="submit" class="dropdown-item text-danger border-0 bg-transparent"><?php echo ((int)($e['is_active'] ?? 1) !== 1) ? 'Khôi phục (Mở khóa)' : 'Khóa tài khoản'; ?></button>
-                      </form>
-                      <?php endif; ?>
-                    </div>
+                  <div class="d-flex justify-content-end gap-1">
+                    <button class="btn btn-phoenix-secondary btn-icon btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Xem chi tiết" onclick='viewEmployeeDetail(<?= json_encode($e) ?>)'><span data-feather="eye"></span></button>
+                    <?php if (in_array(strtolower((string)(auth_user()['role'] ?? '')), ['admin', 'manager'])): ?>
+                    <button class="btn btn-phoenix-primary btn-icon btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Chỉnh sửa" onclick='editEmployee(<?= json_encode([
+                        "id" => $e["id"], 
+                        "full_name" => $e["full_name"], 
+                        "email" => $e["email"], 
+                        "phone" => $e["phone"] ?? "",
+                        "birth_date" => $e["birth_date"] ?? "",
+                        "address_city" => $e["address_city"] ?? "",
+                        "address_ward" => $e["address_ward"] ?? "",
+                        "department_id" => $e["department_id"] ?? "",
+                        "position_id" => $e["position_id"] ?? "",
+                        "start_date" => $e["start_date"] ?? "",
+                        "base_salary" => $e["base_salary"] ?? "",
+                        "role" => $e["role"] ?? "staff"
+                    ]) ?>)' data-bs-toggle="modal" data-bs-target="#editEmployeeModal"><span data-feather="edit"></span></button>
+                    <form method="post" action="/employees/toggle-status" class="mb-0 d-inline-block" onsubmit="return confirm('Bạn có chắc chắn muốn thay đổi trạng thái của nhân sự này không?');">
+                      <input type="hidden" name="id" value="<?= $e['id'] ?>">
+                      <button type="submit" class="btn btn-phoenix-danger btn-icon btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="<?= ((int)$e['is_active'] === 1) ? 'Khóa tài khoản' : 'Mở khóa' ?>">
+                        <span data-feather="<?= ((int)$e['is_active'] === 1) ? 'lock' : 'unlock' ?>"></span>
+                      </button>
+                    </form>
+                    <?php endif; ?>
                   </div>
                 </td>
               </tr>
@@ -345,6 +343,39 @@
   </div>
 </div>
 
+<!-- Modal Xem Chi Tiết -->
+<div class="modal fade" id="viewEmployeeModal" tabindex="-1" aria-labelledby="viewEmployeeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-md modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg">
+      <div class="modal-header bg-light border-bottom border-200">
+        <h5 class="modal-title text-1000" id="viewEmployeeModalLabel">Hồ Sơ Nhân Sự</h5>
+        <button class="btn p-1" type="button" data-bs-dismiss="modal" aria-label="Close"><span class="fas fa-times fs--1"></span></button>
+      </div>
+      <div class="modal-body p-4 bg-white text-center">
+        <div class="avatar avatar-4xl mb-3">
+          <img id="view_avatar" class="rounded-circle shadow-sm" src="/phoenix/assets/img/team/avatar.webp" alt="" />
+        </div>
+        <h4 id="view_full_name" class="text-1000 fw-bold mb-1">--</h4>
+        <p id="view_email" class="text-600 mb-4">--</p>
+        
+        <div class="text-start">
+          <h6 class="text-700 fw-bold mb-2 text-uppercase fs--2">Thông tin liên lạc</h6>
+          <div class="d-flex align-items-center mb-2"><span data-feather="phone" class="text-500 me-2" style="width:16px;height:16px"></span><span id="view_phone" class="text-900 fw-semi-bold">--</span></div>
+          <div class="d-flex align-items-center mb-2"><span data-feather="calendar" class="text-500 me-2" style="width:16px;height:16px"></span><span id="view_birth_date" class="text-900 fw-semi-bold">--</span></div>
+          <div class="d-flex align-items-center mb-4"><span data-feather="map-pin" class="text-500 me-2" style="width:16px;height:16px"></span><span id="view_address" class="text-900 fw-semi-bold">--</span></div>
+          
+          <h6 class="text-700 fw-bold mb-2 text-uppercase fs--2 mt-4">Thông tin công việc</h6>
+          <div class="d-flex align-items-center mb-2"><span data-feather="briefcase" class="text-500 me-2" style="width:16px;height:16px"></span><span class="text-900 fw-semi-bold">Phòng ban: </span><span id="view_department" class="ms-1 text-700">--</span></div>
+          <div class="d-flex align-items-center mb-2"><span data-feather="award" class="text-500 me-2" style="width:16px;height:16px"></span><span class="text-900 fw-semi-bold">Vị trí: </span><span id="view_position" class="ms-1 text-700">--</span></div>
+          <div class="d-flex align-items-center mb-2"><span data-feather="shield" class="text-500 me-2" style="width:16px;height:16px"></span><span class="text-900 fw-semi-bold">Quyền hạn: </span><span id="view_role" class="ms-1 text-700 text-uppercase badge badge-phoenix badge-phoenix-primary">--</span></div>
+          <div class="d-flex align-items-center mb-2"><span data-feather="clock" class="text-500 me-2" style="width:16px;height:16px"></span><span class="text-900 fw-semi-bold">Ngày vào làm: </span><span id="view_start_date" class="ms-1 text-700">--</span></div>
+          <div class="d-flex align-items-center mb-2"><span data-feather="dollar-sign" class="text-500 me-2" style="width:16px;height:16px"></span><span class="text-900 fw-semi-bold">Lương CB: </span><span id="view_base_salary" class="ms-1 text-700 fw-bold text-primary">--</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
   // Bootstrap 5 form validation
   (function () {
@@ -383,6 +414,47 @@
       document.getElementById('edit_start_date').value = data.start_date || '';
       document.getElementById('edit_base_salary').value = data.base_salary || '';
       document.getElementById('edit_role').value = (data.role || 'staff').toLowerCase();
+  }
+
+  // Prepare View Detail Modal
+  function formatDateVN(dateStr) {
+      if(!dateStr) return '--';
+      let d = new Date(dateStr);
+      if(isNaN(d)) return dateStr;
+      return d.toLocaleDateString('vi-VN');
+  }
+
+  function viewEmployeeDetail(data) {
+      document.getElementById('view_full_name').innerText = data.full_name || '--';
+      document.getElementById('view_email').innerText = data.email || '--';
+      document.getElementById('view_phone').innerText = data.phone || '--';
+      
+      let dob = formatDateVN(data.birth_date);
+      document.getElementById('view_birth_date').innerText = dob;
+      
+      let addressParts = [];
+      if(data.address_ward) addressParts.push(data.address_ward);
+      if(data.address_city) addressParts.push(data.address_city);
+      document.getElementById('view_address').innerText = addressParts.length > 0 ? addressParts.join(', ') : '--';
+      
+      document.getElementById('view_department').innerText = data.department_name || '--';
+      document.getElementById('view_position').innerText = data.position || '--';
+      document.getElementById('view_role').innerText = data.role || 'STAFF';
+      document.getElementById('view_start_date').innerText = formatDateVN(data.start_date);
+      
+      let formatSalary = data.base_salary ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(data.base_salary) : '--';
+      document.getElementById('view_base_salary').innerText = formatSalary;
+      
+      if(data.avatar_url) {
+          document.getElementById('view_avatar').src = data.avatar_url;
+      } else {
+          document.getElementById('view_avatar').src = '/phoenix/assets/img/team/avatar.webp';
+      }
+      
+      // Mở modal programmatically
+      var detailModal = new bootstrap.Modal(document.getElementById('viewEmployeeModal'));
+      detailModal.show();
+      feather.replace();
   }
 </script>
 
