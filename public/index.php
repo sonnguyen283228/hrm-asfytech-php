@@ -909,7 +909,10 @@ if ($uri === '/settings/site' && $method === 'POST') {
 
     if (!empty($_FILES['site_logo_file']['tmp_name'])) {
         $file = $_FILES['site_logo_file'];
-        $mime = mime_content_type($file['tmp_name']);
+        $mime = $file['type'];
+        if (function_exists('mime_content_type') && file_exists($file['tmp_name'])) {
+            $mime = @mime_content_type($file['tmp_name']) ?: $file['type'];
+        }
         if (in_array($mime, $allowedMime) && $file['size'] <= 2 * 1024 * 1024) {
             $ext  = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
             $dest = $uploadDir . 'logo_' . time() . '.' . $ext;
@@ -921,7 +924,10 @@ if ($uri === '/settings/site' && $method === 'POST') {
 
     if (!empty($_FILES['site_favicon_file']['tmp_name'])) {
         $file = $_FILES['site_favicon_file'];
-        $mime = mime_content_type($file['tmp_name']);
+        $mime = $file['type'];
+        if (function_exists('mime_content_type') && file_exists($file['tmp_name'])) {
+            $mime = @mime_content_type($file['tmp_name']) ?: $file['type'];
+        }
         $favMime = array_merge($allowedMime, ['image/x-icon', 'image/vnd.microsoft.icon']);
         if (in_array($mime, $favMime) && $file['size'] <= 1 * 1024 * 1024) {
             $ext  = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
