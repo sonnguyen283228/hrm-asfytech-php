@@ -281,11 +281,28 @@ function get_brand_logo_url(): string
     $baseUrl = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'])), '/');
     $brandDir = __DIR__ . '/../public/brand/';
     $extensions = ['png', 'svg', 'jpg', 'jpeg', 'webp', 'gif'];
+    
+    // Ưu tiên chuẩn tên gốc
     foreach ($extensions as $ext) {
         if (file_exists($brandDir . 'logo.' . $ext)) {
             return $baseUrl . '/brand/logo.' . $ext . '?v=' . filemtime($brandDir . 'logo.' . $ext);
         }
     }
+    
+    // Nếu không có tên chuẩn, quét tìm ảnh bất kỳ trong thư mục brand (ko chứa chữ favicon)
+    if (is_dir($brandDir)) {
+        $files = scandir($brandDir);
+        foreach ($files as $file) {
+            if ($file !== '.' && $file !== '..' && $file !== '.keep' && stripos($file, 'favicon') === false) {
+                $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+                if (in_array($ext, $extensions)) {
+                    // Dùng rawurlencode để tránh lỗi khoảng trắng trong tên file (VD: ASFY TECH FS (1).png)
+                    return $baseUrl . '/brand/' . rawurlencode($file) . '?v=' . filemtime($brandDir . $file);
+                }
+            }
+        }
+    }
+
     $dbUrl = site_get('site_logo_url', '');
     if ($dbUrl) return strpos($dbUrl, 'http') === 0 ? $dbUrl : $baseUrl . '/' . ltrim($dbUrl, '/');
     return '';
@@ -296,11 +313,27 @@ function get_brand_favicon_url(): string
     $baseUrl = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'])), '/');
     $brandDir = __DIR__ . '/../public/brand/';
     $extensions = ['ico', 'png', 'svg', 'jpg', 'jpeg', 'webp', 'gif'];
+    
+    // Ưu tiên chuẩn tên gốc
     foreach ($extensions as $ext) {
         if (file_exists($brandDir . 'favicon.' . $ext)) {
             return $baseUrl . '/brand/favicon.' . $ext . '?v=' . filemtime($brandDir . 'favicon.' . $ext);
         }
     }
+    
+    // Nếu không có tên chuẩn, quét tìm file có chữ favicon trong tên
+    if (is_dir($brandDir)) {
+        $files = scandir($brandDir);
+        foreach ($files as $file) {
+            if ($file !== '.' && $file !== '..' && stripos($file, 'favicon') !== false) {
+                $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+                if (in_array($ext, $extensions)) {
+                    return $baseUrl . '/brand/' . rawurlencode($file) . '?v=' . filemtime($brandDir . $file);
+                }
+            }
+        }
+    }
+
     $dbUrl = site_get('site_favicon_url', '');
     if ($dbUrl) return strpos($dbUrl, 'http') === 0 ? $dbUrl : $baseUrl . '/' . ltrim($dbUrl, '/');
     return '';
