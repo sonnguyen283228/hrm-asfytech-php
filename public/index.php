@@ -4,6 +4,46 @@ declare(strict_types=1);
 
 require __DIR__ . '/../app/bootstrap.php';
 
+// Áp dụng: Auto-setup DB Schema 1 lần duy nhất cho Table Positions
+if (empty($_SESSION['auto_setup_db_positions'])) {
+    try {
+        db()->exec("CREATE TABLE IF NOT EXISTS positions (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            name VARCHAR(255) NOT NULL,
+            description TEXT DEFAULT NULL,
+            is_active TINYINT(1) DEFAULT 1,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;");
+        
+        $cols = db()->query("SHOW COLUMNS FROM users LIKE 'position_id'")->fetchAll();
+        if (count($cols) == 0) {
+            db()->exec("ALTER TABLE users ADD COLUMN position_id INT NULL AFTER department_id;");
+            
+            // Map old data from `position` string to `position_id`
+            $usersWithPosition = db()->query("SELECT id, position FROM users WHERE position IS NOT NULL AND position != ''")->fetchAll();
+            $posMap = [];
+            foreach ($usersWithPosition as $u) {
+                $pName = trim((string)$u['position']);
+                if (!isset($posMap[$pName])) {
+                    $cStmt = db()->prepare("SELECT id FROM positions WHERE name = ?");
+                    $cStmt->execute([$pName]);
+                    $row = $cStmt->fetch();
+                    if ($row) {
+                        $posMap[$pName] = (int)$row['id'];
+                    } else {
+                        $iStmt = db()->prepare("INSERT INTO positions(name, is_active) VALUES (?, 1)");
+                        $iStmt->execute([$pName]);
+                        $posMap[$pName] = (int)db()->lastInsertId();
+                    }
+                }
+                $uStmt = db()->prepare("UPDATE users SET position_id = ? WHERE id = ?");
+                $uStmt->execute([$posMap[$pName], $u['id']]);
+            }
+        }
+        $_SESSION['auto_setup_db_positions'] = true;
+    } catch (\Throwable $e) { }
+}
+
 $cfg = require __DIR__ . '/../config/app.php';
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?: '/';
 $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
@@ -25,7 +65,7 @@ if ($uri === '/login' && $method === 'POST') {
     $user = $stmt->fetch();
 
     if (!$user || (int)($user['is_active'] ?? 1) !== 1 || !password_verify($password, $user['password'])) {
-        $_SESSION['error'] = 'Sai tĂ i khoáº£n hoáº·c máº­t kháº©u';
+        $_SESSION['error'] = 'Sai tài khoản đăng nhập hoặc mật khẩu';
         redirect('/login');
     }
     $_SESSION['user_id'] = (int)$user['id'];
@@ -35,7 +75,7 @@ if ($uri === '/login' && $method === 'POST') {
 if ($uri === '/auth/google' && $method === 'GET') {
     $g = $cfg['google'];
     if (empty($g['client_id']) || empty($g['client_secret'])) {
-        $_SESSION['error'] = 'ChÆ°a cáº¥u hĂ¬nh Google OAuth trong config/app.php';
+        $_SESSION['error'] = 'Chưa cấu hình Google OAuth trong config/app.php';
         redirect('/login');
     }
 
@@ -489,20 +529,6 @@ if ($uri === '/departments/delete' && $method === 'POST') {
 // ===== Position management =====
 if ($uri === '/positions' && $method === 'GET') {
     $user = require_admin();
-    
-    // Auto-setup DB table for positions
-    db()->exec("CREATE TABLE IF NOT EXISTS positions (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        name VARCHAR(255) NOT NULL,
-        description TEXT DEFAULT NULL,
-        is_active TINYINT(1) DEFAULT 1,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;");
-    
-    // Also try add position_id to users if not exist
-    try {
-        db()->exec("ALTER TABLE users ADD COLUMN position_id INT NULL AFTER department_id;");
-    } catch (Throwable $e) {}
 
     $stmt = db()->query('SELECT p.*, COUNT(u.id) AS total_users FROM positions p LEFT JOIN users u ON u.position_id = p.id GROUP BY p.id ORDER BY p.id DESC');
     $positions = $stmt->fetchAll();

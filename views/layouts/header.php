@@ -89,7 +89,7 @@
             <a class="nav-link lh-1 pe-0" id="navbarDropdownUser" href="#!" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false">
               <div class="avatar avatar-l">
                 <?php if (!empty($u['avatar_url'])): ?>
-                  <img class="rounded-circle" src="<?= htmlspecialchars($u['avatar_url']) ?>" alt="" referrerpolicy="no-referrer" />
+                  <img class="rounded-circle w-100 h-100 object-fit-cover" src="<?= htmlspecialchars($u['avatar_url']) ?>" alt="" referrerpolicy="no-referrer" />
                 <?php else: ?>
                   <div class="avatar-name rounded-circle border border-2 border-white bg-200 text-700"><span><?= mb_substr($u['full_name'] ?? 'U', 0, 1) ?></span></div>
                 <?php endif; ?>
