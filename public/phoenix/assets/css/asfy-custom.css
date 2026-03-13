@@ -111,16 +111,8 @@ body {
   min-height: calc(100vh - 120px);
 }
 
-/* Phoenix Navbar Vertical Layout Fix */
-@media (min-width: 992px) {
-  body.navbar-top .navbar-top {
-    margin-left: 14.5rem; /* 232px width of Phoenix vertical navbar */
-    width: calc(100% - 14.5rem);
-  }
-  body.navbar-top .content {
-    margin-left: 14.5rem; 
-  }
-}
+/* Phoenix Navbar Vertical Layout Fix
+   Obsolete offsets removed since we switched to top navbar */
 
 /* Table Utilities */
 .table-wrap {
