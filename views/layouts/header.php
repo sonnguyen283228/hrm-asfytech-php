@@ -70,11 +70,11 @@
   
   <?= site_get('header_html', '') ?>
 </head>
-<body class="navbar-top">
+<body class="bg-light">
   <main class="main" id="top">
     <!-- Top Navbar -->
-    <nav class="navbar navbar-top navbar-expand-lg bg-white mb-4 border-bottom px-0 sticky-top shadow-sm" id="navbarTop" style="z-index: 1020; max-width: none !important; margin: 0 !important; width: 100% !important; left: 0; right: 0;">
-      <div class="container-fluid px-3 px-lg-4" style="max-width: none !important;">
+    <nav class="navbar navbar-expand-lg bg-white mb-4 border-bottom px-0 sticky-top shadow-sm" id="navbarTop" style="z-index: 1020;">
+      <div class="container-fluid px-3 px-lg-4">
         
         <div class="d-flex align-items-center">
           <button class="btn btn-link navbar-toggler me-1 px-2 d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTopCollapse" aria-controls="navbarTopCollapse" aria-expanded="false" aria-label="Toggle navigation">
