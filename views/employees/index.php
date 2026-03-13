@@ -32,27 +32,23 @@
       <div class="card-body p-3">
         
         <!-- Filter Row -->
-        <form method="GET" action="/employees" class="row align-items-center justify-content-between g-3 mb-4">
-          <div class="col-12 col-md-auto d-flex align-items-center">
-            <div class="search-box me-2">
-              <div class="position-relative">
-                <input name="q" value="<?= htmlspecialchars($_GET['q'] ?? '') ?>" class="form-control form-control-sm search-input" type="search" placeholder="Tìm tên, email..." aria-label="Search" />
-                <span class="fas fa-search search-box-icon"></span>
-              </div>
+        <form method="GET" action="/employees" class="d-flex flex-wrap align-items-center gap-2 mb-4">
+          <div class="search-box">
+            <div class="position-relative">
+              <input name="q" value="<?= htmlspecialchars($_GET['q'] ?? '') ?>" class="form-control form-control-sm search-input" type="search" placeholder="Tìm tên, email..." style="min-width:200px" />
+              <span class="fas fa-search search-box-icon"></span>
             </div>
           </div>
-          <div class="col-12 col-md-auto d-flex gap-2">
-             <select name="department_id" class="form-select form-select-sm w-auto" aria-label="Lọc phòng ban">
-                <option value="">Tất cả phòng ban</option>
-                <?php foreach (($departments ?? []) as $d): ?>
-                  <option value="<?= $d['id'] ?>" <?= (isset($_GET['department_id']) && $_GET['department_id'] == $d['id']) ? 'selected' : '' ?>><?= htmlspecialchars($d['name']) ?></option>
-                <?php endforeach; ?>
-             </select>
-             <button type="submit" class="btn btn-sm btn-primary">Lọc / Tìm kiếm</button>
-             <?php if (!empty($_GET['q']) || !empty($_GET['department_id'])): ?>
-               <a href="/employees" class="btn btn-sm btn-outline-secondary">Xóa lọc</a>
-             <?php endif; ?>
-          </div>
+          <select name="department_id" class="form-select form-select-sm w-auto">
+            <option value="">Tất cả phòng ban</option>
+            <?php foreach (($departments ?? []) as $d): ?>
+              <option value="<?= $d['id'] ?>" <?= (isset($_GET['department_id']) && $_GET['department_id'] == $d['id']) ? 'selected' : '' ?>><?= htmlspecialchars($d['name']) ?></option>
+            <?php endforeach; ?>
+          </select>
+          <button type="submit" class="btn btn-sm btn-primary">Lọc / Tìm kiếm</button>
+          <?php if (!empty($_GET['q']) || !empty($_GET['department_id'])): ?>
+            <a href="/employees" class="btn btn-sm btn-outline-secondary">Xóa lọc</a>
+          <?php endif; ?>
         </form>
 
         <div class="table-responsive scrollbar">
@@ -67,7 +63,7 @@
                 <th class="pe-1 align-middle white-space-nowrap pb-2 pt-3">Trạng thái</th>
                 <th class="pe-1 align-middle white-space-nowrap pb-2 pt-3">Thời gian làm việc</th>
                 <th class="pe-1 align-middle white-space-nowrap pb-2 pt-3">Lương CB</th>
-                <th class="text-end align-middle pb-2 pt-3">Thao tác</th>
+                <th class="text-center align-middle pb-2 pt-3">Thao tác</th>
               </tr>
             </thead>
             <tbody class="list" id="table-employees-body">
