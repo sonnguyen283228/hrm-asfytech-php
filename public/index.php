@@ -374,7 +374,7 @@ if ($uri === '/employees' && $method === 'GET') {
     $departmentId = trim((string)($_GET['department_id'] ?? ''));
     $month = trim((string)($_GET['month'] ?? ''));
 
-    $sql = "SELECT u.*, d.name AS department_name FROM users u LEFT JOIN departments d ON d.id = u.department_id WHERE 1=1";
+    $sql = "SELECT u.*, d.name AS department_name, p.name AS position_name FROM users u LEFT JOIN departments d ON d.id = u.department_id LEFT JOIN positions p ON p.id = u.position_id WHERE 1=1";
     $params = [];
     
     if ($q !== '') {

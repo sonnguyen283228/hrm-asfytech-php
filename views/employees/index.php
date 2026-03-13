@@ -61,12 +61,12 @@
               <tr>
                 <th class="white-space-nowrap pb-2 pt-3 text-center" style="width:50px">STT</th>
                 <th class="white-space-nowrap pb-2 pt-3" style="width:50px"></th>
-                <th class="sort pe-1 align-middle white-space-nowrap pb-2 pt-3" data-sort="fullName">Họ tên & Email</th>
-                <th class="sort pe-1 align-middle white-space-nowrap pb-2 pt-3" data-sort="department">Phòng ban & Vị trí</th>
-                <th class="sort pe-1 align-middle white-space-nowrap pb-2 pt-3" data-sort="role">Vai trò</th>
-                <th class="sort pe-1 align-middle white-space-nowrap pb-2 pt-3" data-sort="status">Trạng thái</th>
-                <th class="sort pe-1 align-middle white-space-nowrap pb-2 pt-3" data-sort="start_date">Thời gian làm việc</th>
-                <th class="sort pe-1 align-middle white-space-nowrap pb-2 pt-3" data-sort="baseSalary">Lương CB</th>
+                <th class="pe-1 align-middle white-space-nowrap pb-2 pt-3">Họ tên & Email</th>
+                <th class="pe-1 align-middle white-space-nowrap pb-2 pt-3">Phòng ban & Vị trí</th>
+                <th class="pe-1 align-middle white-space-nowrap pb-2 pt-3">Vai trò</th>
+                <th class="pe-1 align-middle white-space-nowrap pb-2 pt-3">Trạng thái</th>
+                <th class="pe-1 align-middle white-space-nowrap pb-2 pt-3">Thời gian làm việc</th>
+                <th class="pe-1 align-middle white-space-nowrap pb-2 pt-3">Lương CB</th>
                 <th class="text-end align-middle pb-2 pt-3">Thao tác</th>
               </tr>
             </thead>
@@ -89,7 +89,10 @@
                 </td>
                 <td class="department align-middle white-space-nowrap py-2">
                     <h6 class="mb-1 text-900"><?= htmlspecialchars($e['department_name'] ?? '--') ?></h6>
-                    <span class="badge badge-phoenix badge-phoenix-secondary fs--2"><?= htmlspecialchars($e['position'] ?? '--') ?></span>
+                    <?php $posName = $e['position_name'] ?? $e['position'] ?? null; ?>
+                    <?php if ($posName): ?>
+                    <span class="badge badge-phoenix badge-phoenix-secondary fs--2"><?= htmlspecialchars($posName) ?></span>
+                    <?php endif; ?>
                 </td>
                 <td class="role align-middle white-space-nowrap py-2">
                     <?php 
