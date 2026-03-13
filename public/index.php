@@ -551,7 +551,7 @@ if ($uri === '/departments' && $method === 'GET') {
 
 if ($uri === '/departments/create' && $method === 'GET') {
     $user = require_admin();
-    view('departments/create', ['user' => $user]);
+    redirect('/departments');
     exit;
 }
 
@@ -582,7 +582,7 @@ if ($uri === '/departments/edit' && $method === 'GET') {
         $_SESSION['error'] = 'Không tìm thấy phòng ban.';
         redirect('/departments');
     }
-    view('departments/edit', ['user' => $user, 'department' => $department]);
+    redirect('/departments');
     exit;
 }
 
