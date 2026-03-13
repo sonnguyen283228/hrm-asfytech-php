@@ -61,6 +61,11 @@
               </a>
             </li>
             <li class="nav-item">
+              <a class="nav-link fw-bold text-uppercase fs--1 d-flex align-items-center gap-2 px-3 py-2 rounded-3 transition-base <?= ($activePage ?? '') === 'positions' ? 'active bg-primary-100 text-primary' : 'text-700 hover-bg-200' ?>" href="/positions">
+                <span data-feather="award" style="width: 16px; height: 16px;"></span> Chức vụ
+              </a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link fw-bold text-uppercase fs--1 d-flex align-items-center gap-2 px-3 py-2 rounded-3 transition-base <?= ($activePage ?? '') === 'projects' ? 'active bg-primary-100 text-primary' : 'text-700 hover-bg-200' ?>" href="/projects">
                 <span data-feather="briefcase" style="width: 16px; height: 16px;"></span> Dự án
               </a>

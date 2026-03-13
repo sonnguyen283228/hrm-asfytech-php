@@ -19,17 +19,17 @@
     </div>
 
     <?php if (!empty($_SESSION['success'])): ?>
-    <div class="alert alert-soft-success d-flex align-items-center" role="alert">
+    <div class="alert alert-soft-success d-flex align-items-center auto-dismiss-alert" role="alert">
       <span data-feather="check-circle" class="text-success fs-3 me-3"></span>
-      <p class="mb-0 flex-1"><?= htmlspecialchars($_SESSION['success']) ?></p>
+      <p class="mb-0 flex-1 fw-bold"><?= htmlspecialchars($_SESSION['success']) ?></p>
       <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     <?php unset($_SESSION['success']); endif; ?>
     
     <?php if (!empty($_SESSION['error'])): ?>
-    <div class="alert alert-soft-danger d-flex align-items-center" role="alert">
+    <div class="alert alert-soft-danger d-flex align-items-center auto-dismiss-alert" role="alert">
       <span data-feather="alert-circle" class="text-danger fs-3 me-3"></span>
-      <p class="mb-0 flex-1"><?= htmlspecialchars($_SESSION['error']) ?></p>
+      <p class="mb-0 flex-1 fw-bold"><?= htmlspecialchars($_SESSION['error']) ?></p>
       <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     <?php unset($_SESSION['error']); endif; ?>
@@ -120,9 +120,27 @@
                     <button class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal fs--2" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs--2"></span></button>
                     <div class="dropdown-menu dropdown-menu-end py-2">
                       <a class="dropdown-item" href="#!">Xem chi tiết</a>
-                      <a class="dropdown-item" href="#!">Chỉnh sửa</a>
+                      <?php if (in_array(strtolower((string)(auth_user()['role'] ?? '')), ['admin', 'manager'])): ?>
+                      <a class="dropdown-item pe-auto cursor-pointer" onclick='editEmployee(<?= json_encode([
+                          "id" => $e["id"], 
+                          "full_name" => $e["full_name"], 
+                          "email" => $e["email"], 
+                          "phone" => $e["phone"] ?? "",
+                          "birth_date" => $e["birth_date"] ?? "",
+                          "address_city" => $e["address_city"] ?? "",
+                          "address_ward" => $e["address_ward"] ?? "",
+                          "department_id" => $e["department_id"] ?? "",
+                          "position_id" => $e["position_id"] ?? "",
+                          "start_date" => $e["start_date"] ?? "",
+                          "base_salary" => $e["base_salary"] ?? "",
+                          "role" => $e["role"] ?? "staff"
+                      ]) ?>)' data-bs-toggle="modal" data-bs-target="#editEmployeeModal">Chỉnh sửa</a>
                       <div class="dropdown-divider"></div>
-                      <a class="dropdown-item text-danger" href="#!"><?php echo ((int)($e['is_active'] ?? 1) !== 1) ? 'Mở khóa tài khoản' : 'Khóa tài khoản'; ?></a>
+                      <form method="post" action="/employees/toggle-status" class="mb-0" onsubmit="return confirm('Bạn có chắc chắn muốn thay đổi trạng thái của nhân sự này không?');">
+                        <input type="hidden" name="id" value="<?= $e['id'] ?>">
+                        <button type="submit" class="dropdown-item text-danger border-0 bg-transparent"><?php echo ((int)($e['is_active'] ?? 1) !== 1) ? 'Khôi phục (Mở khóa)' : 'Khóa tài khoản'; ?></button>
+                      </form>
+                      <?php endif; ?>
                     </div>
                   </div>
                 </td>
@@ -199,8 +217,13 @@
               </select>
             </div>
             <div class="col-md-6">
-              <label class="form-label" for="position">Vị trí chức danh <span class="text-danger">*</span></label>
-              <input class="form-control" id="position" name="position" type="text" placeholder="VD: Lập trình viên, Kế toán..." required />
+              <label class="form-label" for="position_id">Vị trí chức vụ <span class="text-danger">*</span></label>
+              <select class="form-select" id="position_id" name="position_id" required>
+                <option value="" selected>-- Chọn chức vụ --</option>
+                <?php foreach (($positions ?? []) as $p): ?>
+                  <option value="<?= (int)$p['id'] ?>"><?= htmlspecialchars($p['name']) ?></option>
+                <?php endforeach; ?>
+              </select>
             </div>
             <div class="col-md-4">
               <label class="form-label" for="start_date">Ngày tính lương</label>
@@ -232,6 +255,96 @@
   </div>
 </div>
 
+<!-- Modal Sửa Nhân Sự -->
+<div class="modal fade" id="editEmployeeModal" tabindex="-1" aria-labelledby="editEmployeeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg">
+      <div class="modal-header bg-light border-bottom border-200">
+        <h5 class="modal-title text-1000" id="editEmployeeModalLabel">Thay Đổi Thông Tin Nhân Sự</h5>
+        <button class="btn p-1" type="button" data-bs-dismiss="modal" aria-label="Close"><span class="fas fa-times fs--1"></span></button>
+      </div>
+      <form method="post" action="/employees/edit" class="needs-validation" novalidate>
+        <input type="hidden" id="edit_user_id" name="id" value="" />
+        
+        <div class="modal-body p-4 bg-white">
+          <div class="row g-3">
+            <div class="col-12"><h6 class="text-700 fw-bold mb-0">Hồ sơ cá nhân</h6><hr class="mt-2 mb-3"/></div>
+            
+            <div class="col-md-6">
+              <label class="form-label">Họ và tên <span class="text-danger">*</span></label>
+              <input class="form-control" id="edit_full_name" name="full_name" type="text" required />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label text-500">Tài khoản Google <span class="text-danger">*</span></label>
+              <input class="form-control" id="edit_email" name="email" type="email" pattern="^[a-zA-Z0-9._%+-]+@gmail\.com$" required />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Số điện thoại <span class="text-danger">*</span></label>
+              <input class="form-control" id="edit_phone" name="phone" type="tel" pattern="^(0[3|5|7|8|9])+([0-9]{8})$" required />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Ngày sinh</label>
+              <input class="form-control" id="edit_birth_date" name="birth_date" type="date" />
+            </div>
+            <div class="col-md-6">
+               <label class="form-label">Tỉnh / Thành phố </label>
+               <input class="form-control" id="edit_address_city" name="address_city" type="text" />
+            </div>
+            <div class="col-md-6">
+               <label class="form-label">Phường / Xã</label>
+               <input class="form-control" id="edit_address_ward" name="address_ward" type="text" />
+            </div>
+
+            <div class="col-12 mt-4"><h6 class="text-700 fw-bold mb-0">Thông tin công việc</h6><hr class="mt-2 mb-3"/></div>
+            
+            <div class="col-md-6">
+              <label class="form-label">Phòng ban</label>
+              <select class="form-select" id="edit_department_id" name="department_id">
+                <option value="">-- Chọn phòng ban --</option>
+                <?php foreach (($departments ?? []) as $d): ?>
+                  <option value="<?= (int)$d['id'] ?>"><?= htmlspecialchars($d['name']) ?></option>
+                <?php endforeach; ?>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Vị trí chức vụ <span class="text-danger">*</span></label>
+              <select class="form-select" id="edit_position_id" name="position_id" required>
+                <option value="">-- Chọn chức vụ --</option>
+                <?php foreach (($positions ?? []) as $p): ?>
+                  <option value="<?= (int)$p['id'] ?>"><?= htmlspecialchars($p['name']) ?></option>
+                <?php endforeach; ?>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Ngày tính lương</label>
+              <input class="form-control" id="edit_start_date" name="start_date" type="date" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Lương cơ bản (VND)</label>
+              <div class="input-group">
+                <input class="form-control" id="edit_base_salary" name="base_salary" type="number" min="0" step="1" />
+                <span class="input-group-text">đ</span>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Quyền hệ thống <span class="text-danger">*</span></label>
+              <select class="form-select" id="edit_role" name="role" required>
+                <option value="staff">Staff</option>
+                <option value="manager">Manager / HR</option>
+                <option value="admin">Admin</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-top-0 px-4 pb-4">
+          <button class="btn btn-outline-secondary" type="button" data-bs-dismiss="modal">Hủy</button>
+          <button class="btn btn-primary px-5" type="submit">Lưu Thay Đổi</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 <script>
   // Bootstrap 5 form validation
   (function () {
@@ -246,7 +359,31 @@
         form.classList.add('was-validated')
       }, false)
     })
+    
+    // Auto hide alerts after 4s
+    setTimeout(function() {
+      document.querySelectorAll('.auto-dismiss-alert').forEach(function(alertNode) {
+        var alert = new bootstrap.Alert(alertNode)
+        alert.close()
+      })
+    }, 4000);
   })()
+
+  // Prepare Edit Modal
+  function editEmployee(data) {
+      document.getElementById('edit_user_id').value = data.id || '';
+      document.getElementById('edit_full_name').value = data.full_name || '';
+      document.getElementById('edit_email').value = data.email || '';
+      document.getElementById('edit_phone').value = data.phone || '';
+      document.getElementById('edit_birth_date').value = data.birth_date || '';
+      document.getElementById('edit_address_city').value = data.address_city || '';
+      document.getElementById('edit_address_ward').value = data.address_ward || '';
+      document.getElementById('edit_department_id').value = data.department_id || '';
+      document.getElementById('edit_position_id').value = data.position_id || '';
+      document.getElementById('edit_start_date').value = data.start_date || '';
+      document.getElementById('edit_base_salary').value = data.base_salary || '';
+      document.getElementById('edit_role').value = (data.role || 'staff').toLowerCase();
+  }
 </script>
 
 <?php require __DIR__ . '/../layouts/footer.php'; ?>

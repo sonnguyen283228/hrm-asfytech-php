@@ -18,17 +18,17 @@
     </div>
 
     <?php if (!empty($_SESSION['success'])): ?>
-    <div class="alert alert-soft-success d-flex align-items-center" role="alert">
+    <div class="alert alert-soft-success d-flex align-items-center auto-dismiss-alert" role="alert">
       <span data-feather="check-circle" class="text-success fs-3 me-3"></span>
-      <p class="mb-0 flex-1"><?= htmlspecialchars($_SESSION['success']) ?></p>
+      <p class="mb-0 flex-1 fw-bold"><?= htmlspecialchars($_SESSION['success']) ?></p>
       <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     <?php unset($_SESSION['success']); endif; ?>
     
     <?php if (!empty($_SESSION['error'])): ?>
-    <div class="alert alert-soft-danger d-flex align-items-center" role="alert">
+    <div class="alert alert-soft-danger d-flex align-items-center auto-dismiss-alert" role="alert">
       <span data-feather="alert-circle" class="text-danger fs-3 me-3"></span>
-      <p class="mb-0 flex-1"><?= htmlspecialchars($_SESSION['error']) ?></p>
+      <p class="mb-0 flex-1 fw-bold"><?= htmlspecialchars($_SESSION['error']) ?></p>
       <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     <?php unset($_SESSION['error']); endif; ?>
@@ -112,7 +112,27 @@
                     </div>
                 </td>
                 <td class="align-middle white-space-nowrap text-end py-3">
+                  <?php if (in_array(strtolower((string)(auth_user()['role'] ?? '')), ['admin', 'manager'])): ?>
+                  <div class="font-sans-serif btn-reveal-trigger position-static">
+                    <button class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal fs--2" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs--2"></span></button>
+                    <div class="dropdown-menu dropdown-menu-end py-2">
+                        <a class="dropdown-item" href="/projects/view?id=<?= (int)$p['id'] ?>">Xem chi tiết & Cập nhật Task</a>
+                        <a class="dropdown-item cursor-pointer" onclick='editProject(<?= json_encode([
+                          "id" => $p["id"], 
+                          "name" => $p["name"], 
+                          "status" => $p["status"] ?? "Kế hoạch",
+                          "start_date" => $p["start_date"] ?? ""
+                        ]) ?>)' data-bs-toggle="modal" data-bs-target="#editProjectModal">Sửa Tên & Trạng Thái</a>
+                        <div class="dropdown-divider"></div>
+                        <form method="post" action="/projects/delete" onsubmit="return confirm('CẢNH BÁO: Bạn có chắc chắn muốn XÓA DỰ ÁN NÀY? Toàn bộ Dữ liệu tiến độ, thành viên và các module sẽ bị xóa vĩnh viễn!')">
+                            <input type="hidden" name="id" value="<?= (int)$p['id'] ?>">
+                            <button class="dropdown-item text-danger" type="submit">Hủy & Xóa Dự án</button>
+                        </form>
+                    </div>
+                  </div>
+                  <?php else: ?>
                   <a class="btn btn-sm btn-phoenix-primary" href="/projects/view?id=<?= (int)$p['id'] ?>">Xem chi tiết</a>
+                  <?php endif; ?>
                 </td>
               </tr>
               <?php endforeach; ?>
@@ -134,5 +154,81 @@
       </div>
     </div>
 </div>
+
+<!-- Modal Sửa Dự Án -->
+<div class="modal fade" id="editProjectModal" tabindex="-1" aria-labelledby="editProjectModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg">
+      <div class="modal-header bg-light border-bottom border-200">
+        <h5 class="modal-title text-1000" id="editProjectModalLabel">Cập Nhật Dự Án</h5>
+        <button class="btn p-1" type="button" data-bs-dismiss="modal" aria-label="Close"><span class="fas fa-times fs--1"></span></button>
+      </div>
+      <form method="post" action="/projects/edit" class="needs-validation" novalidate>
+        <input type="hidden" id="edit_proj_id" name="id" value="" />
+        <div class="modal-body p-4 bg-white">
+          <div class="mb-3">
+            <label class="form-label">Tên dự án <span class="text-danger">*</span></label>
+            <input class="form-control" id="edit_proj_name" name="name" type="text" required />
+            <div class="invalid-feedback">Vui lòng nhập tên dự án.</div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Ngày bắt đầu <span class="text-danger">*</span></label>
+            <input class="form-control" id="edit_proj_start" name="start_date" type="date" required />
+            <div class="invalid-feedback">Ngày bắt đầu không được để trống.</div>
+          </div>
+          <div class="mb-0">
+            <label class="form-label">Trạng thái tổng quan</label>
+            <select class="form-select" id="edit_proj_status" name="status">
+              <option value="Kế hoạch">Kế hoạch</option>
+              <option value="Đang triển khai">Đang triển khai</option>
+              <option value="Tạm dừng">Tạm dừng</option>
+              <option value="Hoàn thành">Hoàn thành</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer border-top-0 px-4 pb-4">
+          <button class="btn btn-outline-secondary" type="button" data-bs-dismiss="modal">Hủy</button>
+          <button class="btn btn-primary px-4" type="submit">Lưu Thay Đổi</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    'use strict'
+    var forms = document.querySelectorAll('.needs-validation')
+    Array.prototype.slice.call(forms).forEach(function (form) {
+      form.addEventListener('submit', function (event) {
+        if (!form.checkValidity()) {
+          event.preventDefault()
+          event.stopPropagation()
+        }
+        form.classList.add('was-validated')
+      }, false)
+    });
+
+    // Auto dismiss alerts
+    setTimeout(function() {
+      document.querySelectorAll('.auto-dismiss-alert').forEach(function(alertNode) {
+        var alert = new bootstrap.Alert(alertNode)
+        alert.close()
+      })
+    }, 4000);
+  })();
+
+  function editProject(data) {
+      document.getElementById('edit_proj_id').value = data.id || '';
+      document.getElementById('edit_proj_name').value = data.name || '';
+      if(data.start_date) {
+         // Cắt lấy format YYYY-MM-DD
+         document.getElementById('edit_proj_start').value = data.start_date.substring(0, 10);
+      } else {
+         document.getElementById('edit_proj_start').value = '';
+      }
+      document.getElementById('edit_proj_status').value = data.status || 'Kế hoạch';
+  }
+</script>
 
 <?php require __DIR__ . '/../layouts/footer.php'; ?>

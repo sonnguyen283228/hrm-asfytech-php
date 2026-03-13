@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 declare(strict_types=1);
 
@@ -259,7 +259,14 @@ if ($uri === '/employees' && $method === 'GET') {
     $stmt = db()->query('SELECT u.*, d.name AS department_name FROM users u LEFT JOIN departments d ON d.id = u.department_id ORDER BY u.id DESC');
     $employees = $stmt->fetchAll();
     $departments = db()->query('SELECT * FROM departments WHERE is_active = 1 ORDER BY name')->fetchAll();
-    view('employees/index', ['user' => $user, 'employees' => $employees, 'departments' => $departments]);
+    
+    // Thử load bảng positions (nếu đã tạo, nếu chưa thì sẽ là mảng rỗng)
+    $positions = [];
+    try {
+        $positions = db()->query('SELECT * FROM positions WHERE is_active = 1 ORDER BY name')->fetchAll();
+    } catch (Throwable $e) {}
+
+    view('employees/index', ['user' => $user, 'employees' => $employees, 'departments' => $departments, 'positions' => $positions]);
     exit;
 }
 
@@ -276,8 +283,7 @@ if ($uri === '/employees/create' && $method === 'POST') {
     $email = trim((string)($_POST['email'] ?? ''));
     $role = trim((string)($_POST['role'] ?? 'staff'));
     $departmentId = (int)($_POST['department_id'] ?? 0);
-    $position = trim((string)($_POST['position'] ?? 'NhĂ¢n viĂªn'));
-
+    $positionId = (int)($_POST['position_id'] ?? 0);
     $phone = trim((string)($_POST['phone'] ?? ''));
     $addressWard = trim((string)($_POST['address_ward'] ?? ''));
     $addressCity = trim((string)($_POST['address_city'] ?? ''));
@@ -309,13 +315,89 @@ if ($uri === '/employees/create' && $method === 'POST') {
     }
 
     $randomPass = password_hash(bin2hex(random_bytes(16)), PASSWORD_BCRYPT);
-    $stmt = db()->prepare('INSERT INTO users(full_name,email,phone,address_ward,address_city,start_date,birth_date,base_salary,password,role,is_active,department_id,position,avatar_url,last_seen_at) VALUES(?,?,?,?,?,?,?,?,?,?,1,?,?,?,?,NOW())');
-    $stmt->execute([$fullName, $email, $phone, $addressWard, $addressCity, $startDate ?: null, $birthDate ?: null, $baseSalary, $randomPass, $role, $departmentId ?: null, $position, null]);
-
+    $stmt = db()->prepare('INSERT INTO users(full_name,email,phone,address_ward,address_city,start_date,birth_date,base_salary,password,role,is_active,department_id,position_id,avatar_url,last_seen_at) VALUES(?,?,?,?,?,?,?,?,?,?,1,?,?,?,NOW())');
+    $stmt->execute([$fullName, $email, $phone, $addressWard, $addressCity, $startDate ?: null, $birthDate ?: null, $baseSalary, $randomPass, $role, $departmentId ?: null, $positionId ?: null, null]);
     $_SESSION['success'] = 'ÄĂ£ thĂªm nhĂ¢n sá»±. Avatar sáº½ tá»± Ä‘á»“ng bá»™ khi nhĂ¢n sá»± Ä‘Äƒng nháº­p Google láº§n Ä‘áº§u.';
     redirect('/employees');
 }
 
+if ($uri === '/employees/edit' && $method === 'POST') {
+    $user = require_admin();
+    
+    $id = (int)($_POST['id'] ?? 0);
+    if ($id <= 0) {
+        $_SESSION['error'] = 'Không tìm thấy dữ liệu nhân sự cần sửa.';
+        redirect('/employees');
+    }
+    
+    $fullName = trim((string)($_POST['full_name'] ?? ''));
+    $email = trim((string)($_POST['email'] ?? ''));
+    $role = trim((string)($_POST['role'] ?? 'staff'));
+    $departmentId = (int)($_POST['department_id'] ?? 0);
+    $positionId = (int)($_POST['position_id'] ?? 0);
+
+    $phone = trim((string)($_POST['phone'] ?? ''));
+    $addressWard = trim((string)($_POST['address_ward'] ?? ''));
+    $addressCity = trim((string)($_POST['address_city'] ?? ''));
+    $startDate = trim((string)($_POST['start_date'] ?? ''));
+    $birthDate = trim((string)($_POST['birth_date'] ?? ''));
+    $baseSalary = (int)($_POST['base_salary'] ?? 0);
+
+    if ($fullName === '' || $email === '') {
+        $_SESSION['error'] = 'Vui lòng nhập đầy đủ họ tên và email.';
+        redirect('/employees');
+    }
+
+    if (!is_gmail($email)) {
+        $_SESSION['error'] = 'Email phải là @gmail.com';
+        redirect('/employees');
+    }
+    if (!is_vn_phone($phone)) {
+        $_SESSION['error'] = 'Số điện thoại chưa đúng chuẩn VN.';
+        redirect('/employees');
+    }
+    $age = age_from_birthdate($birthDate);
+    if ($age !== null && $age < 18) {
+        $_SESSION['error'] = 'Nhân sự phải từ 18 tuổi trở lên.';
+        redirect('/employees');
+    }
+    if ($baseSalary < 0) {
+        $_SESSION['error'] = 'Lương cơ bản không hợp lệ.';
+        redirect('/employees');
+    }
+
+    $stmt = db()->prepare('UPDATE users SET full_name=?, email=?, phone=?, address_ward=?, address_city=?, start_date=?, birth_date=?, base_salary=?, role=?, department_id=?, position_id=? WHERE id=?');
+    $stmt->execute([
+        $fullName, $email, $phone, $addressWard, $addressCity, 
+        $startDate ?: null, $birthDate ?: null, $baseSalary, 
+        $role, $departmentId ?: null, $positionId ?: null, $id
+    ]);
+
+    $_SESSION['success'] = 'Cập nhật hồ sơ nhân sự thành công.';
+    redirect('/employees');
+}
+
+if ($uri === '/employees/toggle-status' && $method === 'POST') {
+    $user = require_admin();
+    
+    $id = (int)($_POST['id'] ?? 0);
+    if ($id <= 0) {
+        $_SESSION['error'] = 'Yêu cầu không hợp lệ.';
+        redirect('/employees');
+    }
+    
+    // Cannot lock self
+    if ($id === (int)$user['id']) {
+        $_SESSION['error'] = 'Bạn không thể tự khóa tài khoản của chính mình.';
+        redirect('/employees');
+    }
+
+    $stmt = db()->prepare('UPDATE users SET is_active = 1 - COALESCE(is_active, 1) WHERE id = ?');
+    $stmt->execute([$id]);
+
+    $_SESSION['success'] = 'Đã thay đổi trạng thái hoạt động của tài khoản nhân sự.';
+    redirect('/employees');
+}
 
 // ===== Department management =====
 if ($uri === '/departments' && $method === 'GET') {
@@ -404,6 +486,104 @@ if ($uri === '/departments/delete' && $method === 'POST') {
     redirect('/departments');
 }
 
+// ===== Position management =====
+if ($uri === '/positions' && $method === 'GET') {
+    $user = require_admin();
+    
+    // Auto-setup DB table for positions
+    db()->exec("CREATE TABLE IF NOT EXISTS positions (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        description TEXT DEFAULT NULL,
+        is_active TINYINT(1) DEFAULT 1,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;");
+    
+    // Also try add position_id to users if not exist
+    try {
+        db()->exec("ALTER TABLE users ADD COLUMN position_id INT NULL AFTER department_id;");
+    } catch (Throwable $e) {}
+
+    $stmt = db()->query('SELECT p.*, COUNT(u.id) AS total_users FROM positions p LEFT JOIN users u ON u.position_id = p.id GROUP BY p.id ORDER BY p.id DESC');
+    $positions = $stmt->fetchAll();
+    view('positions/index', ['user' => $user, 'positions' => $positions]);
+    exit;
+}
+
+if ($uri === '/positions/create' && $method === 'POST') {
+    $user = require_admin();
+    $name = trim((string)($_POST['name'] ?? ''));
+    $description = trim((string)($_POST['description'] ?? ''));
+
+    if ($name === '') {
+        $_SESSION['error'] = 'Tên chức vụ không được để trống.';
+        redirect('/positions');
+    }
+
+    $stmt = db()->prepare('INSERT INTO positions(name, description, is_active) VALUES(?,?,1)');
+    $stmt->execute([$name, $description ?: null]);
+
+    $_SESSION['success'] = 'Đã tạo chức vụ mới thành công.';
+    redirect('/positions');
+}
+
+if ($uri === '/positions/edit' && $method === 'POST') {
+    $user = require_admin();
+    $id = (int)($_POST['id'] ?? 0);
+    $name = trim((string)($_POST['name'] ?? ''));
+    $description = trim((string)($_POST['description'] ?? ''));
+
+    if ($id <= 0 || $name === '') {
+        $_SESSION['error'] = 'Dữ liệu chức vụ không hợp lệ.';
+        redirect('/positions');
+    }
+
+    $stmt = db()->prepare('UPDATE positions SET name = ?, description = ? WHERE id = ?');
+    $stmt->execute([$name, $description ?: null, $id]);
+
+    $_SESSION['success'] = 'Đã lưu thay đổi chức vụ.';
+    redirect('/positions');
+}
+
+if ($uri === '/positions/toggle' && $method === 'POST') {
+    $user = require_admin();
+    $id = (int)($_POST['id'] ?? 0);
+
+    if ($id <= 0) {
+        $_SESSION['error'] = 'Chức vụ không hợp lệ.';
+        redirect('/positions');
+    }
+
+    $stmt = db()->prepare('UPDATE positions SET is_active = 1 - COALESCE(is_active, 1) WHERE id = ?');
+    $stmt->execute([$id]);
+    $_SESSION['success'] = 'Đã thay đổi trạng thái hoạt động của chức vụ.';
+    redirect('/positions');
+}
+
+if ($uri === '/positions/delete' && $method === 'POST') {
+    $user = require_admin();
+    $id = (int)($_POST['id'] ?? 0);
+
+    if ($id <= 0) {
+        $_SESSION['error'] = 'Chức vụ không hợp lệ.';
+        redirect('/positions');
+    }
+
+    $stmt = db()->prepare('SELECT COUNT(*) AS total FROM users WHERE position_id = ?');
+    $stmt->execute([$id]);
+    $total = (int)($stmt->fetch()['total'] ?? 0);
+
+    if ($total > 0) {
+        $_SESSION['error'] = 'Không thể xóa vĩnh viễn chức vụ đang có nhân sự đảm nhiệm.';
+        redirect('/positions');
+    }
+
+    $stmt = db()->prepare('DELETE FROM positions WHERE id = ?');
+    $stmt->execute([$id]);
+    $_SESSION['success'] = 'Đã xóa vĩnh viễn chức vụ khỏi hệ thống.';
+    redirect('/positions');
+}
+
 
 // ===== Project management =====
 if ($uri === '/projects' && $method === 'GET') {
@@ -437,6 +617,44 @@ if ($uri === '/projects/create' && $method === 'POST') {
     $stmt->execute([$name, $startDate, null, $description, 'planning']);
 
     $_SESSION['success'] = 'ÄĂ£ táº¡o dá»± Ă¡n má»›i.';
+    redirect('/projects');
+}
+
+if ($uri === '/projects/edit' && $method === 'POST') {
+    $user = require_admin();
+    $id = (int)($_POST['id'] ?? 0);
+    $name = trim((string)($_POST['name'] ?? ''));
+    $startDate = trim((string)($_POST['start_date'] ?? ''));
+    $status = trim((string)($_POST['status'] ?? ''));
+
+    if ($id <= 0 || $name === '' || $startDate === '') {
+        $_SESSION['error'] = 'Thông tin dự án không hợp lệ.';
+        redirect('/projects');
+    }
+
+    $stmt = db()->prepare('UPDATE projects SET name = ?, start_date = ?, status = ? WHERE id = ?');
+    $stmt->execute([$name, $startDate, $status, $id]);
+
+    $_SESSION['success'] = 'Cập nhật thông tin dự án thành công.';
+    redirect('/projects');
+}
+
+if ($uri === '/projects/delete' && $method === 'POST') {
+    $user = require_admin();
+    $id = (int)($_POST['id'] ?? 0);
+
+    if ($id <= 0) {
+        $_SESSION['error'] = 'ID Dự án không hợp lệ.';
+        redirect('/projects');
+    }
+
+    // Xóa cascade
+    db()->prepare('DELETE FROM project_details WHERE project_id = ?')->execute([$id]);
+    db()->prepare('DELETE FROM project_modules WHERE project_id = ?')->execute([$id]);
+    db()->prepare('DELETE FROM project_members WHERE project_id = ?')->execute([$id]);
+    db()->prepare('DELETE FROM projects WHERE id = ?')->execute([$id]);
+
+    $_SESSION['success'] = 'Đã xóa toàn bộ dữ liệu dự án.';
     redirect('/projects');
 }
 
