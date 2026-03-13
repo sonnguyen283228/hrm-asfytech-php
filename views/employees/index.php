@@ -98,7 +98,7 @@
                     ?>
                     <span class="badge badge-phoenix fs--2 <?= $badgeClass ?>"><span class="badge-label"><?= htmlspecialchars($e['role']) ?></span></span>
                 </td>
-                <td class="status align-middle white-space-nowrap d-flex align-items-center py-3">
+                <td class="status align-middle white-space-nowrap py-2">
                   <?php if ((int)($e['is_active'] ?? 1) !== 1): ?>
                     <span class="badge badge-phoenix fs--2 badge-phoenix-secondary"><span class="badge-label" data-feather="lock"></span> Khóa</span>
                   <?php else: ?>
@@ -119,7 +119,7 @@
                   <div class="d-flex justify-content-end gap-1">
                     <button class="btn btn-phoenix-secondary btn-icon btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Xem chi tiết" onclick='viewEmployeeDetail(<?= json_encode($e) ?>)'><span data-feather="eye"></span></button>
                     <?php if (in_array(strtolower((string)(auth_user()['role'] ?? '')), ['admin', 'manager'])): ?>
-                    <button class="btn btn-phoenix-primary btn-icon btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Chỉnh sửa" onclick='editEmployee(<?= json_encode([
+                    <button class="btn btn-phoenix-primary btn-icon btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Chỉnh sửa" data-bs-toggle="modal" data-bs-target="#editEmployeeModal" onclick='editEmployee(<?= json_encode([
                         "id" => $e["id"], 
                         "full_name" => $e["full_name"], 
                         "email" => $e["email"], 
@@ -132,7 +132,7 @@
                         "start_date" => $e["start_date"] ?? "",
                         "base_salary" => $e["base_salary"] ?? "",
                         "role" => $e["role"] ?? "staff"
-                    ]) ?>)' data-bs-toggle="modal" data-bs-target="#editEmployeeModal"><span data-feather="edit"></span></button>
+                    ]) ?>)'><span data-feather="edit"></span></button>
                     <form method="post" action="/employees/toggle-status" class="mb-0 d-inline-block" onsubmit="return confirm('Bạn có chắc chắn muốn thay đổi trạng thái của nhân sự này không?');">
                       <input type="hidden" name="id" value="<?= $e['id'] ?>">
                       <button type="submit" class="btn btn-phoenix-danger btn-icon btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="<?= ((int)$e['is_active'] === 1) ? 'Khóa tài khoản' : 'Mở khóa' ?>">
