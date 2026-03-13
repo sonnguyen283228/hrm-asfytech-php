@@ -9,7 +9,7 @@
         </div>
         <div class="col-auto">
           <div class="d-flex align-items-center gap-2">
-            <button class="btn btn-outline-secondary btn-sm"><span data-feather="download" class="me-2"></span>Export File</button>
+            <a href="/employees/export?<?= http_build_query($_GET) ?>" class="btn btn-outline-secondary btn-sm"><span data-feather="download" class="me-2"></span>Export File</a>
             <?php if (in_array(strtolower((string)(auth_user()['role'] ?? '')), ['admin', 'manager'])): ?>
             <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#employeeModal"><span data-feather="plus" class="me-2"></span>Thêm nhân sự mới</button>
             <?php endif; ?>
@@ -38,30 +38,32 @@
       <div class="card-body p-3">
         
         <!-- Filter Row -->
-        <div class="row align-items-center justify-content-between g-3 mb-4">
+        <form method="GET" action="/employees" class="row align-items-center justify-content-between g-3 mb-4">
           <div class="col-12 col-md-auto d-flex align-items-center">
             <div class="search-box me-2">
-              <form class="position-relative" data-bs-toggle="search" data-bs-display="static">
-                <input class="form-control form-control-sm search-input search" type="search" placeholder="Tìm tên, email..." aria-label="Search" />
+              <div class="position-relative">
+                <input name="q" value="<?= htmlspecialchars($_GET['q'] ?? '') ?>" class="form-control form-control-sm search-input" type="search" placeholder="Tìm tên, email..." aria-label="Search" />
                 <span class="fas fa-search search-box-icon"></span>
-              </form>
+              </div>
             </div>
           </div>
           <div class="col-12 col-md-auto d-flex gap-2">
-             <select class="form-select form-select-sm w-auto" aria-label="Lọc phòng ban">
+             <select name="department_id" class="form-select form-select-sm w-auto" aria-label="Lọc phòng ban">
                 <option value="">Tất cả phòng ban</option>
                 <?php foreach (($departments ?? []) as $d): ?>
-                  <option value="<?= htmlspecialchars($d['name']) ?>"><?= htmlspecialchars($d['name']) ?></option>
+                  <option value="<?= $d['id'] ?>" <?= (isset($_GET['department_id']) && $_GET['department_id'] == $d['id']) ? 'selected' : '' ?>><?= htmlspecialchars($d['name']) ?></option>
                 <?php endforeach; ?>
              </select>
-             <input type="month" class="form-control form-control-sm w-auto" placeholder="Tháng bắt đầu" aria-label="Lọc thời gian">
+             <input name="month" value="<?= htmlspecialchars($_GET['month'] ?? '') ?>" type="month" class="form-control form-control-sm w-auto" placeholder="Tháng bắt đầu" aria-label="Lọc thời gian">
+             <button type="submit" class="btn btn-sm btn-primary">Lọc / Tìm kiếm</button>
           </div>
-        </div>
+        </form>
 
         <div class="table-responsive scrollbar">
           <table class="table table-sm fs--1 mb-0 overflow-hidden text-nowrap">
             <thead class="bg-200 text-900 border-bottom">
               <tr>
+                <th class="white-space-nowrap pb-2 pt-3 text-center" style="width:50px">STT</th>
                 <th class="white-space-nowrap pb-2 pt-3" style="width:50px"></th>
                 <th class="sort pe-1 align-middle white-space-nowrap pb-2 pt-3" data-sort="fullName">Họ tên & Email</th>
                 <th class="sort pe-1 align-middle white-space-nowrap pb-2 pt-3" data-sort="department">Phòng ban</th>
@@ -74,8 +76,9 @@
               </tr>
             </thead>
             <tbody class="list" id="table-employees-body">
-              <?php foreach ($employees as $e): ?>
+              <?php $stt = 1; foreach ($employees as $e): ?>
               <tr class="hover-actions-trigger btn-reveal-trigger position-static">
+                <td class="align-middle white-space-nowrap py-2 text-center text-900 fw-semi-bold"><?= $stt++ ?></td>
                 <td class="align-middle white-space-nowrap py-2">
                   <div class="avatar avatar-m">
                     <?php if (!empty($e['avatar_url'])): ?>

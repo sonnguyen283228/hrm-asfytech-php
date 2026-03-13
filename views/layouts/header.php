@@ -127,4 +127,4 @@
     <!-- Main Content Wrapper -->
 
     <!-- Main Content Wrapper -->
-    <div class="content">
+    <div class="content pt-0">

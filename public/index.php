@@ -293,11 +293,94 @@ if ($uri === '/attendance/export/pdf' && $method === 'GET') {
     exit;
 }
 
+// ===== Employee Export =====
+if ($uri === '/employees/export' && $method === 'GET') {
+    $user = require_admin();
+    
+    $q = trim((string)($_GET['q'] ?? ''));
+    $departmentId = trim((string)($_GET['department_id'] ?? ''));
+    $month = trim((string)($_GET['month'] ?? ''));
+
+    // Tự động nhận alias position cho trường position tự do hoặc bảng positions. Do schema có thể trộn lẫn 2 kiểu.
+    $sql = "SELECT u.*, d.name AS department_name FROM users u LEFT JOIN departments d ON d.id = u.department_id WHERE 1=1";
+    $params = [];
+    
+    if ($q !== '') {
+        $sql .= " AND (u.full_name LIKE ? OR u.email LIKE ? OR u.phone LIKE ?)";
+        $params[] = "%$q%";
+        $params[] = "%$q%";
+        $params[] = "%$q%";
+    }
+    
+    if ($departmentId !== '') {
+        $sql .= " AND u.department_id = ?";
+        $params[] = $departmentId;
+    }
+    
+    if ($month !== '') {
+        // Chỉ xuất những nhân sự có ngày bắt đầu trước hoặc bằng tháng này. Hoặc nếu muốn lọc người vào đúng tháng.
+        // Dựa theo UI "Tháng bắt đầu", lọc nhân sự bắt đầu làm vào tháng đó.
+        $sql .= " AND DATE_FORMAT(u.start_date, '%Y-%m') = ?";
+        $params[] = $month;
+    }
+    
+    $sql .= " ORDER BY u.id DESC";
+    $stmt = db()->prepare($sql);
+    $stmt->execute($params);
+    $employees = $stmt->fetchAll();
+
+    header('Content-Type: application/vnd.ms-excel; charset=UTF-8');
+    header('Content-Disposition: attachment; filename="employees_' . date('Y_m_d_H_i') . '.xls"');
+
+    echo "STT\tHọ tên\tEmail\tPhòng ban\tVị trí/Chức vụ\tVai trò\tNgày bắt đầu\tLương cơ bản\n";
+    $stt = 1;
+    foreach ($employees as $r) {
+        $pName = htmlspecialchars($r['position'] ?? '');
+        echo $stt++ . "\t" . 
+             htmlspecialchars($r['full_name']) . "\t" . 
+             htmlspecialchars($r['email']) . "\t" . 
+             htmlspecialchars($r['department_name'] ?? '--') . "\t" . 
+             $pName . "\t" . 
+             htmlspecialchars($r['role']) . "\t" . 
+             htmlspecialchars($r['start_date'] ?? '--') . "\t" . 
+             ($r['base_salary'] ? number_format((int)$r['base_salary']) . ' ₫' : '--') . "\n";
+    }
+    exit;
+}
+
 // ===== Employee management =====
 if ($uri === '/employees' && $method === 'GET') {
     $user = require_admin();
-    $stmt = db()->query('SELECT u.*, d.name AS department_name FROM users u LEFT JOIN departments d ON d.id = u.department_id ORDER BY u.id DESC');
+    
+    $q = trim((string)($_GET['q'] ?? ''));
+    $departmentId = trim((string)($_GET['department_id'] ?? ''));
+    $month = trim((string)($_GET['month'] ?? ''));
+
+    $sql = "SELECT u.*, d.name AS department_name FROM users u LEFT JOIN departments d ON d.id = u.department_id WHERE 1=1";
+    $params = [];
+    
+    if ($q !== '') {
+        $sql .= " AND (u.full_name LIKE ? OR u.email LIKE ? OR u.phone LIKE ?)";
+        $params[] = "%$q%";
+        $params[] = "%$q%";
+        $params[] = "%$q%";
+    }
+    
+    if ($departmentId !== '') {
+        $sql .= " AND u.department_id = ?";
+        $params[] = $departmentId;
+    }
+    
+    if ($month !== '') {
+        $sql .= " AND DATE_FORMAT(u.start_date, '%Y-%m') = ?";
+        $params[] = $month;
+    }
+    
+    $sql .= " ORDER BY u.id DESC";
+    $stmt = db()->prepare($sql);
+    $stmt->execute($params);
     $employees = $stmt->fetchAll();
+
     $departments = db()->query('SELECT * FROM departments WHERE is_active = 1 ORDER BY name')->fetchAll();
     
     // Thử load bảng positions (nếu đã tạo, nếu chưa thì sẽ là mảng rỗng)
@@ -397,8 +480,8 @@ if ($uri === '/employees/edit' && $method === 'POST') {
         redirect('/employees');
     }
     $age = age_from_birthdate($birthDate);
-    if ($age !== null && $age < 18) {
-        $_SESSION['error'] = 'Nhân sự phải từ 18 tuổi trở lên.';
+    if ($age === null || $age < 18) {
+        $_SESSION['error'] = 'Nhân sự phải từ 18 tuổi trở lên. Hãy kiểm tra ngày sinh.';
         redirect('/employees');
     }
     if ($baseSalary < 0) {
