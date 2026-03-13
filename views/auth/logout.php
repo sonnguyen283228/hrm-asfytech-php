@@ -26,8 +26,8 @@ $favUrl = get_brand_favicon_url();
       background-position: center;
     }
     .avatar-logout {
-      width: 61px;
-      height: 61px;
+      width: 91px;
+      height: 91px;
       margin: 0 auto;
     }
   </style>

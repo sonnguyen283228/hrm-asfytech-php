@@ -85,11 +85,11 @@
               $logoUrl = get_brand_logo_url(); 
               if ($logoUrl): 
             ?>
-              <img src="<?= htmlspecialchars($logoUrl) ?>" alt="logo" style="max-height: 61px; width: 61px; object-fit: contain;">
+              <img src="<?= htmlspecialchars($logoUrl) ?>" alt="logo" style="max-height: 91px; width: 91px; object-fit: contain;">
             <?php else: ?>
-              <div class="d-flex align-items-center justify-content-center bg-primary text-white rounded-2" style="width: 61px; height: 61px; font-weight: 800; font-size: 24px;">A</div>
+              <div class="d-flex align-items-center justify-content-center bg-primary text-white rounded-2" style="width: 91px; height: 91px; font-weight: 800; font-size: 32px;">A</div>
             <?php endif; ?>
-            <span class="d-none d-sm-block fw-bold text-1000 tracking-tight" style="font-size: 49px; line-height: 1;"><?= htmlspecialchars(site_get('site_name', 'HRM APP')) ?></span>
+            <span class="d-none d-sm-block fw-bold text-1000 tracking-tight" style="font-size: 21px; line-height: 1;"><?= htmlspecialchars(site_get('site_name', 'HRM APP')) ?></span>
           </a>
         </div>
 
