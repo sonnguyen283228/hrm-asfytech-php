@@ -119,7 +119,7 @@
                   <div class="d-flex justify-content-end gap-1">
                     <button class="btn btn-phoenix-secondary btn-icon btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Xem chi tiết" onclick='viewEmployeeDetail(<?= json_encode($e) ?>)'><span data-feather="eye"></span></button>
                     <?php if (in_array(strtolower((string)(auth_user()['role'] ?? '')), ['admin', 'manager'])): ?>
-                    <button class="btn btn-phoenix-primary btn-icon btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Chỉnh sửa" data-bs-toggle="modal" data-bs-target="#editEmployeeModal" onclick='editEmployee(<?= json_encode([
+                    <button class="btn btn-phoenix-primary btn-icon btn-sm" title="Chỉnh sửa" onclick='editEmployee(<?= json_encode([
                         "id" => $e["id"], 
                         "full_name" => $e["full_name"], 
                         "email" => $e["email"], 
@@ -414,6 +414,9 @@
       document.getElementById('edit_start_date').value = data.start_date || '';
       document.getElementById('edit_base_salary').value = data.base_salary || '';
       document.getElementById('edit_role').value = (data.role || 'staff').toLowerCase();
+      // Mở modal programmatically (tránh xung đột data-bs-toggle)
+      var editModal = new bootstrap.Modal(document.getElementById('editEmployeeModal'));
+      editModal.show();
   }
 
   // Prepare View Detail Modal
