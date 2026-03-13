@@ -28,39 +28,18 @@ $favicon = function_exists('site_get') ? site_get('site_favicon_url', '') : '';
 </head>
 <body>
   <main class="main" id="top">
-    <div class="row vh-100 g-0">
-      <div class="col-lg-6 position-relative d-none d-lg-block">
-        <div class="bg-auth position-absolute top-0 left-0 w-100 h-100"></div>
-        <div class="position-absolute w-100 h-100" style="background: rgba(15, 23, 42, 0.7);"></div>
-        <div class="position-relative h-100 d-flex flex-column justify-content-center px-6">
-          <div class="mb-4">
-            <?php if ($logo): ?>
-              <img src="<?= htmlspecialchars($logo) ?>" alt="logo" width="64" class="bg-white p-2 rounded-3 shadow-sm mb-4">
-            <?php else: ?>
-              <div class="d-inline-flex align-items-center justify-content-center bg-primary text-white rounded-3 shadow-sm mb-4" style="width: 64px; height: 64px; font-size: 28px; font-weight: 800;">A</div>
-            <?php endif; ?>
-            <h1 class="text-white fw-bolder mb-3 display-4">ASFY HRM System</h1>
-            <p class="text-300 fs-1 leading-normal mb-0" style="max-width: 500px">
-              Hệ thống Quản trị Nhân sự và Quản lý Dự án toàn diện, giúp tối ưu hóa luồng công việc và năng suất của đội ngũ.
-            </p>
-          </div>
-        </div>
-      </div>
-      
-      <div class="col-lg-6 d-flex justify-content-center align-items-center">
-        <div class="w-100 px-4 px-sm-6 px-md-8 px-lg-6 px-xl-8 px-xxl-10" style="max-width: 500px">
-          <div class="text-center mb-5 d-lg-none">
-            <?php if ($logo): ?>
-              <img src="<?= htmlspecialchars($logo) ?>" alt="logo" width="48" class="mb-3 rounded">
-            <?php else: ?>
-              <div class="d-inline-flex align-items-center justify-content-center bg-primary text-white rounded-circle shadow-sm mb-3" style="width: 48px; height: 48px; font-size: 22px; font-weight: 800;">A</div>
-            <?php endif; ?>
-            <h3 class="text-1000">Hệ thống HRM</h3>
-          </div>
+    <div class="row vh-100 g-0 flex-center">
+      <div class="col-sm-10 col-md-8 col-lg-5 col-xl-5 col-xxl-4 d-flex justify-content-center align-items-center">
+        <div class="w-100 px-4 px-sm-6 px-md-8 px-lg-6 px-xl-8 px-xxl-10 bg-white py-6 shadow-lg rounded-4 border border-200">
           
-          <div class="mb-5 text-center text-lg-start">
-            <h3 class="text-1000">Đăng nhập</h3>
-            <p class="text-700">Truy cập vào không gian làm việc của bạn</p>
+          <div class="text-center mb-5">
+            <?php if ($logo): ?>
+              <img src="<?= htmlspecialchars($logo) ?>" alt="logo" width="64" class="mb-3 rounded-3 shadow-sm p-1 border">
+            <?php else: ?>
+              <div class="d-inline-flex align-items-center justify-content-center bg-primary text-white rounded-3 shadow-sm mb-3" style="width: 54px; height: 54px; font-size: 24px; font-weight: 800;">A</div>
+            <?php endif; ?>
+            <h3 class="text-1000 mb-2 fw-bolder"><?= htmlspecialchars($siteName) ?></h3>
+            <p class="text-700 fs--1">Vui lòng đăng nhập để tiếp tục</p>
           </div>
 
           <?php if (!empty($_SESSION['error'])): ?>
