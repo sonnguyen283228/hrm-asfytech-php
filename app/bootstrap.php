@@ -42,6 +42,7 @@ function view(string $file, array $data = []): void
 
 function redirect(string $path): void
 {
+    session_write_close();
     header('Location: ' . $path);
     exit;
 }
@@ -219,12 +220,23 @@ function working_tenure_text(?string $startDate): string
     try {
         $s = new DateTime($startDate);
         $n = new DateTime();
-        $diff = $n->diff($s);
-        if ($diff->y === 0 and $diff->m === 0) return 'Dưới 1 tháng';
-        if ($diff->y === 0 and $diff->m < 3) return 'Trên 1 tháng';
-        if ($diff->y === 0 and $diff->m >= 3) return 'Trên 3 tháng';
-        if ($diff->y >= 1 and $diff->m === 0) return $diff->y . ' năm';
-        return $diff->y . ' năm ' . $diff->m . ' tháng';
+        
+        // Nếu ngày cấu hình ở tương lai (chưa bắt đầu làm việc)
+        if ($s > $n) return 'Chưa bắt đầu';
+        
+        $diff = $s->diff($n);
+        
+        $y = $diff->y;
+        $m = $diff->m;
+        $d = $diff->d;
+
+        if ($y === 0 && $m === 0) return ($d > 0) ? $d . ' ngày' : 'Hôm nay';
+        
+        $text = '';
+        if ($y > 0) $text .= $y . ' năm ';
+        if ($m > 0) $text .= $m . ' tháng';
+        
+        return trim($text);
     } catch (Throwable $e) {
         return '--';
     }

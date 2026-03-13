@@ -17,21 +17,7 @@
       </div>
     </div>
 
-    <?php if (!empty($_SESSION['success'])): ?>
-    <div class="alert alert-soft-success d-flex align-items-center auto-dismiss-alert" role="alert">
-      <span data-feather="check-circle" class="text-success fs-3 me-3"></span>
-      <p class="mb-0 flex-1 fw-bold"><?= htmlspecialchars($_SESSION['success']) ?></p>
-      <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    <?php unset($_SESSION['success']); endif; ?>
-    
-    <?php if (!empty($_SESSION['error'])): ?>
-    <div class="alert alert-soft-danger d-flex align-items-center auto-dismiss-alert" role="alert">
-      <span data-feather="alert-circle" class="text-danger fs-3 me-3"></span>
-      <p class="mb-0 flex-1 fw-bold"><?= htmlspecialchars($_SESSION['error']) ?></p>
-      <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    <?php unset($_SESSION['error']); endif; ?>
+
 
     <div class="card shadow-sm border-0 mb-3" data-list='{"valueNames":["id","name","desc","members"],"page":10,"pagination":true}'>
       <div class="card-body p-3">

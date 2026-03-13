@@ -18,8 +18,41 @@
   <script src="/phoenix/vendors/bootstrap/bootstrap.min.js"></script>
   <script src="/phoenix/assets/js/phoenix.js"></script>
   <script src="/phoenix/vendors/feather-icons/feather.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
     feather.replace();
+    
+    // Global SweetAlert Toast System
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 3500,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.addEventListener('mouseenter', Swal.stopTimer)
+        toast.addEventListener('mouseleave', Swal.resumeTimer)
+      }
+    });
   </script>
+
+  <?php if (!empty($_SESSION['success'])): ?>
+  <script>
+    Toast.fire({
+      icon: 'success',
+      title: <?= json_encode($_SESSION['success']) ?>
+    });
+  </script>
+  <?php unset($_SESSION['success']); endif; ?>
+
+  <?php if (!empty($_SESSION['error'])): ?>
+  <script>
+    Toast.fire({
+      icon: 'error',
+      title: <?= json_encode($_SESSION['error']) ?>
+    });
+  </script>
+  <?php unset($_SESSION['error']); endif; ?>
+
 </body>
 </html>

@@ -18,21 +18,7 @@
       </div>
     </div>
 
-    <?php if (!empty($_SESSION['success'])): ?>
-    <div class="alert alert-soft-success d-flex align-items-center auto-dismiss-alert" role="alert">
-      <span data-feather="check-circle" class="text-success fs-3 me-3"></span>
-      <p class="mb-0 flex-1 fw-bold"><?= htmlspecialchars($_SESSION['success']) ?></p>
-      <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    <?php unset($_SESSION['success']); endif; ?>
-    
-    <?php if (!empty($_SESSION['error'])): ?>
-    <div class="alert alert-soft-danger d-flex align-items-center auto-dismiss-alert" role="alert">
-      <span data-feather="alert-circle" class="text-danger fs-3 me-3"></span>
-      <p class="mb-0 flex-1 fw-bold"><?= htmlspecialchars($_SESSION['error']) ?></p>
-      <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    <?php unset($_SESSION['error']); endif; ?>
+
 
     <div class="card shadow-sm border-0 mb-3" data-list='{"valueNames":["fullName","email","department","position","role","status","baseSalary"],"page":10,"pagination":true}'>
       <div class="card-body p-3">
@@ -274,34 +260,34 @@
             <div class="col-12"><h6 class="text-700 fw-bold mb-0">Hồ sơ cá nhân</h6><hr class="mt-2 mb-3"/></div>
             
             <div class="col-md-6">
-              <label class="form-label">Họ và tên <span class="text-danger">*</span></label>
+              <label class="form-label" for="edit_full_name">Họ và tên <span class="text-danger">*</span></label>
               <input class="form-control" id="edit_full_name" name="full_name" type="text" required />
             </div>
             <div class="col-md-6">
-              <label class="form-label text-500">Tài khoản Google <span class="text-danger">*</span></label>
+              <label class="form-label text-500" for="edit_email">Tài khoản Google <span class="text-danger">*</span></label>
               <input class="form-control" id="edit_email" name="email" type="email" pattern="^[a-zA-Z0-9._%+-]+@gmail\.com$" required />
             </div>
             <div class="col-md-6">
-              <label class="form-label">Số điện thoại <span class="text-danger">*</span></label>
+              <label class="form-label" for="edit_phone">Số điện thoại <span class="text-danger">*</span></label>
               <input class="form-control" id="edit_phone" name="phone" type="tel" pattern="^(0[3|5|7|8|9])+([0-9]{8})$" required />
             </div>
             <div class="col-md-6">
-              <label class="form-label">Ngày sinh</label>
+              <label class="form-label" for="edit_birth_date">Ngày sinh</label>
               <input class="form-control" id="edit_birth_date" name="birth_date" type="date" />
             </div>
             <div class="col-md-6">
-               <label class="form-label">Tỉnh / Thành phố </label>
+               <label class="form-label" for="edit_address_city">Tỉnh / Thành phố </label>
                <input class="form-control" id="edit_address_city" name="address_city" type="text" />
             </div>
             <div class="col-md-6">
-               <label class="form-label">Phường / Xã</label>
+               <label class="form-label" for="edit_address_ward">Phường / Xã</label>
                <input class="form-control" id="edit_address_ward" name="address_ward" type="text" />
             </div>
 
             <div class="col-12 mt-4"><h6 class="text-700 fw-bold mb-0">Thông tin công việc</h6><hr class="mt-2 mb-3"/></div>
             
             <div class="col-md-6">
-              <label class="form-label">Phòng ban</label>
+              <label class="form-label" for="edit_department_id">Phòng ban</label>
               <select class="form-select" id="edit_department_id" name="department_id">
                 <option value="">-- Chọn phòng ban --</option>
                 <?php foreach (($departments ?? []) as $d): ?>
@@ -310,7 +296,7 @@
               </select>
             </div>
             <div class="col-md-6">
-              <label class="form-label">Vị trí chức vụ <span class="text-danger">*</span></label>
+              <label class="form-label" for="edit_position_id">Vị trí chức vụ <span class="text-danger">*</span></label>
               <select class="form-select" id="edit_position_id" name="position_id" required>
                 <option value="">-- Chọn chức vụ --</option>
                 <?php foreach (($positions ?? []) as $p): ?>
@@ -319,18 +305,18 @@
               </select>
             </div>
             <div class="col-md-4">
-              <label class="form-label">Ngày tính lương</label>
+              <label class="form-label" for="edit_start_date">Ngày tính lương</label>
               <input class="form-control" id="edit_start_date" name="start_date" type="date" />
             </div>
             <div class="col-md-4">
-              <label class="form-label">Lương cơ bản (VND)</label>
+              <label class="form-label" for="edit_base_salary">Lương cơ bản (VND)</label>
               <div class="input-group">
                 <input class="form-control" id="edit_base_salary" name="base_salary" type="number" min="0" step="1" />
                 <span class="input-group-text">đ</span>
               </div>
             </div>
             <div class="col-md-4">
-              <label class="form-label">Quyền hệ thống <span class="text-danger">*</span></label>
+              <label class="form-label" for="edit_role">Quyền hệ thống <span class="text-danger">*</span></label>
               <select class="form-select" id="edit_role" name="role" required>
                 <option value="staff">Staff</option>
                 <option value="manager">Manager / HR</option>

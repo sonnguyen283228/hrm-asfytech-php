@@ -6,14 +6,6 @@
       <p class="text-700 mb-0">Thiết lập cấu hình giao diện chung và thông tin hiển thị của hệ thống.</p>
     </div>
 
-    <?php if (!empty($_SESSION['success'])): ?>
-    <div class="alert alert-soft-success d-flex align-items-center mb-4" role="alert">
-      <span data-feather="check-circle" class="text-success fs-3 me-3"></span>
-      <p class="mb-0 flex-1"><?= htmlspecialchars($_SESSION['success']) ?></p>
-      <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    <?php unset($_SESSION['success']); endif; ?>
-
     <div class="card shadow-sm border-0">
       <div class="card-body p-4">
         <form method="post" action="/settings/site" enctype="multipart/form-data">
