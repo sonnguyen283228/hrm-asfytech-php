@@ -939,5 +939,5 @@ if ($uri === '/settings/site' && $method === 'POST') {
     redirect('/settings/site');
 }
 http_response_code(404);
-echo '404 Not Found';
+view('errors/404');
 
