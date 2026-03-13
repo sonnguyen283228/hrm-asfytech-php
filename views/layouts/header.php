@@ -30,6 +30,9 @@
       <div class="container-fluid px-3 px-xl-4 px-xxl-6">
         
         <div class="d-flex align-items-center">
+          <button class="btn btn-link navbar-toggler me-1 px-2 d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTopCollapse" aria-controls="navbarTopCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span data-feather="menu"></span>
+          </button>
           <a class="navbar-brand me-1 me-sm-3 d-flex align-items-center gap-2" href="/attendance">
             <?php $logo = site_get('site_logo_url', ''); if ($logo): ?>
               <img src="<?= htmlspecialchars($logo) ?>" alt="logo">
@@ -39,8 +42,38 @@
             <span class="d-none d-sm-block fw-bold text-1000 fs-1 tracking-tight"><?= htmlspecialchars(site_get('site_name', 'HRM APP')) ?></span>
           </a>
         </div>
+
+        <div class="collapse navbar-collapse justify-content-center" id="navbarTopCollapse">
+          <ul class="navbar-nav gap-2 mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link fw-semi-bold d-flex align-items-center gap-2 <?= ($activePage ?? '') === 'home' ? 'active text-primary' : '' ?>" href="/attendance">
+                <span data-feather="pie-chart" style="width: 18px; height: 18px;"></span> Trang chủ
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link fw-semi-bold d-flex align-items-center gap-2 <?= ($activePage ?? '') === 'employees' ? 'active text-primary' : '' ?>" href="/employees">
+                <span data-feather="users" style="width: 18px; height: 18px;"></span> Nhân sự
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link fw-semi-bold d-flex align-items-center gap-2 <?= ($activePage ?? '') === 'departments' ? 'active text-primary' : '' ?>" href="/departments">
+                <span data-feather="grid" style="width: 18px; height: 18px;"></span> Phòng ban
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link fw-semi-bold d-flex align-items-center gap-2 <?= ($activePage ?? '') === 'projects' ? 'active text-primary' : '' ?>" href="/projects">
+                <span data-feather="briefcase" style="width: 18px; height: 18px;"></span> Dự án
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link fw-semi-bold d-flex align-items-center gap-2 <?= ($activePage ?? '') === 'settings' ? 'active text-primary' : '' ?>" href="/settings/site">
+                <span data-feather="settings" style="width: 18px; height: 18px;"></span> Tùy biến
+              </a>
+            </li>
+          </ul>
+        </div>
         
-        <div class="d-flex align-items-center">
+        <div class="d-flex align-items-center d-none">
           <label class="form-check-label mb-0" for="themeControlToggle">...</label>
         </div>
 
@@ -86,8 +119,7 @@
       </div>
     </nav>
     
-    <!-- Sidebar -->
-    <?php require __DIR__ . '/sidebar.php'; ?>
+    <!-- Main Content Wrapper -->
 
     <!-- Main Content Wrapper -->
     <div class="content">
