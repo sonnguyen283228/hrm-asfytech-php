@@ -894,20 +894,50 @@ if ($uri === '/settings/site' && $method === 'GET') {
 if ($uri === '/settings/site' && $method === 'POST') {
     $user = require_admin();
     $pairs = [
-        'site_name' => trim((string)($_POST['site_name'] ?? 'HRM APP')),
-        'site_logo_url' => trim((string)($_POST['site_logo_url'] ?? '')),
+        'site_name'        => trim((string)($_POST['site_name'] ?? 'HRM APP')),
+        'site_logo_url'    => trim((string)($_POST['site_logo_url'] ?? '')),
         'site_favicon_url' => trim((string)($_POST['site_favicon_url'] ?? '')),
-        'header_html' => (string)($_POST['header_html'] ?? ''),
-        'footer_html' => (string)($_POST['footer_html'] ?? ''),
-        'footer_text' => trim((string)($_POST['footer_text'] ?? 'Â© HRM APP')),
+        'header_html'      => (string)($_POST['header_html'] ?? ''),
+        'footer_html'      => (string)($_POST['footer_html'] ?? ''),
+        'footer_text'      => trim((string)($_POST['footer_text'] ?? '\u00a9 HRM APP')),
     ];
+
+    // Handle logo/favicon file upload
+    $uploadDir = __DIR__ . '/uploads/brand/';
+    if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
+    $allowedMime = ['image/png', 'image/jpeg', 'image/webp', 'image/svg+xml', 'image/gif'];
+
+    if (!empty($_FILES['site_logo_file']['tmp_name'])) {
+        $file = $_FILES['site_logo_file'];
+        $mime = mime_content_type($file['tmp_name']);
+        if (in_array($mime, $allowedMime) && $file['size'] <= 2 * 1024 * 1024) {
+            $ext  = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+            $dest = $uploadDir . 'logo_' . time() . '.' . $ext;
+            if (move_uploaded_file($file['tmp_name'], $dest)) {
+                $pairs['site_logo_url'] = '/uploads/brand/' . basename($dest);
+            }
+        }
+    }
+
+    if (!empty($_FILES['site_favicon_file']['tmp_name'])) {
+        $file = $_FILES['site_favicon_file'];
+        $mime = mime_content_type($file['tmp_name']);
+        $favMime = array_merge($allowedMime, ['image/x-icon', 'image/vnd.microsoft.icon']);
+        if (in_array($mime, $favMime) && $file['size'] <= 1 * 1024 * 1024) {
+            $ext  = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+            $dest = $uploadDir . 'favicon_' . time() . '.' . $ext;
+            if (move_uploaded_file($file['tmp_name'], $dest)) {
+                $pairs['site_favicon_url'] = '/uploads/brand/' . basename($dest);
+            }
+        }
+    }
+
     $stmt = db()->prepare('INSERT INTO site_settings(`key`,`value`) VALUES(?,?) ON DUPLICATE KEY UPDATE `value`=VALUES(`value`)');
     foreach ($pairs as $k => $v) $stmt->execute([$k, $v]);
 
-    $_SESSION['success'] = 'ÄĂ£ cáº­p nháº­t giao diá»‡n site.';
+    $_SESSION['success'] = 'Da cap nhat giao dien site.';
     redirect('/settings/site');
 }
-
 http_response_code(404);
 echo '404 Not Found';
 
