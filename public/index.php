@@ -723,9 +723,7 @@ if ($uri === '/projects' && $method === 'GET') {
 }
 
 if ($uri === '/projects/create' && $method === 'GET') {
-    $user = require_admin();
-    view('projects/create', ['user' => $user]);
-    exit;
+    redirect('/projects');
 }
 
 if ($uri === '/projects/create' && $method === 'POST') {

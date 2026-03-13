@@ -10,7 +10,7 @@
         <div class="col-auto">
           <div class="d-flex align-items-center gap-2">
             <?php if (in_array(strtolower((string)(auth_user()['role'] ?? '')), ['admin', 'manager'])): ?>
-            <a class="btn btn-primary" href="/projects/create"><span data-feather="plus" class="me-2"></span>Tạo dự án mới</a>
+            <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#createProjectModal"><span data-feather="plus" class="me-2"></span>Tạo dự án mới</button>
             <?php endif; ?>
           </div>
         </div>
@@ -141,6 +141,40 @@
 
       </div>
     </div>
+</div>
+
+<!-- Modal Trương Mới Dự Án -->
+<div class="modal fade" id="createProjectModal" tabindex="-1" aria-labelledby="createProjectModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg">
+      <div class="modal-header bg-light border-bottom border-200">
+        <h5 class="modal-title text-1000" id="createProjectModalLabel">Chỉ Định Dự Án Mới</h5>
+        <button class="btn p-1" type="button" data-bs-dismiss="modal" aria-label="Close"><span class="fas fa-times fs--1"></span></button>
+      </div>
+      <form method="post" action="/projects/create" class="needs-validation" novalidate>
+        <div class="modal-body p-4 bg-white">
+          <div class="mb-3">
+            <label class="form-label">Tên dự án <span class="text-danger">*</span></label>
+            <input class="form-control" name="name" type="text" required placeholder="Tên gọi của dự án..." />
+            <div class="invalid-feedback">Vui lòng nhập tên dự án.</div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Ngày bắt đầu <span class="text-danger">*</span></label>
+            <input class="form-control" name="start_date" type="date" required />
+            <div class="invalid-feedback">Ngày bắt đầu không được để trống.</div>
+          </div>
+          <div class="mb-0">
+            <label class="form-label">Mô tả (Không bắt buộc)</label>
+            <textarea class="form-control" name="description" rows="3" placeholder="Ghi chú thêm..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer border-top-0 px-4 pb-4">
+          <button class="btn btn-outline-secondary" type="button" data-bs-dismiss="modal">Hủy</button>
+          <button class="btn btn-primary px-4" type="submit">Thêm Dự Án Mới</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
 
 <!-- Modal Sửa Dự Án -->
