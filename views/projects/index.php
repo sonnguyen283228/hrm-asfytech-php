@@ -64,7 +64,7 @@
                 <th class="sort pe-1 align-middle white-space-nowrap pb-2 pt-3" data-sort="status">Trạng thái</th>
                 <th class="sort pe-1 align-middle white-space-nowrap pb-2 pt-3 text-center" data-sort="progress">Tiến độ</th>
                 <th class="sort pe-1 align-middle white-space-nowrap pb-2 pt-3" data-sort="start_date">Ngày bắt đầu</th>
-                <th class="sort pe-1 align-middle white-space-nowrap pb-2 pt-3 text-center" data-sort="duration">Tgian (Tháng)</th>
+                <th class="sort pe-1 align-middle white-space-nowrap pb-2 pt-3 text-center" data-sort="duration">Thời gian (Tháng)</th>
                 <th class="sort pe-1 align-middle white-space-nowrap pb-2 pt-3 text-center" data-sort="members">Số module</th>
                 <th class="text-end align-middle pb-2 pt-3">Thao tác</th>
               </tr>
