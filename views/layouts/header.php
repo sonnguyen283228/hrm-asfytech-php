@@ -26,7 +26,7 @@
 <body class="navbar-top">
   <main class="main" id="top">
     <!-- Top Navbar -->
-    <nav class="navbar navbar-top navbar-expand-lg bg-white mb-4 border-bottom px-0" id="navbarTop">
+    <nav class="navbar navbar-top navbar-expand-lg bg-white mb-4 border-bottom px-0 sticky-top shadow-sm" id="navbarTop" style="z-index: 1020;">
       <div class="container-fluid px-3 px-xl-4 px-xxl-6">
         
         <div class="d-flex align-items-center">
@@ -35,39 +35,39 @@
           </button>
           <a class="navbar-brand me-1 me-sm-3 d-flex align-items-center gap-2" href="/attendance">
             <?php $logo = site_get('site_logo_url', ''); if ($logo): ?>
-              <img src="<?= htmlspecialchars($logo) ?>" alt="logo">
+              <img src="<?= htmlspecialchars($logo) ?>" alt="logo" style="height: 28px;">
             <?php else: ?>
-              <div class="d-flex align-items-center justify-content-center bg-primary text-white rounded-2" style="width: 36px; height: 36px; font-weight: 800; font-size: 18px;">A</div>
+              <div class="d-flex align-items-center justify-content-center bg-primary text-white rounded-2" style="width: 28px; height: 28px; font-weight: 800; font-size: 14px;">A</div>
             <?php endif; ?>
             <span class="d-none d-sm-block fw-bold text-1000 fs-1 tracking-tight"><?= htmlspecialchars(site_get('site_name', 'HRM APP')) ?></span>
           </a>
         </div>
 
         <div class="collapse navbar-collapse justify-content-center" id="navbarTopCollapse">
-          <ul class="navbar-nav gap-2 mb-2 mb-lg-0">
+          <ul class="navbar-nav gap-2 gap-lg-4 mb-2 mb-lg-0 py-2 py-lg-0">
             <li class="nav-item">
-              <a class="nav-link fw-semi-bold d-flex align-items-center gap-2 <?= ($activePage ?? '') === 'home' ? 'active text-primary' : '' ?>" href="/attendance">
-                <span data-feather="pie-chart" style="width: 18px; height: 18px;"></span> Trang chủ
+              <a class="nav-link fw-bold text-uppercase fs--1 d-flex align-items-center gap-2 px-3 py-2 rounded-3 transition-base <?= ($activePage ?? '') === 'home' ? 'active bg-primary-100 text-primary' : 'text-700 hover-bg-200' ?>" href="/attendance">
+                <span data-feather="pie-chart" style="width: 16px; height: 16px;"></span> Trang chủ
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link fw-semi-bold d-flex align-items-center gap-2 <?= ($activePage ?? '') === 'employees' ? 'active text-primary' : '' ?>" href="/employees">
-                <span data-feather="users" style="width: 18px; height: 18px;"></span> Nhân sự
+              <a class="nav-link fw-bold text-uppercase fs--1 d-flex align-items-center gap-2 px-3 py-2 rounded-3 transition-base <?= ($activePage ?? '') === 'employees' ? 'active bg-primary-100 text-primary' : 'text-700 hover-bg-200' ?>" href="/employees">
+                <span data-feather="users" style="width: 16px; height: 16px;"></span> Nhân sự
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link fw-semi-bold d-flex align-items-center gap-2 <?= ($activePage ?? '') === 'departments' ? 'active text-primary' : '' ?>" href="/departments">
-                <span data-feather="grid" style="width: 18px; height: 18px;"></span> Phòng ban
+              <a class="nav-link fw-bold text-uppercase fs--1 d-flex align-items-center gap-2 px-3 py-2 rounded-3 transition-base <?= ($activePage ?? '') === 'departments' ? 'active bg-primary-100 text-primary' : 'text-700 hover-bg-200' ?>" href="/departments">
+                <span data-feather="grid" style="width: 16px; height: 16px;"></span> Phòng ban
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link fw-semi-bold d-flex align-items-center gap-2 <?= ($activePage ?? '') === 'projects' ? 'active text-primary' : '' ?>" href="/projects">
-                <span data-feather="briefcase" style="width: 18px; height: 18px;"></span> Dự án
+              <a class="nav-link fw-bold text-uppercase fs--1 d-flex align-items-center gap-2 px-3 py-2 rounded-3 transition-base <?= ($activePage ?? '') === 'projects' ? 'active bg-primary-100 text-primary' : 'text-700 hover-bg-200' ?>" href="/projects">
+                <span data-feather="briefcase" style="width: 16px; height: 16px;"></span> Dự án
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link fw-semi-bold d-flex align-items-center gap-2 <?= ($activePage ?? '') === 'settings' ? 'active text-primary' : '' ?>" href="/settings/site">
-                <span data-feather="settings" style="width: 18px; height: 18px;"></span> Tùy biến
+              <a class="nav-link fw-bold text-uppercase fs--1 d-flex align-items-center gap-2 px-3 py-2 rounded-3 transition-base <?= ($activePage ?? '') === 'settings' ? 'active bg-primary-100 text-primary' : 'text-700 hover-bg-200' ?>" href="/settings/site">
+                <span data-feather="settings" style="width: 16px; height: 16px;"></span> Tùy biến
               </a>
             </li>
           </ul>
