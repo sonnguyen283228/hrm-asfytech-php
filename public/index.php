@@ -104,7 +104,7 @@ if ($uri === '/auth/google/callback' && $method === 'GET') {
     $avatar = trim((string)($profile['picture'] ?? ''));
 
     if ($email === '') {
-        $_SESSION['error'] = 'KhĂ´ng láº¥y Ä‘Æ°á»£c email tá»« tĂ i khoáº£n Google.';
+        $_SESSION['error'] = 'Không lấy được email từ tài khoản Google.';
         redirect('/login');
     }
 
@@ -114,13 +114,13 @@ if ($uri === '/auth/google/callback' && $method === 'GET') {
 
     if (!$user) {
         $randomPass = password_hash(bin2hex(random_bytes(16)), PASSWORD_BCRYPT);
-        $stmt = db()->prepare('INSERT INTO users(full_name,email,password,role,is_active,department_id,position,avatar_url,last_seen_at) VALUES(?,?,?,?,1,NULL,?,?,NOW())');
-        $stmt->execute([$name, $email, $randomPass, 'staff', 'NhĂ¢n viĂªn', $avatar]);
+        $stmt = db()->prepare('INSERT INTO users(full_name,email,password,role,is_active,department_id,position_id,avatar_url,last_seen_at) VALUES(?,?,?,?,1,NULL,NULL,?,NOW())');
+        $stmt->execute([$name, $email, $randomPass, 'staff', $avatar]);
         $id = (int)db()->lastInsertId();
     } else {
         $id = (int)$user['id'];
         if ((int)($user['is_active'] ?? 1) !== 1) {
-            $_SESSION['error'] = 'TĂ i khoáº£n Ä‘Ă£ bá»‹ khĂ³a, vui lĂ²ng liĂªn há»‡ Admin.';
+            $_SESSION['error'] = 'Tài khoản đã bị khóa, vui lòng liên hệ Admin.';
             redirect('/login');
         }
         $stmt = db()->prepare('UPDATE users SET full_name = ?, avatar_url = ?, last_seen_at = NOW() WHERE id = ?');
@@ -292,32 +292,32 @@ if ($uri === '/employees/create' && $method === 'POST') {
     $baseSalary = (int)($_POST['base_salary'] ?? 0);
 
     if ($fullName === '' || $email === '') {
-        $_SESSION['error'] = 'Vui lĂ²ng nháº­p Ä‘áº§y Ä‘á»§ há» tĂªn vĂ  email.';
+        $_SESSION['error'] = 'Vui lòng nhập đầy đủ họ tên và email.';
         redirect('/employees');
     }
 
     if (!is_gmail($email)) {
-        $_SESSION['error'] = 'Email pháº£i lĂ  @gmail.com';
+        $_SESSION['error'] = 'Email phải là @gmail.com';
         redirect('/employees');
     }
     if (!is_vn_phone($phone)) {
-        $_SESSION['error'] = 'Sá»‘ Ä‘iá»‡n thoáº¡i chÆ°a Ä‘Ăºng chuáº©n VN.';
+        $_SESSION['error'] = 'Số điện thoại chưa đúng chuẩn VN.';
         redirect('/employees');
     }
     $age = age_from_birthdate($birthDate);
     if ($age === null || $age < 18) {
-        $_SESSION['error'] = 'NhĂ¢n sá»± pháº£i tá»« 18 tuá»•i trá»Ÿ lĂªn.';
+        $_SESSION['error'] = 'Nhân sự phải từ 18 tuổi trở lên.';
         redirect('/employees');
     }
     if ($baseSalary < 0) {
-        $_SESSION['error'] = 'LÆ°Æ¡ng cÆ¡ báº£n khĂ´ng há»£p lá»‡.';
+        $_SESSION['error'] = 'Lương cơ bản không hợp lệ.';
         redirect('/employees');
     }
 
     $randomPass = password_hash(bin2hex(random_bytes(16)), PASSWORD_BCRYPT);
     $stmt = db()->prepare('INSERT INTO users(full_name,email,phone,address_ward,address_city,start_date,birth_date,base_salary,password,role,is_active,department_id,position_id,avatar_url,last_seen_at) VALUES(?,?,?,?,?,?,?,?,?,?,1,?,?,?,NOW())');
     $stmt->execute([$fullName, $email, $phone, $addressWard, $addressCity, $startDate ?: null, $birthDate ?: null, $baseSalary, $randomPass, $role, $departmentId ?: null, $positionId ?: null, null]);
-    $_SESSION['success'] = 'ÄĂ£ thĂªm nhĂ¢n sá»±. Avatar sáº½ tá»± Ä‘á»“ng bá»™ khi nhĂ¢n sá»± Ä‘Äƒng nháº­p Google láº§n Ä‘áº§u.';
+    $_SESSION['success'] = 'Đã thêm nhân sự. Avatar sẽ tự đồng bộ khi đăng nhập bằng Google lần đầu.';
     redirect('/employees');
 }
 
@@ -420,14 +420,14 @@ if ($uri === '/departments/create' && $method === 'POST') {
     $description = trim((string)($_POST['description'] ?? ''));
 
     if ($name === '') {
-        $_SESSION['error'] = 'TĂªn phĂ²ng ban khĂ´ng Ä‘Æ°á»£c Ä‘á»ƒ trá»‘ng.';
+        $_SESSION['error'] = 'Tên phòng ban không được để trống.';
         redirect('/departments');
     }
 
     $stmt = db()->prepare('INSERT INTO departments(name, description, is_active) VALUES(?,?,1)');
     $stmt->execute([$name, $description ?: null]);
 
-    $_SESSION['success'] = 'ÄĂ£ táº¡o phĂ²ng ban má»›i.';
+    $_SESSION['success'] = 'Đã tạo phòng ban mới.';
     redirect('/departments');
 }
 
@@ -438,7 +438,7 @@ if ($uri === '/departments/edit' && $method === 'GET') {
     $stmt->execute([$id]);
     $department = $stmt->fetch();
     if (!$department) {
-        $_SESSION['error'] = 'KhĂ´ng tĂ¬m tháº¥y phĂ²ng ban.';
+        $_SESSION['error'] = 'Không tìm thấy phòng ban.';
         redirect('/departments');
     }
     view('departments/edit', ['user' => $user, 'department' => $department]);
@@ -451,14 +451,14 @@ if ($uri === '/departments/edit' && $method === 'POST') {
     $name = trim((string)($_POST['name'] ?? ''));
 
     if ($id <= 0 || $name === '') {
-        $_SESSION['error'] = 'Dá»¯ liá»‡u phĂ²ng ban khĂ´ng há»£p lá»‡.';
+        $_SESSION['error'] = 'Dữ liệu phòng ban không hợp lệ.';
         redirect('/departments');
     }
 
     $stmt = db()->prepare('UPDATE departments SET name = ? WHERE id = ?');
     $stmt->execute([$name, $id]);
 
-    $_SESSION['success'] = 'ÄĂ£ cáº­p nháº­t phĂ²ng ban.';
+    $_SESSION['success'] = 'Đã cập nhật phòng ban.';
     redirect('/departments');
 }
 
@@ -467,7 +467,7 @@ if ($uri === '/departments/delete' && $method === 'POST') {
     $id = (int)($_POST['id'] ?? 0);
 
     if ($id <= 0) {
-        $_SESSION['error'] = 'PhĂ²ng ban khĂ´ng há»£p lá»‡.';
+        $_SESSION['error'] = 'Phòng ban không hợp lệ.';
         redirect('/departments');
     }
 
@@ -476,13 +476,13 @@ if ($uri === '/departments/delete' && $method === 'POST') {
     $total = (int)($stmt->fetch()['total'] ?? 0);
 
     if ($total > 0) {
-        $_SESSION['error'] = 'KhĂ´ng thá»ƒ xĂ³a phĂ²ng ban Ä‘ang cĂ³ nhĂ¢n sá»±.';
+        $_SESSION['error'] = 'Không thể xóa phòng ban đang có nhân sự.';
         redirect('/departments');
     }
 
     $stmt = db()->prepare('DELETE FROM departments WHERE id = ?');
     $stmt->execute([$id]);
-    $_SESSION['success'] = 'ÄĂ£ xĂ³a phĂ²ng ban.';
+    $_SESSION['success'] = 'Đã xóa phòng ban.';
     redirect('/departments');
 }
 
@@ -609,14 +609,14 @@ if ($uri === '/projects/create' && $method === 'POST') {
     $description = trim((string)($_POST['description'] ?? ''));
 
     if ($name === '' || $startDate === '') {
-        $_SESSION['error'] = 'Vui lĂ²ng nháº­p Ä‘áº§y Ä‘á»§ thĂ´ng tin dá»± Ă¡n.';
+        $_SESSION['error'] = 'Vui lòng nhập đầy đủ thông tin dự án.';
         redirect('/projects/create');
     }
 
     $stmt = db()->prepare('INSERT INTO projects(name,start_date,duration_months,description,status) VALUES(?,?,?,?,?)');
     $stmt->execute([$name, $startDate, null, $description, 'planning']);
 
-    $_SESSION['success'] = 'ÄĂ£ táº¡o dá»± Ă¡n má»›i.';
+    $_SESSION['success'] = 'Đã tạo dự án mới.';
     redirect('/projects');
 }
 
