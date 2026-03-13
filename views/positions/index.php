@@ -65,27 +65,29 @@
                     <span class="badge badge-phoenix fs--2 badge-phoenix-secondary"><span class="badge-label">Ngừng hoạt động</span></span>
                   <?php endif; ?>
                 </td>
-                <td class="align-middle white-space-nowrap text-end py-3">
+                <td class="align-middle white-space-nowrap text-end py-2">
                   <?php if (in_array(strtolower((string)(auth_user()['role'] ?? '')), ['admin', 'manager'])): ?>
-                  <div class="font-sans-serif btn-reveal-trigger position-static">
-                    <button class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal fs--2" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs--2"></span></button>
-                    <div class="dropdown-menu dropdown-menu-end py-2">
-                        <a class="dropdown-item cursor-pointer" onclick='editPosition(<?= json_encode([
-                          "id" => $p["id"], 
-                          "name" => $p["name"], 
-                          "description" => $p["description"] ?? "",
-                          "is_active" => $p["is_active"] ?? 1
-                        ]) ?>)' data-bs-toggle="modal" data-bs-target="#editPositionModal">Chỉnh sửa</a>
-                        <div class="dropdown-divider"></div>
-                        <form method="post" action="/positions/toggle" onsubmit="return confirm('Bạn muốn thay đổi trạng thái hoạt động của chức vụ này?');">
-                            <input type="hidden" name="id" value="<?= (int)$p['id'] ?>">
-                            <button class="dropdown-item text-warning" type="submit"><?php echo ((int)($p['is_active'] ?? 1) !== 1) ? 'Kích hoạt lại' : 'Tạm dừng chức vụ'; ?></button>
-                        </form>
-                        <form method="post" action="/positions/delete" class="mt-1" onsubmit="return confirm('CẢNH BÁO: Bạn có chắc chắn muốn XÓA VĨNH VIỄN chức vụ này không? Không thể thực hiện nếu đang có nhân sự giữ chức vụ này.');">
-                            <input type="hidden" name="id" value="<?= (int)$p['id'] ?>">
-                            <button class="dropdown-item text-danger" type="submit">Xóa vĩnh viễn</button>
-                        </form>
-                    </div>
+                  <div class="d-flex justify-content-end gap-1">
+                    <button class="btn btn-phoenix-primary btn-icon btn-icon-xs btn-sm" title="Ch\u1ec9nh s\u1eeda" onclick='editPosition(<?= json_encode([
+                        "id" => $p["id"],
+                        "name" => $p["name"],
+                        "description" => $p["description"] ?? "",
+                        "is_active" => $p["is_active"] ?? 1
+                    ]) ?>); (function(){ var m = new bootstrap.Modal(document.getElementById("editPositionModal")); m.show(); })();'>
+                      <span data-feather="edit"></span>
+                    </button>
+                    <form method="post" action="/positions/toggle" class="mb-0 d-inline-block" onsubmit="return confirm('Thay \u0111\u1ed5i tr\u1ea1ng th\u00e1i ch\u1ee9c v\u1ee5?')">
+                      <input type="hidden" name="id" value="<?= (int)$p['id'] ?>">
+                      <button type="submit" class="btn btn-icon btn-icon-xs btn-sm <?= ((int)($p['is_active'] ?? 1) === 1) ? 'btn-phoenix-warning' : 'btn-phoenix-success' ?>" title="<?= ((int)($p['is_active'] ?? 1) === 1) ? 'T\u1ea1m d\u1eebng' : 'K\u00edch ho\u1ea1t' ?>">
+                        <span data-feather="<?= ((int)($p['is_active'] ?? 1) === 1) ? 'pause-circle' : 'play-circle' ?>"></span>
+                      </button>
+                    </form>
+                    <form method="post" action="/positions/delete" class="mb-0 d-inline-block" onsubmit="return confirm('X\u00f3a v\u0129nh vi\u1ec5n ch\u1ee9c v\u1ee5 n\u00e0y?')">
+                      <input type="hidden" name="id" value="<?= (int)$p['id'] ?>">
+                      <button type="submit" class="btn btn-phoenix-danger btn-icon btn-icon-xs btn-sm" title="X\u00f3a">
+                        <span data-feather="trash-2"></span>
+                      </button>
+                    </form>
                   </div>
                   <?php endif; ?>
                 </td>

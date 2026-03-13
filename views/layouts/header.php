@@ -49,6 +49,19 @@
       vertical-align: middle;
       border-color: #e2e8ef;
     }
+    /* Nút icon nhỏ cho cột Thao tác */
+    .btn-icon-xs {
+      width: 28px !important;
+      height: 28px !important;
+      padding: 0 !important;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-icon-xs [data-feather], .btn-icon-xs svg {
+      width: 13px !important;
+      height: 13px !important;
+    }
   </style>
   
   <?= site_get('header_html', '') ?>

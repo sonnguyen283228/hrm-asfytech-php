@@ -97,28 +97,28 @@
                         </div>
                     </div>
                 </td>
-                <td class="align-middle white-space-nowrap text-end py-3">
-                  <?php if (in_array(strtolower((string)(auth_user()['role'] ?? '')), ['admin', 'manager'])): ?>
-                  <div class="font-sans-serif btn-reveal-trigger position-static">
-                    <button class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal fs--2" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs--2"></span></button>
-                    <div class="dropdown-menu dropdown-menu-end py-2">
-                        <a class="dropdown-item" href="/projects/view?id=<?= (int)$p['id'] ?>">Xem chi tiết & Cập nhật Task</a>
-                        <a class="dropdown-item cursor-pointer" onclick='editProject(<?= json_encode([
-                          "id" => $p["id"], 
-                          "name" => $p["name"], 
-                          "status" => $p["status"] ?? "Kế hoạch",
-                          "start_date" => $p["start_date"] ?? ""
-                        ]) ?>)' data-bs-toggle="modal" data-bs-target="#editProjectModal">Sửa Tên & Trạng Thái</a>
-                        <div class="dropdown-divider"></div>
-                        <form method="post" action="/projects/delete" onsubmit="return confirm('CẢNH BÁO: Bạn có chắc chắn muốn XÓA DỰ ÁN NÀY? Toàn bộ Dữ liệu tiến độ, thành viên và các module sẽ bị xóa vĩnh viễn!')">
-                            <input type="hidden" name="id" value="<?= (int)$p['id'] ?>">
-                            <button class="dropdown-item text-danger" type="submit">Hủy & Xóa Dự án</button>
-                        </form>
-                    </div>
+                <td class="align-middle white-space-nowrap text-end py-2">
+                  <div class="d-flex justify-content-end gap-1">
+                    <a class="btn btn-phoenix-secondary btn-icon btn-icon-xs btn-sm" title="Xem chi tiết" href="/projects/view?id=<?= (int)$p['id'] ?>">
+                      <span data-feather="eye"></span>
+                    </a>
+                    <?php if (in_array(strtolower((string)(auth_user()['role'] ?? '')), ['admin', 'manager'])): ?>
+                    <button class="btn btn-phoenix-primary btn-icon btn-icon-xs btn-sm" title="Sửa tên & trạng thái" onclick='editProject(<?= json_encode([
+                        "id" => $p["id"],
+                        "name" => $p["name"],
+                        "status" => $p["status"] ?? "Kế hoạch",
+                        "start_date" => $p["start_date"] ?? ""
+                    ]) ?>); (function(){ var m = new bootstrap.Modal(document.getElementById("editProjectModal")); m.show(); })();'>
+                      <span data-feather="edit"></span>
+                    </button>
+                    <form method="post" action="/projects/delete" class="mb-0 d-inline-block" onsubmit="return confirm('CẢNH BÁO: Xóa dự án này? Không thể hồi phục!')">
+                      <input type="hidden" name="id" value="<?= (int)$p['id'] ?>">
+                      <button type="submit" class="btn btn-phoenix-danger btn-icon btn-icon-xs btn-sm" title="Xóa dự án">
+                        <span data-feather="trash-2"></span>
+                      </button>
+                    </form>
+                    <?php endif; ?>
                   </div>
-                  <?php else: ?>
-                  <a class="btn btn-sm btn-phoenix-primary" href="/projects/view?id=<?= (int)$p['id'] ?>">Xem chi tiết</a>
-                  <?php endif; ?>
                 </td>
               </tr>
               <?php endforeach; ?>
