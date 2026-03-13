@@ -10,7 +10,13 @@ $favicon = function_exists('site_get') ? site_get('site_favicon_url', '') : '';
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Đăng xuất - <?= htmlspecialchars($siteName) ?></title>
-  <?php if ($favicon): ?><link rel="icon" href="<?= htmlspecialchars($favicon) ?>"><?php endif; ?>
+  <?php 
+    $baseUrl = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'])), '/');
+    if ($favicon): 
+      $favUrl = strpos($favicon, 'http') === 0 ? $favicon : $baseUrl . '/' . ltrim($favicon, '/');
+  ?>
+  <link rel="icon" href="<?= htmlspecialchars($favUrl) ?>">
+  <?php endif; ?>
   
   <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
   <link href="/phoenix/assets/css/theme.min.css" rel="stylesheet" id="style-default">
@@ -40,7 +46,8 @@ $favicon = function_exists('site_get') ? site_get('site_favicon_url', '') : '';
           <div class="position-relative" style="z-index: 2; margin-top: 20px;">
             <div class="avatar avatar-xl avatar-logout mb-4 shadow-sm border border-4 border-white bg-white">
                 <?php if (!empty($user['avatar_url'])): ?>
-                   <img class="rounded-circle object-fit-cover w-100 h-100" src="<?= htmlspecialchars($user['avatar_url']) ?>" alt="Avatar" referrerpolicy="no-referrer" />
+                   <?php $avtUrl = strpos($user['avatar_url'], 'http') === 0 ? $user['avatar_url'] : $baseUrl . '/' . ltrim($user['avatar_url'], '/'); ?>
+                   <img class="rounded-circle object-fit-cover w-100 h-100" src="<?= htmlspecialchars($avtUrl) ?>" alt="Avatar" referrerpolicy="no-referrer" />
                 <?php else: ?>
                    <div class="avatar-name rounded-circle w-100 h-100 fs-2 bg-200 text-700 border-0 d-flex align-items-center justify-content-center"><span><?= mb_substr($user['full_name'] ?? 'U', 0, 1) ?></span></div>
                 <?php endif; ?>

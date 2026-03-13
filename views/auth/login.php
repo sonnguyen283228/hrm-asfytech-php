@@ -11,7 +11,13 @@ $favicon = function_exists('site_get') ? site_get('site_favicon_url', '') : '';
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><?= htmlspecialchars($siteName) ?> - Đăng nhập</title>
-  <?php if ($favicon): ?><link rel="icon" href="<?= htmlspecialchars($favicon) ?>"><?php endif; ?>
+  <?php 
+    $baseUrl = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'])), '/');
+    if ($favicon): 
+      $favUrl = strpos($favicon, 'http') === 0 ? $favicon : $baseUrl . '/' . ltrim($favicon, '/');
+  ?>
+  <link rel="icon" href="<?= htmlspecialchars($favUrl) ?>">
+  <?php endif; ?>
   
   <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
   <link href="/phoenix/assets/css/theme.min.css" rel="stylesheet" id="style-default">
@@ -34,7 +40,8 @@ $favicon = function_exists('site_get') ? site_get('site_favicon_url', '') : '';
           
           <div class="text-center mb-5">
             <?php if ($logo): ?>
-              <img src="<?= htmlspecialchars($logo) ?>" alt="logo" width="64" class="mb-3 rounded-3 shadow-sm p-1 border">
+              <?php $logoUrlL = strpos($logo, 'http') === 0 ? $logo : $baseUrl . '/' . ltrim($logo, '/'); ?>
+              <img src="<?= htmlspecialchars($logoUrlL) ?>" alt="logo" width="64" class="mb-3 rounded-3 shadow-sm p-1 border">
             <?php else: ?>
               <div class="d-inline-flex align-items-center justify-content-center bg-primary text-white rounded-3 shadow-sm mb-3" style="width: 54px; height: 54px; font-size: 24px; font-weight: 800;">A</div>
             <?php endif; ?>

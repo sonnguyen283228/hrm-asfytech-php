@@ -913,9 +913,16 @@ if ($uri === '/settings/site' && $method === 'POST') {
         if (in_array($ext, $allowedExts) && $file['size'] <= 2 * 1024 * 1024) {
             $dest = $uploadDir . 'logo_' . time() . '.' . $ext;
             if (move_uploaded_file($file['tmp_name'], $dest)) {
-                $pairs['site_logo_url'] = '/uploads/brand/' . basename($dest);
+                $pairs['site_logo_url'] = 'uploads/brand/' . basename($dest);
+                file_put_contents(__DIR__ . '/upload_log.txt', "Success upload logo: $dest\n", FILE_APPEND);
+            } else {
+                file_put_contents(__DIR__ . '/upload_log.txt', "Failed move_uploaded_file logo. Tmp: {$file['tmp_name']}, Dest: $dest\n", FILE_APPEND);
             }
+        } else {
+            file_put_contents(__DIR__ . '/upload_log.txt', "Validation failed logo: Ext=$ext, Size={$file['size']}\n", FILE_APPEND);
         }
+    } else if (isset($_FILES['site_logo_file'])) {
+        file_put_contents(__DIR__ . '/upload_log.txt', "Upload error logo: {$_FILES['site_logo_file']['error']}\n", FILE_APPEND);
     }
 
     if (!empty($_FILES['site_favicon_file']['tmp_name'])) {
@@ -926,7 +933,7 @@ if ($uri === '/settings/site' && $method === 'POST') {
         if (in_array($ext, $allowedExtsFav) && $file['size'] <= 1 * 1024 * 1024) {
             $dest = $uploadDir . 'favicon_' . time() . '.' . $ext;
             if (move_uploaded_file($file['tmp_name'], $dest)) {
-                $pairs['site_favicon_url'] = '/uploads/brand/' . basename($dest);
+                $pairs['site_favicon_url'] = 'uploads/brand/' . basename($dest);
             }
         }
     }

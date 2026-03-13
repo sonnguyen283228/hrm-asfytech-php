@@ -6,8 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><?= htmlspecialchars(site_get('site_name', 'HRM APP')) ?></title>
   
-  <?php $favicon = site_get('site_favicon_url', ''); if ($favicon): ?>
-    <link rel="icon" href="<?= htmlspecialchars($favicon) ?>">
+  <?php 
+    $baseUrl = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'])), '/');
+    $favicon = site_get('site_favicon_url', ''); 
+    if ($favicon): 
+      $favUrl = strpos($favicon, 'http') === 0 ? $favicon : $baseUrl . '/' . ltrim($favicon, '/');
+  ?>
+    <link rel="icon" href="<?= htmlspecialchars($favUrl) ?>">
   <?php endif; ?>
 
   <script src="/phoenix/assets/js/config.js"></script>
@@ -77,8 +82,12 @@
             <span data-feather="menu"></span>
           </button>
           <a class="navbar-brand me-1 me-sm-3 d-flex align-items-center gap-2" href="/attendance">
-            <?php $logo = site_get('site_logo_url', ''); if ($logo): ?>
-              <img src="<?= htmlspecialchars($logo) ?>" alt="logo" style="max-height: 40px; width: auto; object-fit: contain;">
+            <?php 
+              $logo = site_get('site_logo_url', ''); 
+              if ($logo): 
+                $logoUrl = strpos($logo, 'http') === 0 ? $logo : $baseUrl . '/' . ltrim($logo, '/');
+            ?>
+              <img src="<?= htmlspecialchars($logoUrl) ?>" alt="logo" style="max-height: 40px; width: auto; object-fit: contain;">
             <?php else: ?>
               <div class="d-flex align-items-center justify-content-center bg-primary text-white rounded-2" style="width: 32px; height: 32px; font-weight: 800; font-size: 14px;">A</div>
             <?php endif; ?>
@@ -132,7 +141,8 @@
             <a class="nav-link lh-1 pe-0" id="navbarDropdownUser" href="#!" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false">
               <div class="avatar avatar-l">
                 <?php if (!empty($u['avatar_url'])): ?>
-                  <img class="rounded-circle w-100 h-100 object-fit-cover" src="<?= htmlspecialchars($u['avatar_url']) ?>" alt="" referrerpolicy="no-referrer" />
+                  <?php $avtUrl = strpos($u['avatar_url'], 'http') === 0 ? $u['avatar_url'] : $baseUrl . '/' . ltrim($u['avatar_url'], '/'); ?>
+                  <img class="rounded-circle w-100 h-100 object-fit-cover" src="<?= htmlspecialchars($avtUrl) ?>" alt="" referrerpolicy="no-referrer" />
                 <?php else: ?>
                   <div class="avatar-name rounded-circle border border-2 border-white bg-200 text-700"><span><?= mb_substr($u['full_name'] ?? 'U', 0, 1) ?></span></div>
                 <?php endif; ?>
@@ -144,7 +154,8 @@
                   <div class="text-center pt-4 pb-3">
                     <div class="avatar avatar-xl">
                       <?php if (!empty($u['avatar_url'])): ?>
-                        <img class="rounded-circle object-fit-cover w-100 h-100" src="<?= htmlspecialchars($u['avatar_url']) ?>" alt="" referrerpolicy="no-referrer" />
+                        <?php $avtUrl = strpos($u['avatar_url'], 'http') === 0 ? $u['avatar_url'] : $baseUrl . '/' . ltrim($u['avatar_url'], '/'); ?>
+                        <img class="rounded-circle object-fit-cover w-100 h-100" src="<?= htmlspecialchars($avtUrl) ?>" alt="" referrerpolicy="no-referrer" />
                       <?php else: ?>
                         <div class="avatar-name rounded-circle border border-2 border-white bg-200 text-700"><span><?= mb_substr($u['full_name'] ?? 'U', 0, 1) ?></span></div>
                       <?php endif; ?>
