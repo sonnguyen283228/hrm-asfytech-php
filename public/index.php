@@ -909,12 +909,10 @@ if ($uri === '/settings/site' && $method === 'POST') {
 
     if (!empty($_FILES['site_logo_file']['tmp_name'])) {
         $file = $_FILES['site_logo_file'];
-        $mime = $file['type'];
-        if (function_exists('mime_content_type') && file_exists($file['tmp_name'])) {
-            $mime = @mime_content_type($file['tmp_name']) ?: $file['type'];
-        }
-        if (in_array($mime, $allowedMime) && $file['size'] <= 2 * 1024 * 1024) {
-            $ext  = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+        $ext  = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+        $allowedExts = ['png', 'jpg', 'jpeg', 'webp', 'svg', 'gif'];
+        
+        if (in_array($ext, $allowedExts) && $file['size'] <= 2 * 1024 * 1024) {
             $dest = $uploadDir . 'logo_' . time() . '.' . $ext;
             if (move_uploaded_file($file['tmp_name'], $dest)) {
                 $pairs['site_logo_url'] = '/uploads/brand/' . basename($dest);
@@ -924,13 +922,10 @@ if ($uri === '/settings/site' && $method === 'POST') {
 
     if (!empty($_FILES['site_favicon_file']['tmp_name'])) {
         $file = $_FILES['site_favicon_file'];
-        $mime = $file['type'];
-        if (function_exists('mime_content_type') && file_exists($file['tmp_name'])) {
-            $mime = @mime_content_type($file['tmp_name']) ?: $file['type'];
-        }
-        $favMime = array_merge($allowedMime, ['image/x-icon', 'image/vnd.microsoft.icon']);
-        if (in_array($mime, $favMime) && $file['size'] <= 1 * 1024 * 1024) {
-            $ext  = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+        $ext  = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+        $allowedExtsFav = ['ico', 'png', 'svg', 'jpg', 'jpeg', 'webp', 'gif'];
+        
+        if (in_array($ext, $allowedExtsFav) && $file['size'] <= 1 * 1024 * 1024) {
             $dest = $uploadDir . 'favicon_' . time() . '.' . $ext;
             if (move_uploaded_file($file['tmp_name'], $dest)) {
                 $pairs['site_favicon_url'] = '/uploads/brand/' . basename($dest);

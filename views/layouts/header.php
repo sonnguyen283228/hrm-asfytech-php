@@ -78,9 +78,9 @@
           </button>
           <a class="navbar-brand me-1 me-sm-3 d-flex align-items-center gap-2" href="/attendance">
             <?php $logo = site_get('site_logo_url', ''); if ($logo): ?>
-              <img src="<?= htmlspecialchars($logo) ?>" alt="logo" style="height: 28px;">
+              <img src="<?= htmlspecialchars($logo) ?>" alt="logo" style="max-height: 40px; width: auto; object-fit: contain;">
             <?php else: ?>
-              <div class="d-flex align-items-center justify-content-center bg-primary text-white rounded-2" style="width: 28px; height: 28px; font-weight: 800; font-size: 14px;">A</div>
+              <div class="d-flex align-items-center justify-content-center bg-primary text-white rounded-2" style="width: 32px; height: 32px; font-weight: 800; font-size: 14px;">A</div>
             <?php endif; ?>
             <span class="d-none d-sm-block fw-bold text-1000 fs-1 tracking-tight"><?= htmlspecialchars(site_get('site_name', 'HRM APP')) ?></span>
           </a>
