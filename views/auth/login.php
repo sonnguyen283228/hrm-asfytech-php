@@ -36,9 +36,9 @@ $favUrl = get_brand_favicon_url();
           
           <div class="text-center mb-5">
             <?php if ($logoUrl): ?>
-              <img src="<?= htmlspecialchars($logoUrl) ?>" alt="logo" style="width: 91px; height: 91px; object-fit: contain;" class="mb-3">
+              <img src="<?= htmlspecialchars($logoUrl) ?>" alt="logo" style="width: 91px; height: 91px; object-fit: cover; border-radius: 8px;" class="mb-3">
             <?php else: ?>
-              <div class="d-inline-flex align-items-center justify-content-center bg-primary text-white rounded-3 mb-3" style="width: 91px; height: 91px; font-size: 32px; font-weight: 800;">A</div>
+              <div class="d-inline-flex align-items-center justify-content-center bg-primary text-white mb-3" style="width: 91px; height: 91px; border-radius: 8px; font-size: 32px; font-weight: 800;">A</div>
             <?php endif; ?>
             <h3 class="text-1000 mb-2 fw-bolder"><?= htmlspecialchars($siteName) ?></h3>
             <p class="text-700 fs--1">Vui lòng đăng nhập để tiếp tục</p>
