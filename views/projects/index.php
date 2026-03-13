@@ -46,17 +46,18 @@
           <table class="table table-sm table-hrm fs--1 mb-0 overflow-hidden text-nowrap">
             <thead>
               <tr>
-                <th class="sort pe-1 align-middle white-space-nowrap pb-2 pt-3" data-sort="name">Tên dự án</th>
-                <th class="sort pe-1 align-middle white-space-nowrap pb-2 pt-3" data-sort="status">Trạng thái</th>
-                <th class="sort pe-1 align-middle white-space-nowrap pb-2 pt-3 text-center" data-sort="progress">Tiến độ</th>
-                <th class="sort pe-1 align-middle white-space-nowrap pb-2 pt-3" data-sort="start_date">Ngày bắt đầu</th>
-                <th class="sort pe-1 align-middle white-space-nowrap pb-2 pt-3 text-center" data-sort="duration">Thời gian (Tháng)</th>
-                <th class="sort pe-1 align-middle white-space-nowrap pb-2 pt-3 text-center" data-sort="members">Số module</th>
+                <th class="align-middle white-space-nowrap pb-2 pt-3 text-center" style="width:50px">STT</th>
+                <th class="pe-1 align-middle white-space-nowrap pb-2 pt-3">Tên dự án</th>
+                <th class="pe-1 align-middle white-space-nowrap pb-2 pt-3">Trạng thái</th>
+                <th class="pe-1 align-middle white-space-nowrap pb-2 pt-3 text-center">Tiến độ</th>
+                <th class="pe-1 align-middle white-space-nowrap pb-2 pt-3">Ngày bắt đầu</th>
+                <th class="pe-1 align-middle white-space-nowrap pb-2 pt-3 text-center">Thời gian (Tháng)</th>
+                <th class="pe-1 align-middle white-space-nowrap pb-2 pt-3 text-center">Số module</th>
                 <th class="text-end align-middle pb-2 pt-3">Thao tác</th>
               </tr>
             </thead>
             <tbody class="list" id="table-projects-body">
-              <?php foreach ($projects as $p): ?>
+              <?php $stt = 1; foreach ($projects as $p): ?>
               <?php 
                  $st = $p['status'] ?? 'Đang triển khai';
                  $st_class = 'badge-phoenix-primary';
@@ -67,6 +68,7 @@
                  $prog_color = $progress < 30 ? 'bg-danger' : ($progress < 70 ? 'bg-primary' : 'bg-success');
               ?>
               <tr class="hover-actions-trigger btn-reveal-trigger position-static">
+                <td class="align-middle white-space-nowrap py-2 text-center fw-bold text-700"><?= $stt++ ?></td>
                 <td class="name align-middle white-space-nowrap py-3">
                     <a class="text-decoration-none fw-bold fs-0" href="/projects/view?id=<?= (int)$p['id'] ?>">
                         <?= htmlspecialchars($p['name']) ?>

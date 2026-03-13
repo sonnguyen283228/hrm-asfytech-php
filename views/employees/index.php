@@ -120,9 +120,9 @@
                 </td>
                 <td class="align-middle white-space-nowrap text-end py-2">
                   <div class="d-flex justify-content-end gap-1">
-                    <button class="btn btn-phoenix-secondary btn-icon btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Xem chi tiết" onclick='viewEmployeeDetail(<?= json_encode($e) ?>)'><span data-feather="eye"></span></button>
+                    <button class="btn btn-phoenix-secondary btn-icon btn-icon-xs btn-sm" title="Xem chi tiết" onclick='viewEmployeeDetail(<?= json_encode($e) ?>)'><span data-feather="eye"></span></button>
                     <?php if (in_array(strtolower((string)(auth_user()['role'] ?? '')), ['admin', 'manager'])): ?>
-                    <button class="btn btn-phoenix-primary btn-icon btn-sm" title="Chỉnh sửa" onclick='editEmployee(<?= json_encode([
+                    <button class="btn btn-phoenix-primary btn-icon btn-icon-xs btn-sm" title="Chỉnh sửa" onclick='editEmployee(<?= json_encode([
                         "id" => $e["id"], 
                         "full_name" => $e["full_name"], 
                         "email" => $e["email"], 
@@ -138,7 +138,7 @@
                     ]) ?>)'><span data-feather="edit"></span></button>
                     <form method="post" action="/employees/toggle-status" class="mb-0 d-inline-block" onsubmit="return confirm('Bạn có chắc chắn muốn thay đổi trạng thái của nhân sự này không?');">
                       <input type="hidden" name="id" value="<?= $e['id'] ?>">
-                      <button type="submit" class="btn btn-phoenix-danger btn-icon btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="<?= ((int)$e['is_active'] === 1) ? 'Khóa tài khoản' : 'Mở khóa' ?>">
+                      <button type="submit" class="btn btn-phoenix-danger btn-icon btn-icon-xs btn-sm" title="<?= ((int)$e['is_active'] === 1) ? 'Khóa tài khoản' : 'Mở khóa' ?>">
                         <span data-feather="<?= ((int)$e['is_active'] === 1) ? 'lock' : 'unlock' ?>"></span>
                       </button>
                     </form>

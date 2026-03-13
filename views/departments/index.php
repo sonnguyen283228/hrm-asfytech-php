@@ -37,17 +37,17 @@
           <table class="table table-sm table-hrm fs--1 mb-0 overflow-hidden text-nowrap">
             <thead>
               <tr>
-                <th class="sort pe-1 align-middle white-space-nowrap pb-2 pt-3" data-sort="id">ID</th>
-                <th class="sort pe-1 align-middle white-space-nowrap pb-2 pt-3" data-sort="name">Tên phòng ban</th>
-                <th class="sort pe-1 align-middle white-space-nowrap pb-2 pt-3" data-sort="desc">Mô tả chức năng</th>
-                <th class="sort pe-1 align-middle white-space-nowrap pb-2 pt-3 text-center" data-sort="members">Số nhân sự</th>
+                <th class="align-middle white-space-nowrap pb-2 pt-3 text-center" style="width:50px">STT</th>
+                <th class="pe-1 align-middle white-space-nowrap pb-2 pt-3">Tên phòng ban</th>
+                <th class="pe-1 align-middle white-space-nowrap pb-2 pt-3">Mô tả chức năng</th>
+                <th class="pe-1 align-middle white-space-nowrap pb-2 pt-3 text-center">Số nhân sự</th>
                 <th class="text-end align-middle pb-2 pt-3">Thao tác</th>
               </tr>
             </thead>
             <tbody class="list" id="table-department-body">
-            <?php foreach ($departments as $d): ?>
+            <?php $stt = 1; foreach ($departments as $d): ?>
               <tr class="hover-actions-trigger btn-reveal-trigger position-static">
-                <td class="id align-middle white-space-nowrap py-3 fw-bold">#<?= (int)$d['id'] ?></td>
+                <td class="align-middle white-space-nowrap py-2 text-center fw-bold text-700"><?= $stt++ ?></td>
                 <td class="name align-middle white-space-nowrap py-3">
                     <h6 class="mb-0 text-900 fw-semi-bold"><?= htmlspecialchars($d['name']) ?></h6>
                 </td>
