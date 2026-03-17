@@ -20,53 +20,7 @@
   <link href="/phoenix/assets/css/user.min.css" rel="stylesheet" id="user-style-default">
   <link href="/phoenix/assets/css/asfy-custom.css" rel="stylesheet" />
   
-  <style>
-    body { font-family: 'Nunito Sans', sans-serif; }
-    .navbar-brand img { height: 36px; }
 
-    /* ===== HRM Striped Table ===== */
-    .table-hrm thead tr {
-      background: linear-gradient(135deg, #2c3e50 0%, #3d5a80 100%) !important;
-      color: #fff !important;
-    }
-    .table-hrm thead th {
-      color: #fff !important;
-      font-weight: 700;
-      letter-spacing: 0.03em;
-      font-size: .78rem;
-      text-transform: uppercase;
-      border-bottom: none !important;
-      padding-top: 12px;
-      padding-bottom: 12px;
-    }
-    .table-hrm tbody tr:nth-child(even) {
-      background-color: #f3f6fb;
-    }
-    .table-hrm tbody tr:nth-child(odd) {
-      background-color: #fff;
-    }
-    .table-hrm tbody tr:hover {
-      background-color: #e8f0fe !important;
-      transition: background-color 0.15s ease;
-    }
-    .table-hrm td, .table-hrm th {
-      vertical-align: middle;
-      border-color: #e2e8ef;
-    }
-    /* Nút icon nhỏ cho cột Thao tác */
-    .btn-icon-xs {
-      width: 28px !important;
-      height: 28px !important;
-      padding: 0 !important;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .btn-icon-xs [data-feather], .btn-icon-xs svg {
-      width: 13px !important;
-      height: 13px !important;
-    }
-  </style>
   
   <?= site_get('header_html', '') ?>
 </head>
