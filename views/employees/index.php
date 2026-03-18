@@ -551,7 +551,7 @@
 
   // Handle Location Dropdowns Data Fetching and Logic
   document.addEventListener('DOMContentLoaded', function() {
-    const apiEndpoint = 'https://provinces.open-api.vn/api/?depth=3';
+    const apiEndpoint = '/data.json';
     let locationData = [];
 
     // Fetch data once and store it
