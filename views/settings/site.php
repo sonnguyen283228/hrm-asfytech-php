@@ -54,6 +54,54 @@
             </div>
           </div>
 
+          <h5 class="text-900 mb-4 border-bottom pb-2 mt-5">4. Quản lý tính năng (Feature Flags)</h5>
+          <div class="row g-4">
+            <div class="col-12">
+              <div class="alert alert-warning border-warning-subtle border-start border-4 bg-white d-flex align-items-center" role="alert">
+                <span class="fas fa-exclamation-triangle fs-3 text-warning me-3"></span>
+                <div>
+                  <h6 class="mb-1 text-900 fw-bold">Lưu ý khi bật/tắt module</h6>
+                  <p class="mb-0 text-700 fs--1">Khi tắt một module, nó sẽ bị ẩn hoàn toàn với các nhân viên và quản lý thông thường, nhưng <b>vẫn hiển thị bình thường</b> đối với tài khoản Admin để tiện cho việc bảo trì, sửa lỗi.</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-md-6 col-xl-4 mt-2">
+              <div class="form-check form-switch cursor-pointer">
+                <input class="form-check-input cursor-pointer" id="ff_module_employees" name="ff_module_employees" type="checkbox" value="1" <?= (\site_get('ff_module_employees', '1') === '1') ? 'checked' : '' ?> />
+                <label class="form-check-label cursor-pointer fs-0 text-900" for="ff_module_employees">Module Nhân sự</label>
+              </div>
+            </div>
+            
+            <div class="col-md-6 col-xl-4 mt-2">
+              <div class="form-check form-switch cursor-pointer">
+                <input class="form-check-input cursor-pointer" id="ff_module_positions" name="ff_module_positions" type="checkbox" value="1" <?= (\site_get('ff_module_positions', '1') === '1') ? 'checked' : '' ?> />
+                <label class="form-check-label cursor-pointer fs-0 text-900" for="ff_module_positions">Module Chức vụ</label>
+              </div>
+            </div>
+            
+            <div class="col-md-6 col-xl-4 mt-2">
+              <div class="form-check form-switch cursor-pointer">
+                <input class="form-check-input cursor-pointer" id="ff_module_departments" name="ff_module_departments" type="checkbox" value="1" <?= (\site_get('ff_module_departments', '1') === '1') ? 'checked' : '' ?> />
+                <label class="form-check-label cursor-pointer fs-0 text-900" for="ff_module_departments">Module Phòng ban</label>
+              </div>
+            </div>
+            
+            <div class="col-md-6 col-xl-4 mt-2">
+              <div class="form-check form-switch cursor-pointer">
+                <input class="form-check-input cursor-pointer" id="ff_module_projects" name="ff_module_projects" type="checkbox" value="1" <?= (\site_get('ff_module_projects', '1') === '1') ? 'checked' : '' ?> />
+                <label class="form-check-label cursor-pointer fs-0 text-900" for="ff_module_projects">Module Dự án</label>
+              </div>
+            </div>
+            
+            <div class="col-md-6 col-xl-4 mt-2 mb-4">
+              <div class="form-check form-switch cursor-pointer">
+                <input class="form-check-input cursor-pointer" id="ff_module_attendance" name="ff_module_attendance" type="checkbox" value="1" <?= (\site_get('ff_module_attendance', '1') === '1') ? 'checked' : '' ?> />
+                <label class="form-check-label cursor-pointer fs-0 text-900" for="ff_module_attendance">Module Chấm công</label>
+              </div>
+            </div>
+          </div>
+
           <hr class="my-4">
           <div class="d-flex justify-content-end">
             <button class="btn btn-primary px-5" type="submit"><span data-feather="save" class="me-2"></span>Lưu tùy biến</button>

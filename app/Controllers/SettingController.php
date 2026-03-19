@@ -21,6 +21,11 @@ class SettingController extends Controller
             'header_html'      => (string)($_POST['header_html'] ?? ''),
             'footer_html'      => (string)($_POST['footer_html'] ?? ''),
             'footer_text'      => trim((string)($_POST['footer_text'] ?? '\u00a9 HRM APP')),
+            'ff_module_employees'   => (string)($_POST['ff_module_employees'] ?? '0'),
+            'ff_module_positions'   => (string)($_POST['ff_module_positions'] ?? '0'),
+            'ff_module_departments' => (string)($_POST['ff_module_departments'] ?? '0'),
+            'ff_module_projects'    => (string)($_POST['ff_module_projects'] ?? '0'),
+            'ff_module_attendance'  => (string)($_POST['ff_module_attendance'] ?? '0'),
         ];
 
         $stmt = $this->db()->prepare('INSERT INTO site_settings(`key`,`value`) VALUES(?,?) ON DUPLICATE KEY UPDATE `value`=VALUES(`value`)');

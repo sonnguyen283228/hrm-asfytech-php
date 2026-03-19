@@ -9,41 +9,43 @@ async function build() {
         let data = await response.json();
         if (data.value) data = data.value;
 
+        // Bảng sáp nhập 34 đơn vị hành chính cấp tỉnh Việt Nam 2025
         const merges = {
             "Hà Nội": ["Hà Nội"],
-            "TP. Hồ Chí Minh": ["Thành phố Hồ Chí Minh"],
-            "Hải Phòng": ["Hải Phòng", "Hải Dương", "Hưng Yên", "Thái Bình"],
-            "Đà Nẵng": ["Đà Nẵng", "Quảng Nam", "Quảng Ngãi"],
+            "Hải Phòng": ["Hải Phòng", "Hải Dương"],
+            "Huế": ["Huế", "Thừa Thiên Huế", "Thừa Thiên - Huế"],
+            "Đà Nẵng": ["Đà Nẵng", "Quảng Nam"],
+            "TP. Hồ Chí Minh": ["Thành phố Hồ Chí Minh", "TP. Hồ Chí Minh", "Hồ Chí Minh", "Bà Rịa - Vũng Tàu", "Bình Dương"],
             "Cần Thơ": ["Cần Thơ", "Sóc Trăng", "Hậu Giang"],
-            "Huế": ["Thừa Thiên Huế", "Thừa Thiên - Huế", "Quảng Trị", "Quảng Bình"],
             
             "Cao Bằng": ["Cao Bằng"],
+            "Tuyên Quang": ["Tuyên Quang", "Hà Giang"],
             "Điện Biên": ["Điện Biên"],
-            "Hà Tĩnh": ["Hà Tĩnh"],
             "Lai Châu": ["Lai Châu"],
-            "Lạng Sơn": ["Lạng Sơn"],
-            "Nghệ An": ["Nghệ An"],
-            "Quảng Ninh": ["Quảng Ninh"],
-            "Thanh Hóa": ["Thanh Hóa", "Thanh Hoá"],
             "Sơn La": ["Sơn La"],
-
-            "Hòa Bình - Thái Nguyên": ["Hòa Bình", "Hoà Bình", "Thái Nguyên", "Tuyên Quang", "Bắc Kạn"],
-            "Lào Cai - Hà Giang": ["Lào Cai", "Hà Giang", "Yên Bái", "Phú Thọ"],
-            "Vĩnh Phúc - Bắc Ninh": ["Vĩnh Phúc", "Bắc Ninh", "Bắc Giang"],
-            "Hà Nam - Ninh Bình": ["Hà Nam", "Nam Định", "Ninh Bình"],
-            
-            "Tây Ninh - Bình Dương": ["Tây Ninh", "Bình Dương", "Bình Phước"],
-            "Đồng Nai - Bà Rịa": ["Đồng Nai", "Bà Rịa - Vũng Tàu", "Bình Thuận"],
-            
-            "Khu vực Tây Nguyên": ["Kon Tum", "Gia Lai", "Đắk Lắk", "Đắk Nông"],
-            "Lâm Đồng - Ninh Thuận": ["Lâm Đồng", "Ninh Thuận", "Khánh Hòa", "Khánh Hoà"],
-            
-            "Khu vực Nam Trung Bộ": ["Phú Yên", "Bình Định"],
-            
-            "Long An - Tiền Giang": ["Long An", "Tiền Giang", "Bến Tre"],
-            "Đồng Tháp - Vĩnh Long": ["Đồng Tháp", "Vĩnh Long", "Trà Vinh"],
-            "An Giang - Kiên Giang": ["An Giang", "Kiên Giang"],
-            "Bạc Liêu - Cà Mau": ["Bạc Liêu", "Cà Mau"]
+            "Lào Cai": ["Lào Cai", "Yên Bái"],
+            "Thái Nguyên": ["Thái Nguyên", "Bắc Kạn"],
+            "Lạng Sơn": ["Lạng Sơn"],
+            "Quảng Ninh": ["Quảng Ninh"],
+            "Bắc Ninh": ["Bắc Ninh", "Bắc Giang"],
+            "Phú Thọ": ["Phú Thọ", "Hòa Bình", "Hoà Bình", "Vĩnh Phúc"],
+            "Hưng Yên": ["Hưng Yên", "Thái Bình"],
+            "Ninh Bình": ["Ninh Bình", "Hà Nam", "Nam Định"],
+            "Thanh Hóa": ["Thanh Hóa", "Thanh Hoá"],
+            "Nghệ An": ["Nghệ An"],
+            "Hà Tĩnh": ["Hà Tĩnh"],
+            "Quảng Trị": ["Quảng Trị", "Quảng Bình"],
+            "Quảng Ngãi": ["Quảng Ngãi", "Kon Tum"],
+            "Gia Lai": ["Gia Lai", "Bình Định"],
+            "Khánh Hòa": ["Khánh Hòa", "Ninh Thuận", "Khánh Hoà"],
+            "Đắk Lắk": ["Đắk Lắk", "Phú Yên"],
+            "Lâm Đồng": ["Lâm Đồng", "Đắk Nông", "Bình Thuận"],
+            "Đồng Nai": ["Đồng Nai", "Bình Phước"],
+            "Đồng Tháp": ["Đồng Tháp", "Tiền Giang"],
+            "Tây Ninh": ["Tây Ninh", "Long An"],
+            "An Giang": ["An Giang", "Kiên Giang"],
+            "Cà Mau": ["Cà Mau", "Bạc Liêu"],
+            "Vĩnh Long": ["Vĩnh Long", "Bến Tre", "Trà Vinh"]
         };
 
         const oldMap = {};
@@ -90,11 +92,16 @@ async function build() {
             });
             
             if (foundOldNamesCount > 0) {
+                let formattedName = newName;
+                if (!['Hà Nội', 'Hải Phòng', 'Huế', 'Đà Nẵng', 'TP. Hồ Chí Minh', 'Cần Thơ'].includes(newName)) {
+                    // Province
+                }
+
                 newProvinces.push({
-                    name: newName,
+                    name: formattedName,
                     code: codeCounter++,
                     codename: 'p_' + newName.toLowerCase().replace(/[\s-\.]/g, ''),
-                    division_type: 'tỉnh',
+                    division_type: ['Hà Nội', 'Hải Phòng', 'Huế', 'Đà Nẵng', 'TP. Hồ Chí Minh', 'Cần Thơ'].includes(newName) ? 'thành phố trung ương' : 'tỉnh',
                     phone_code: 0,
                     districts: mergedDistricts
                 });

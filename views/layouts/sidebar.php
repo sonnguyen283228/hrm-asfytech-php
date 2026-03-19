@@ -13,9 +13,11 @@
           <!-- label-->
           <p class="navbar-vertical-label">Tổng Quan</p>
           <hr class="navbar-vertical-line" />
+          <?php if (\is_feature_enabled('ff_module_attendance')): ?>
           <a class="nav-link <?= ($activePage ?? '') === 'home' ? 'active' : '' ?>" href="/attendance" role="button" data-bs-toggle="" aria-expanded="false">
             <div class="d-flex align-items-center"><span class="nav-link-icon"><span data-feather="pie-chart"></span></span><span class="nav-link-text-wrapper"><span class="nav-link-text">Trang chủ</span></span></div>
           </a>
+          <?php endif; ?>
         </li>
         
         <li class="nav-item">
@@ -23,17 +25,29 @@
           <p class="navbar-vertical-label">Quản Lý Nguồn Lực</p>
           <hr class="navbar-vertical-line" />
           
+          <?php if (\is_feature_enabled('ff_module_employees')): ?>
           <a class="nav-link <?= ($activePage ?? '') === 'employees' ? 'active' : '' ?>" href="/employees" role="button" data-bs-toggle="" aria-expanded="false">
             <div class="d-flex align-items-center"><span class="nav-link-icon"><span data-feather="users"></span></span><span class="nav-link-text-wrapper"><span class="nav-link-text">Nhân sự</span></span></div>
           </a>
+          <?php endif; ?>
           
+          <?php if (\is_feature_enabled('ff_module_positions')): ?>
+          <a class="nav-link <?= ($activePage ?? '') === 'positions' ? 'active' : '' ?>" href="/positions" role="button" data-bs-toggle="" aria-expanded="false">
+            <div class="d-flex align-items-center"><span class="nav-link-icon"><span data-feather="layers"></span></span><span class="nav-link-text-wrapper"><span class="nav-link-text">Chức vụ</span></span></div>
+          </a>
+          <?php endif; ?>
+          
+          <?php if (\is_feature_enabled('ff_module_departments')): ?>
           <a class="nav-link <?= ($activePage ?? '') === 'departments' ? 'active' : '' ?>" href="/departments" role="button" data-bs-toggle="" aria-expanded="false">
             <div class="d-flex align-items-center"><span class="nav-link-icon"><span data-feather="grid"></span></span><span class="nav-link-text-wrapper"><span class="nav-link-text">Phòng ban</span></span></div>
           </a>
+          <?php endif; ?>
           
+          <?php if (\is_feature_enabled('ff_module_projects')): ?>
           <a class="nav-link <?= ($activePage ?? '') === 'projects' ? 'active' : '' ?>" href="/projects" role="button" data-bs-toggle="" aria-expanded="false">
             <div class="d-flex align-items-center"><span class="nav-link-icon"><span data-feather="briefcase"></span></span><span class="nav-link-text-wrapper"><span class="nav-link-text">Dự án</span></span></div>
           </a>
+          <?php endif; ?>
         </li>
         
         <li class="nav-item">
@@ -41,9 +55,11 @@
           <p class="navbar-vertical-label">Hệ Thống</p>
           <hr class="navbar-vertical-line" />
           
+          <?php if (\is_feature_enabled('ff_module_attendance')): ?>
           <a class="nav-link <?= ($activePage ?? '') === 'reports' ? 'active' : '' ?>" href="/attendance/reports" role="button" data-bs-toggle="" aria-expanded="false">
             <div class="d-flex align-items-center"><span class="nav-link-icon"><span data-feather="file-text"></span></span><span class="nav-link-text-wrapper"><span class="nav-link-text">Báo cáo công</span></span></div>
           </a>
+          <?php endif; ?>
           
           <a class="nav-link <?= ($activePage ?? '') === 'settings' ? 'active' : '' ?>" href="/settings/site" role="button" data-bs-toggle="" aria-expanded="false">
             <div class="d-flex align-items-center"><span class="nav-link-icon"><span data-feather="settings"></span></span><span class="nav-link-text-wrapper"><span class="nav-link-text">Tùy biến</span></span></div>

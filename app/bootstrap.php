@@ -286,6 +286,14 @@ function site_get(string $key, string $default = ''): string
     return isset($s[$key]) && $s[$key] !== '' ? $s[$key] : $default;
 }
 
+function is_feature_enabled(string $featureKey): bool
+{
+    $enabled = site_get($featureKey, '1') === '1';
+    $u = auth_user();
+    $isAdmin = $u && strtolower($u['role'] ?? '') === 'admin';
+    return $enabled || $isAdmin;
+}
+
 function get_brand_logo_url(): string
 {
     $baseUrl = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'])), '/');
