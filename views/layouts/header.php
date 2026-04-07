@@ -15,7 +15,7 @@
   <?php endif; ?>
 
   <script src="/phoenix/assets/js/config.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link href="/phoenix/assets/css/theme.min.css" rel="stylesheet" id="style-default">
   <link href="/phoenix/assets/css/user.min.css" rel="stylesheet" id="user-style-default">
   <link href="/phoenix/assets/css/asfy-custom.css" rel="stylesheet" />
@@ -26,59 +26,32 @@
 </head>
 <body class="bg-light">
   <main class="main" id="top">
+    <?php require __DIR__ . '/sidebar.php'; ?>
+    
     <!-- Top Navbar -->
     <nav class="navbar navbar-expand-lg bg-white mb-4 border-bottom px-0 sticky-top shadow-sm" id="navbarTop" style="z-index: 1020;">
       <div class="container-fluid px-3 px-lg-4">
         
         <div class="d-flex align-items-center">
-          <button class="btn btn-link navbar-toggler me-1 px-2 d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTopCollapse" aria-controls="navbarTopCollapse" aria-expanded="false" aria-label="Toggle navigation">
+          <button class="btn btn-link navbar-toggler me-1 px-2 d-xl-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarVerticalCollapse" aria-controls="navbarVerticalCollapse" aria-expanded="false" aria-label="Toggle navigation">
             <span data-feather="menu"></span>
           </button>
-          <a class="navbar-brand me-1 me-sm-3 d-flex align-items-center gap-2" href="/attendance">
+          <a class="navbar-brand me-1 me-sm-3 d-flex align-items-center gap-2 d-xl-none" href="/attendance">
             <?php 
               $logoUrl = get_brand_logo_url(); 
               if ($logoUrl): 
             ?>
-              <img src="<?= htmlspecialchars($logoUrl) ?>" alt="logo" style="height: 91px; width: 91px; object-fit: cover; border-radius: 8px;">
+              <img src="<?= htmlspecialchars($logoUrl) ?>" alt="logo" style="height: 36px; width: auto; object-fit: cover; border-radius: 4px;">
             <?php else: ?>
-              <div class="d-flex align-items-center justify-content-center bg-primary text-white" style="width: 91px; height: 91px; border-radius: 8px; font-weight: 800; font-size: 32px;">A</div>
+              <div class="d-flex align-items-center justify-content-center bg-primary text-white" style="width: 36px; height: 36px; border-radius: 4px; font-weight: 800; font-size: 18px;">A</div>
             <?php endif; ?>
-            <span class="d-none d-sm-block fw-bold text-1000 tracking-tight" style="font-size: 21px; line-height: 1;"><?= htmlspecialchars(site_get('site_name', 'HRM APP')) ?></span>
+            <span class="d-none d-sm-block fw-bold text-1000 tracking-tight" style="font-size: 18px; line-height: 1;"><?= htmlspecialchars(site_get('site_name', 'HRM APP')) ?></span>
           </a>
         </div>
 
-        <div class="collapse navbar-collapse justify-content-center" id="navbarTopCollapse">
+        <div class="collapse navbar-collapse" id="navbarTopCollapse">
           <ul class="navbar-nav gap-2 gap-lg-4 mb-2 mb-lg-0 py-2 py-lg-0">
-            <li class="nav-item">
-              <a class="nav-link fw-bold text-uppercase fs--1 d-flex align-items-center gap-2 px-3 py-2 rounded-3 transition-base <?= ($activePage ?? '') === 'home' ? 'active bg-primary-100 text-primary' : 'text-700 hover-bg-200' ?>" href="/attendance">
-                <span data-feather="pie-chart" style="width: 16px; height: 16px;"></span> Trang chủ
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link fw-bold text-uppercase fs--1 d-flex align-items-center gap-2 px-3 py-2 rounded-3 transition-base <?= ($activePage ?? '') === 'employees' ? 'active bg-primary-100 text-primary' : 'text-700 hover-bg-200' ?>" href="/employees">
-                <span data-feather="users" style="width: 16px; height: 16px;"></span> Nhân sự
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link fw-bold text-uppercase fs--1 d-flex align-items-center gap-2 px-3 py-2 rounded-3 transition-base <?= ($activePage ?? '') === 'departments' ? 'active bg-primary-100 text-primary' : 'text-700 hover-bg-200' ?>" href="/departments">
-                <span data-feather="grid" style="width: 16px; height: 16px;"></span> Phòng ban
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link fw-bold text-uppercase fs--1 d-flex align-items-center gap-2 px-3 py-2 rounded-3 transition-base <?= ($activePage ?? '') === 'positions' ? 'active bg-primary-100 text-primary' : 'text-700 hover-bg-200' ?>" href="/positions">
-                <span data-feather="award" style="width: 16px; height: 16px;"></span> Chức vụ
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link fw-bold text-uppercase fs--1 d-flex align-items-center gap-2 px-3 py-2 rounded-3 transition-base <?= ($activePage ?? '') === 'projects' ? 'active bg-primary-100 text-primary' : 'text-700 hover-bg-200' ?>" href="/projects">
-                <span data-feather="briefcase" style="width: 16px; height: 16px;"></span> Dự án
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link fw-bold text-uppercase fs--1 d-flex align-items-center gap-2 px-3 py-2 rounded-3 transition-base <?= ($activePage ?? '') === 'settings' ? 'active bg-primary-100 text-primary' : 'text-700 hover-bg-200' ?>" href="/settings/site">
-                <span data-feather="settings" style="width: 16px; height: 16px;"></span> Tùy biến
-              </a>
-            </li>
+             <!-- Navigation links moved to sidebar -->
           </ul>
         </div>
         

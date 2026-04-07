@@ -67,6 +67,12 @@ $router->get('/attendance/reports', [\App\Controllers\AttendanceController::clas
 $router->get('/attendance/export/excel', [\App\Controllers\AttendanceController::class, 'exportExcel']);
 $router->get('/attendance/export/pdf', [\App\Controllers\AttendanceController::class, 'exportPdf']);
 
+// Timekeeping
+$router->get('/timekeeping', [\App\Controllers\TimekeepingController::class, 'index']);
+
+// Leave Management
+$router->get('/leave', [\App\Controllers\LeaveController::class, 'index']);
+
 // Employees
 $router->get('/employees', [\App\Controllers\EmployeeController::class, 'index']);
 $router->get('/employees/export', [\App\Controllers\EmployeeController::class, 'export']);
