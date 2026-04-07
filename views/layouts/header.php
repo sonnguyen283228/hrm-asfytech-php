@@ -39,9 +39,9 @@
               $logoUrl = get_brand_logo_url(); 
               if ($logoUrl): 
             ?>
-              <img src="<?= htmlspecialchars($logoUrl) ?>" alt="logo" style="height: 91px; width: 91px; object-fit: cover; border-radius: 8px;">
+              <img src="<?= htmlspecialchars($logoUrl) ?>" alt="logo" style="height: 40px; width: auto; max-width: 120px; object-fit: contain; border-radius: 4px;">
             <?php else: ?>
-              <div class="d-flex align-items-center justify-content-center bg-primary text-white" style="width: 91px; height: 91px; border-radius: 8px; font-weight: 800; font-size: 32px;">A</div>
+              <div class="d-flex align-items-center justify-content-center bg-primary text-white" style="width: 40px; height: 40px; border-radius: 4px; font-weight: 800; font-size: 20px;">A</div>
             <?php endif; ?>
             <span class="d-none d-sm-block fw-bold text-1000 tracking-tight" style="font-size: 21px; line-height: 1;"><?= htmlspecialchars(site_get('site_name', 'HRM APP')) ?></span>
           </a>
