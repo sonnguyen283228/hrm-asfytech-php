@@ -90,7 +90,11 @@
         <?php if ($u): ?>
         <ul class="navbar-nav navbar-nav-icons ms-auto flex-row align-items-center mb-0">
           <li class="nav-item dropdown">
-            <a class="nav-link lh-1 pe-0" id="navbarDropdownUser" href="#!" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false">
+            <a class="nav-link lh-1 pe-0 d-flex align-items-center gap-2" id="navbarDropdownUser" href="#!" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false">
+              <div class="text-end d-none d-sm-block">
+                <h6 class="mb-0 text-900 fw-bold" style="font-size: 0.9rem;"><?= htmlspecialchars($u['full_name'] ?? '') ?></h6>
+                <span class="text-500 fw-semi-bold text-uppercase ls-1" style="font-size: 0.7rem;"><?= htmlspecialchars($u['role'] ?? '') ?></span>
+              </div>
               <div class="avatar avatar-l">
                 <?php if (!empty($u['avatar_url'])): ?>
                   <?php $avtUrl = strpos($u['avatar_url'], 'http') === 0 ? $u['avatar_url'] : $baseUrl . '/' . ltrim($u['avatar_url'], '/'); ?>
