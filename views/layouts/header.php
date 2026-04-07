@@ -98,7 +98,8 @@
               <div class="avatar avatar-l">
                 <?php if (!empty($u['avatar_url'])): ?>
                   <?php $avtUrl = strpos($u['avatar_url'], 'http') === 0 ? $u['avatar_url'] : $baseUrl . '/' . ltrim($u['avatar_url'], '/'); ?>
-                  <img class="rounded-circle w-100 h-100 object-fit-cover" src="<?= htmlspecialchars($avtUrl) ?>" alt="" referrerpolicy="no-referrer" />
+                  <img class="rounded-circle w-100 h-100 object-fit-cover" src="<?= htmlspecialchars($avtUrl) ?>" alt="" referrerpolicy="no-referrer" onerror="this.style.display='none'; this.nextElementSibling.style.setProperty('display', 'flex', 'important');" />
+                  <div class="avatar-name rounded-circle border border-2 border-white bg-200 text-700" style="display: none;"><span><?= mb_substr($u['full_name'] ?? 'U', 0, 1) ?></span></div>
                 <?php else: ?>
                   <div class="avatar-name rounded-circle border border-2 border-white bg-200 text-700"><span><?= mb_substr($u['full_name'] ?? 'U', 0, 1) ?></span></div>
                 <?php endif; ?>
@@ -111,7 +112,8 @@
                     <div class="avatar avatar-xl">
                       <?php if (!empty($u['avatar_url'])): ?>
                         <?php $avtUrl = strpos($u['avatar_url'], 'http') === 0 ? $u['avatar_url'] : $baseUrl . '/' . ltrim($u['avatar_url'], '/'); ?>
-                        <img class="rounded-circle object-fit-cover w-100 h-100" src="<?= htmlspecialchars($avtUrl) ?>" alt="" referrerpolicy="no-referrer" />
+                        <img class="rounded-circle object-fit-cover w-100 h-100" src="<?= htmlspecialchars($avtUrl) ?>" alt="" referrerpolicy="no-referrer" onerror="this.style.display='none'; this.nextElementSibling.style.setProperty('display', 'flex', 'important');" />
+                        <div class="avatar-name rounded-circle border border-2 border-white bg-200 text-700" style="display: none;"><span><?= mb_substr($u['full_name'] ?? 'U', 0, 1) ?></span></div>
                       <?php else: ?>
                         <div class="avatar-name rounded-circle border border-2 border-white bg-200 text-700"><span><?= mb_substr($u['full_name'] ?? 'U', 0, 1) ?></span></div>
                       <?php endif; ?>
