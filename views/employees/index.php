@@ -1,4 +1,4 @@
-﻿<?php $activePage='employees'; require __DIR__ . '/../layouts/header.php'; ?>
+<?php $activePage='employees'; require __DIR__ . '/../layouts/header.php'; ?>
 
 <div class="px-sm-4 px-md-5 mt-4">
     <div class="mb-4">
@@ -73,7 +73,9 @@
                 <td class="align-middle white-space-nowrap py-2">
                   <div class="avatar avatar-m">
                     <?php if (!empty($e['avatar_url'])): ?>
-                      <img class="rounded-circle" src="<?= htmlspecialchars($e['avatar_url']) ?>" alt="" />
+                      <?php $eAvtUrl = strpos($e['avatar_url'], 'http') === 0 ? $e['avatar_url'] : '/' . ltrim($e['avatar_url'], '/'); ?>
+                      <img class="rounded-circle" src="<?= htmlspecialchars($eAvtUrl) ?>" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.setProperty('display', 'flex', 'important');" />
+                      <div class="avatar-name rounded-circle" style="display: none;"><span><?= mb_substr($e['full_name'], 0, 2) ?></span></div>
                     <?php else: ?>
                       <div class="avatar-name rounded-circle"><span><?= mb_substr($e['full_name'], 0, 2) ?></span></div>
                     <?php endif; ?>
