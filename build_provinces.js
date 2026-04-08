@@ -63,7 +63,7 @@ async function build() {
         let codeCounter = 1;
 
         for (const [newName, oldNames] of Object.entries(merges)) {
-            const mergedDistricts = [];
+            const mergedWards = [];
             let foundOldNamesCount = 0;
 
             oldNames.forEach(oldName => {
@@ -71,20 +71,22 @@ async function build() {
                 if (oldProvince && oldProvince.districts) {
                     foundOldNamesCount++;
                     oldProvince.districts.forEach(d => {
-                        let modifiedName = d.name;
-                        // Determine if we need to suffix with oldName: if merges[newName] has more than 1 distinct province mapped
+                        let districtName = d.name;
                         const isMergedGroup = oldNames.filter(n => oldMap[n]).length > 1;
                         if (isMergedGroup) {
-                            modifiedName = d.name + ' (' + oldName + ')';
+                            districtName = d.name + ' (' + oldName + ')';
                         }
-                        mergedDistricts.push({
-                            name: modifiedName,
-                            code: d.code,
-                            codename: d.codename,
-                            division_type: d.division_type,
-                            short_codename: d.short_codename,
-                            wards: d.wards
-                        });
+                        
+                        if (d.wards) {
+                            d.wards.forEach(w => {
+                                mergedWards.push({
+                                    name: w.name + ' - ' + districtName,
+                                    code: w.code,
+                                    codename: w.codename,
+                                    division_type: w.division_type
+                                });
+                            });
+                        }
                     });
                 } else {
                     // console.log('Warn: Missing data for old province:', oldName);
@@ -93,9 +95,6 @@ async function build() {
             
             if (foundOldNamesCount > 0) {
                 let formattedName = newName;
-                if (!['Hà Nội', 'Hải Phòng', 'Huế', 'Đà Nẵng', 'TP. Hồ Chí Minh', 'Cần Thơ'].includes(newName)) {
-                    // Province
-                }
 
                 newProvinces.push({
                     name: formattedName,
@@ -103,7 +102,7 @@ async function build() {
                     codename: 'p_' + newName.toLowerCase().replace(/[\s-\.]/g, ''),
                     division_type: ['Hà Nội', 'Hải Phòng', 'Huế', 'Đà Nẵng', 'TP. Hồ Chí Minh', 'Cần Thơ'].includes(newName) ? 'thành phố trung ương' : 'tỉnh',
                     phone_code: 0,
-                    districts: mergedDistricts
+                    wards: mergedWards
                 });
             }
         }

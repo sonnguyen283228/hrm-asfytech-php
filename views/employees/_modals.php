@@ -1,4 +1,4 @@
-﻿<!-- Modal Thêm Nhân Sự -->
+<!-- Modal Thêm Nhân Sự -->
 <div class="modal fade" id="employeeModal" tabindex="-1" aria-labelledby="employeeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content border-0 shadow-lg">
@@ -28,20 +28,14 @@
               <label class="form-label" for="birth_date">Ngày sinh</label>
               <input class="form-control" id="birth_date" name="birth_date" type="date" />
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                <label class="form-label">Tỉnh / Thành phố</label>
                <select class="form-select province-select" id="create_province_id">
                  <option value="">-- Chọn Tỉnh/TP --</option>
                </select>
                <input type="hidden" name="address_city" id="create_address_city" />
             </div>
-            <div class="col-md-4">
-               <label class="form-label">Quận / Huyện</label>
-               <select class="form-select district-select" id="create_district_id" disabled>
-                 <option value="">-- Chọn Quận/Huyện --</option>
-               </select>
-            </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                <label class="form-label">Phường / Xã</label>
                <select class="form-select ward-select" id="create_ward_id" disabled>
                  <option value="">-- Chọn Phường/Xã --</option>
@@ -70,7 +64,7 @@
               </select>
             </div>
             <div class="col-md-4">
-              <label class="form-label" for="start_date">Ngày tính lương</label>
+              <label class="form-label" for="start_date">Ngày vào làm việc</label>
               <input class="form-control" id="start_date" name="start_date" type="date" />
             </div>
             <div class="col-md-4">
@@ -90,9 +84,9 @@
             </div>
           </div>
         </div>
-        <div class="modal-footer border-top-0 px-4 pb-4">
+        <div class="modal-footer bg-light border-top border-200 px-4 py-3">
           <button class="btn btn-outline-secondary" type="button" data-bs-dismiss="modal">Hủy</button>
-          <button class="btn btn-primary px-5" type="submit">Lưu Hồ Sơ</button>
+          <button class="btn btn-primary px-5" type="submit">Thêm</button>
         </div>
       </form>
     </div>
@@ -130,20 +124,14 @@
               <label class="form-label" for="edit_birth_date">Ngày sinh</label>
               <input class="form-control" id="edit_birth_date" name="birth_date" type="date" />
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                <label class="form-label" for="edit_province_id">Tỉnh / Thành phố</label>
                <select class="form-select province-select" id="edit_province_id">
                  <option value="">-- Chọn Tỉnh/TP --</option>
                </select>
                <input type="hidden" name="address_city" id="edit_address_city" />
             </div>
-            <div class="col-md-4">
-               <label class="form-label" for="edit_district_id">Quận / Huyện</label>
-               <select class="form-select district-select" id="edit_district_id" disabled>
-                 <option value="">-- Chọn Quận/Huyện --</option>
-               </select>
-            </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                <label class="form-label" for="edit_ward_id">Phường / Xã</label>
                <select class="form-select ward-select" id="edit_ward_id" disabled>
                  <option value="">-- Chọn Phường/Xã --</option>
@@ -172,7 +160,7 @@
               </select>
             </div>
             <div class="col-md-4">
-              <label class="form-label" for="edit_start_date">Ngày tính lương</label>
+              <label class="form-label" for="edit_start_date">Ngày vào làm việc</label>
               <input class="form-control" id="edit_start_date" name="start_date" type="date" />
             </div>
             <div class="col-md-4">
@@ -192,7 +180,7 @@
             </div>
           </div>
         </div>
-        <div class="modal-footer border-top-0 px-4 pb-4">
+        <div class="modal-footer bg-light border-top border-200 px-4 py-3">
           <button class="btn btn-outline-secondary" type="button" data-bs-dismiss="modal">Hủy</button>
           <button class="btn btn-primary px-5" type="submit">Lưu Thay Đổi</button>
         </div>
@@ -251,13 +239,10 @@
       
       // Handle Location Dropdowns Pre-selection
       const provinceSelect = document.getElementById('edit_province_id');
-      const districtSelect = document.getElementById('edit_district_id');
       const wardSelect = document.getElementById('edit_ward_id');
       
       // Reset dropdowns
       provinceSelect.value = '';
-      districtSelect.innerHTML = '<option value="">-- Chọn Quận/Huyện --</option>';
-      districtSelect.disabled = true;
       wardSelect.innerHTML = '<option value="">-- Chọn Phường/Xã --</option>';
       wardSelect.disabled = true;
 
@@ -267,48 +252,23 @@
           if (province) {
               provinceSelect.value = province.code;
               
-              // Populate and enable districts
-              if (province.districts) {
-                  province.districts.forEach(district => {
+              // Populate and enable wards
+              if (province.wards) {
+                  province.wards.forEach(ward => {
                     const option = document.createElement('option');
-                    option.value = district.code;
-                    option.textContent = district.name;
-                    option.dataset.name = district.name;
-                    districtSelect.appendChild(option);
+                    option.value = ward.code;
+                    option.textContent = ward.name;
+                    option.dataset.name = ward.name;
+                    wardSelect.appendChild(option);
                   });
-                  districtSelect.disabled = false;
+                  wardSelect.disabled = false;
               }
 
               if (data.address_ward) {
-                  // address_ward format is "Ward Name - District Name" (e.g., "Phường 1 - Quận 3")
-                  const parts = data.address_ward.split(' - ');
-                  if (parts.length === 2) {
-                      const wardName = parts[0].trim();
-                      const districtName = parts[1].trim();
-
-                      // Find matching district
-                      const district = province.districts?.find(d => d.name === districtName);
-                      if (district) {
-                          districtSelect.value = district.code;
-
-                          // Populate and enable wards
-                          if (district.wards) {
-                              district.wards.forEach(ward => {
-                                const option = document.createElement('option');
-                                option.value = ward.code;
-                                option.textContent = ward.name;
-                                option.dataset.name = ward.name;
-                                wardSelect.appendChild(option);
-                              });
-                              wardSelect.disabled = false;
-                          }
-
-                          // Find matching ward
-                          const ward = district.wards?.find(w => w.name === wardName);
-                          if (ward) {
-                              wardSelect.value = ward.code;
-                          }
-                      }
+                  // Find matching ward by name
+                  const ward = province.wards?.find(w => w.name === data.address_ward);
+                  if (ward) {
+                      wardSelect.value = ward.code;
                   }
               }
           }
@@ -390,7 +350,6 @@
 
     function handleProvinceChange(prefix) {
       const provinceSelect = document.getElementById(`${prefix}_province_id`);
-      const districtSelect = document.getElementById(`${prefix}_district_id`);
       const wardSelect = document.getElementById(`${prefix}_ward_id`);
       const cityInput = document.getElementById(`${prefix}_address_city`);
       const wardInput = document.getElementById(`${prefix}_address_ward`);
@@ -401,10 +360,8 @@
         const provinceCode = this.value;
         const provinceOption = this.options[this.selectedIndex];
         
-        // Reset and disable district/ward
-        districtSelect.innerHTML = '<option value="">-- Chọn Quận/Huyện --</option>';
+        // Reset and disable ward
         wardSelect.innerHTML = '<option value="">-- Chọn Phường/Xã --</option>';
-        districtSelect.disabled = true;
         wardSelect.disabled = true;
         cityInput.value = '';
         wardInput.value = '';
@@ -412,51 +369,23 @@
         if (provinceCode) {
           cityInput.value = provinceOption.dataset.name;
           const province = locationData.find(p => p.code == provinceCode);
-          if (province && province.districts) {
-            province.districts.forEach(district => {
+          if (province && province.wards) {
+            province.wards.forEach(ward => {
               const option = document.createElement('option');
-              option.value = district.code;
-              option.textContent = district.name;
-              option.dataset.name = district.name;
-              districtSelect.appendChild(option);
+              option.value = ward.code;
+              option.textContent = ward.name;
+              option.dataset.name = ward.name;
+              wardSelect.appendChild(option);
             });
-            districtSelect.disabled = false;
-          }
-        }
-      });
-
-      districtSelect.addEventListener('change', function() {
-        const provinceCode = provinceSelect.value;
-        const districtCode = this.value;
-        
-        // Reset and disable ward
-        wardSelect.innerHTML = '<option value="">-- Chọn Phường/Xã --</option>';
-        wardSelect.disabled = true;
-        wardInput.value = '';
-
-        if (provinceCode && districtCode) {
-          const province = locationData.find(p => p.code == provinceCode);
-          if (province && province.districts) {
-            const district = province.districts.find(d => d.code == districtCode);
-            if (district && district.wards) {
-              district.wards.forEach(ward => {
-                const option = document.createElement('option');
-                option.value = ward.code;
-                option.textContent = ward.name;
-                option.dataset.name = ward.name;
-                wardSelect.appendChild(option);
-              });
-              wardSelect.disabled = false;
-            }
+            wardSelect.disabled = false;
           }
         }
       });
 
       wardSelect.addEventListener('change', function() {
-         const districtOption = districtSelect.options[districtSelect.selectedIndex];
          const wardOption = this.options[this.selectedIndex];
          if (this.value) {
-            wardInput.value = `${wardOption.dataset.name} - ${districtOption.dataset.name}`;
+            wardInput.value = wardOption.dataset.name;
          } else {
             wardInput.value = '';
          }
