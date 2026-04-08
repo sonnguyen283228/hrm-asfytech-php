@@ -18,6 +18,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
   <link href="/phoenix/assets/css/theme.min.css" rel="stylesheet" id="style-default">
   <link href="/phoenix/assets/css/user.min.css" rel="stylesheet" id="user-style-default">
+  <link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet">
   <link href="/phoenix/assets/css/asfy-custom.css" rel="stylesheet" />
   
 

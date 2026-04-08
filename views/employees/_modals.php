@@ -222,6 +222,26 @@
   </div>
 </div>
 <script>
+  let tsInstances = {}; // Store TomSelect instances
+
+  // Helper to init TomSelect
+  function initSelectSearch(selector, config = {}) {
+      document.querySelectorAll(selector).forEach(el => {
+          if (!el.id) return;
+          if (tsInstances[el.id]) {
+              tsInstances[el.id].destroy();
+          }
+          tsInstances[el.id] = new TomSelect(el, { ...config, create: false });
+      });
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+      // Init static selects (department, position)
+      initSelectSearch('select#department_id, select#position_id, select#edit_department_id, select#edit_position_id');
+      // Role is small, don't really need search, but user said "các form select", so let's do it or skip it.
+      initSelectSearch('select#role, select#edit_role', { controlInput: null }); // controlInput null removes the search box, keep it simple. Actually let's just let it have search.
+  });
+
   // Prepare Edit Modal
   function editEmployee(data) {
       document.getElementById('edit_user_id').value = data.id || '';
@@ -231,18 +251,21 @@
       document.getElementById('edit_birth_date').value = data.birth_date || '';
       document.getElementById('edit_address_city').value = data.address_city || '';
       document.getElementById('edit_address_ward').value = data.address_ward || '';
-      document.getElementById('edit_department_id').value = data.department_id || '';
-      document.getElementById('edit_position_id').value = data.position_id || '';
+      
+      if(tsInstances['edit_department_id']) tsInstances['edit_department_id'].setValue(data.department_id || '');
+      if(tsInstances['edit_position_id']) tsInstances['edit_position_id'].setValue(data.position_id || '');
+      if(tsInstances['edit_role']) tsInstances['edit_role'].setValue((data.role || 'staff').toLowerCase());
+      
       document.getElementById('edit_start_date').value = data.start_date || '';
       document.getElementById('edit_base_salary').value = data.base_salary || '';
-      document.getElementById('edit_role').value = (data.role || 'staff').toLowerCase();
       
       // Handle Location Dropdowns Pre-selection
       const provinceSelect = document.getElementById('edit_province_id');
       const wardSelect = document.getElementById('edit_ward_id');
       
       // Reset dropdowns
-      provinceSelect.value = '';
+      if(tsInstances['edit_province_id']) tsInstances['edit_province_id'].setValue('');
+      
       wardSelect.innerHTML = '<option value="">-- Chọn Phường/Xã --</option>';
       wardSelect.disabled = true;
 
@@ -250,7 +273,7 @@
           // Find matching province by name
           const province = window.locationData.find(p => p.name === data.address_city);
           if (province) {
-              provinceSelect.value = province.code;
+              if(tsInstances['edit_province_id']) tsInstances['edit_province_id'].setValue(province.code);
               
               // Populate and enable wards
               if (province.wards) {
@@ -273,8 +296,15 @@
               }
           }
       }
+      
+      // Sync TomSelect if it exists
+      if(tsInstances['edit_ward_id']) {
+          tsInstances['edit_ward_id'].sync();
+      } else {
+          initSelectSearch('#edit_ward_id');
+      }
 
-      // Mở modal programmatically (tránh xung đột data-bs-toggle)
+      // Mở modal programmatically
       var editModal = new bootstrap.Modal(document.getElementById('editEmployeeModal'));
       editModal.show();
   }
@@ -317,7 +347,7 @@
       // Mở modal programmatically
       var detailModal = new bootstrap.Modal(document.getElementById('viewEmployeeModal'));
       detailModal.show();
-      feather.replace();
+      if(typeof feather !== 'undefined') feather.replace();
   }
 
   // Handle Location Dropdowns Data Fetching and Logic
@@ -332,8 +362,12 @@
         locationData = data;
         populateProvinces('create');
         populateProvinces('edit');
+        initSelectSearch('.province-select');
+        initSelectSearch('.ward-select');
       })
       .catch(error => console.error('Error fetching location data:', error));
+
+    window.locationData = locationData;
 
     function populateProvinces(prefix) {
       const provinceSelect = document.getElementById(`${prefix}_province_id`);
@@ -358,8 +392,13 @@
 
       provinceSelect.addEventListener('change', function() {
         const provinceCode = this.value;
-        const provinceOption = this.options[this.selectedIndex];
+        let provinceOption = this.options[this.selectedIndex];
         
+        // Handle TomSelect's internal select element change mapping
+        if(tsInstances[`${prefix}_province_id`]) {
+            provinceOption = this.querySelector(`option[value="${provinceCode}"]`) || provinceOption;
+        }
+
         // Reset and disable ward
         wardSelect.innerHTML = '<option value="">-- Chọn Phường/Xã --</option>';
         wardSelect.disabled = true;
@@ -367,7 +406,7 @@
         wardInput.value = '';
 
         if (provinceCode) {
-          cityInput.value = provinceOption.dataset.name;
+          cityInput.value = provinceOption ? provinceOption.dataset.name : '';
           const province = locationData.find(p => p.code == provinceCode);
           if (province && province.wards) {
             province.wards.forEach(ward => {
@@ -380,11 +419,22 @@
             wardSelect.disabled = false;
           }
         }
+        
+        // Sync TomSelect
+        if (tsInstances[`${prefix}_ward_id`]) {
+            tsInstances[`${prefix}_ward_id`].sync();
+            if(!wardSelect.disabled) tsInstances[`${prefix}_ward_id`].enable();
+            else tsInstances[`${prefix}_ward_id`].disable();
+        }
       });
 
       wardSelect.addEventListener('change', function() {
-         const wardOption = this.options[this.selectedIndex];
-         if (this.value) {
+         let wardOption = this.options[this.selectedIndex];
+         if(tsInstances[`${prefix}_ward_id`]) {
+            wardOption = this.querySelector(`option[value="${this.value}"]`) || wardOption;
+         }
+         
+         if (this.value && wardOption) {
             wardInput.value = wardOption.dataset.name;
          } else {
             wardInput.value = '';
@@ -395,7 +445,5 @@
     handleProvinceChange('create');
     handleProvinceChange('edit');
     
-    // Store the global location data for use in editEmployee
-    window.locationData = locationData;
   });
 </script>
