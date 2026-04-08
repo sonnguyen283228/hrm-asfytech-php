@@ -1,4 +1,4 @@
-﻿<?php $activePage='projects'; require __DIR__ . '/../layouts/header.php'; ?>
+<?php $activePage='projects'; require __DIR__ . '/../layouts/header.php'; ?>
 
 <div class="px-sm-4 px-md-5 mt-4">
   <div class="mb-4">
@@ -113,7 +113,7 @@
                     ]) ?>); (function(){ var m = new bootstrap.Modal(document.getElementById("editProjectModal")); m.show(); })();'>
                       <span data-feather="edit"></span>
                     </button>
-                    <form method="post" action="/projects/delete" class="mb-0 d-inline-block" onsubmit="return confirm('CẢNH BÁO: Xóa dự án này? Không thể hồi phục!')">
+                    <form method="post" action="/projects/delete" class="mb-0 d-inline-block confirm-action" data-message="CẢNH BÁO: Xóa dự án này? Không thể hồi phục!">
                       <input type="hidden" name="id" value="<?= (int)$p['id'] ?>">
                       <button type="submit" class="btn btn-phoenix-danger btn-icon btn-icon-xs btn-sm" title="Xóa dự án">
                         <span data-feather="trash-2"></span>

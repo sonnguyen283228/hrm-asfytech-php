@@ -134,7 +134,7 @@
                         "base_salary" => $e["base_salary"] ?? "",
                         "role" => $e["role"] ?? "staff"
                     ]) ?>)'><span data-feather="edit"></span></button>
-                    <form method="post" action="/employees/toggle-status" class="mb-0 d-inline-block" onsubmit="return confirm('Bạn có chắc chắn muốn thay đổi trạng thái của nhân sự này không?');">
+                    <form method="post" action="/employees/toggle-status" class="mb-0 d-inline-block confirm-action" data-message="Bạn có chắc chắn muốn thay đổi trạng thái của nhân sự này không?">
                       <input type="hidden" name="id" value="<?= $e['id'] ?>">
                       <button type="submit" class="btn btn-phoenix-danger btn-icon btn-icon-xs btn-sm" title="<?= ((int)$e['is_active'] === 1) ? 'Khóa tài khoản' : 'Mở khóa' ?>">
                         <span data-feather="<?= ((int)$e['is_active'] === 1) ? 'lock' : 'unlock' ?>"></span>

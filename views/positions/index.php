@@ -1,4 +1,4 @@
-﻿<?php $activePage='positions'; require __DIR__ . '/../layouts/header.php'; ?>
+<?php $activePage='positions'; require __DIR__ . '/../layouts/header.php'; ?>
 
 <div class="px-sm-4 px-md-5 mt-4">
   <div class="mb-4">
@@ -76,13 +76,13 @@
                     ]) ?>); (function(){ var m = new bootstrap.Modal(document.getElementById("editPositionModal")); m.show(); })();'>
                       <span data-feather="edit"></span>
                     </button>
-                    <form method="post" action="/positions/toggle" class="mb-0 d-inline-block" onsubmit="return confirm('Thay \u0111\u1ed5i tr\u1ea1ng th\u00e1i ch\u1ee9c v\u1ee5?')">
+                    <form method="post" action="/positions/toggle" class="mb-0 d-inline-block confirm-action" data-message="Thay đổi trạng thái chức vụ?">
                       <input type="hidden" name="id" value="<?= (int)$p['id'] ?>">
                       <button type="submit" class="btn btn-icon btn-icon-xs btn-sm <?= ((int)($p['is_active'] ?? 1) === 1) ? 'btn-phoenix-warning' : 'btn-phoenix-success' ?>" title="<?= ((int)($p['is_active'] ?? 1) === 1) ? 'T\u1ea1m d\u1eebng' : 'K\u00edch ho\u1ea1t' ?>">
                         <span data-feather="<?= ((int)($p['is_active'] ?? 1) === 1) ? 'pause-circle' : 'play-circle' ?>"></span>
                       </button>
                     </form>
-                    <form method="post" action="/positions/delete" class="mb-0 d-inline-block" onsubmit="return confirm('X\u00f3a v\u0129nh vi\u1ec5n ch\u1ee9c v\u1ee5 n\u00e0y?')">
+                    <form method="post" action="/positions/delete" class="mb-0 d-inline-block confirm-action" data-message="Xóa vĩnh viễn chức vụ này?">
                       <input type="hidden" name="id" value="<?= (int)$p['id'] ?>">
                       <button type="submit" class="btn btn-phoenix-danger btn-icon btn-icon-xs btn-sm" title="X\u00f3a">
                         <span data-feather="trash-2"></span>

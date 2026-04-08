@@ -1,4 +1,4 @@
-﻿<?php $activePage='departments'; require __DIR__ . '/../layouts/header.php'; ?>
+<?php $activePage='departments'; require __DIR__ . '/../layouts/header.php'; ?>
 
 <div class="px-sm-4 px-md-5 mt-4">
   <div class="mb-4">
@@ -67,7 +67,7 @@
                     ]) ?>); (function(){ var m = new bootstrap.Modal(document.getElementById("editDeptModal")); m.show(); })();'>
                       <span data-feather="edit"></span>
                     </button>
-                    <form method="post" action="/departments/delete" class="mb-0 d-inline-block" onsubmit="return confirm('B\u1ea1n c\u00f3 ch\u1eafc ch\u1eafn mu\u1ed1n x\u00f3a ph\u00f2ng ban n\u00e0y kh\u00f4ng?')">
+                    <form method="post" action="/departments/delete" class="mb-0 d-inline-block confirm-action" data-message="Bạn có chắc chắn muốn xóa phòng ban này không?">
                       <input type="hidden" name="id" value="<?= (int)$d['id'] ?>">
                       <button type="submit" class="btn btn-phoenix-danger btn-icon btn-icon-xs btn-sm" title="X\u00f3a">
                         <span data-feather="trash-2"></span>
